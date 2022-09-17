@@ -10,31 +10,41 @@ public class Reverse {
     }
 
     public static int[][] parseInput(Scanner inputScanner) {
-        int[][] resultArr = {};
+        int[][] resultArr = new int[1][];
         Scanner lineScanner;
+        int amount = 0;
 
         while (inputScanner.hasNextLine()) {
             lineScanner = new Scanner(inputScanner.nextLine());
             int[] newRow = parseLine(lineScanner);
             // place for analyze
 
-            resultArr = Arrays.copyOf(resultArr, resultArr.length + 1);
-            resultArr[resultArr.length - 1] = newRow;
+            if (amount >= resultArr.length) {
+                resultArr = Arrays.copyOf(resultArr, resultArr.length * 2);
+            }
+            resultArr[amount] = newRow;
+            amount++;
         }
 
+        resultArr = Arrays.copyOf(resultArr, amount);
         return resultArr;
     }
 
     public static int[] parseLine(Scanner lineScanner) {
-        int[] lineArr = {};
-
+        int[] lineArr = new int[1];
+        int amount = 0;
         while (lineScanner.hasNextInt()) {
             int value = lineScanner.nextInt();
             // place for analyze
 
-            lineArr = Arrays.copyOf(lineArr, lineArr.length + 1);
-            lineArr[lineArr.length - 1] = value;
+            if (amount >= lineArr.length) {
+                lineArr = Arrays.copyOf(lineArr, lineArr.length * 2);
+            }
+            lineArr[amount] = value;
+            amount++;
         }
+
+        lineArr = Arrays.copyOf(lineArr, amount);
 
         return lineArr;
     }
