@@ -1,0 +1,1 @@
+javac *.java && java -ea -jar ReverseTest.jar %1

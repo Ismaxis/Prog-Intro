@@ -1,0 +1,1 @@
+javac *.java && java -ea -jar SumTest.jar %1
