@@ -51,13 +51,12 @@ public class Reverse {
 
     public static void printReverseArray(int[][] arr) {
         for (int i = arr.length - 1; i >= 0; --i) {
-            String rowOutput = "";
             if (arr[i].length > 0) {
                 for (int j = arr[i].length - 1; j >= 0; --j) {
-                    rowOutput = rowOutput + " " + arr[i][j];
+                    System.out.print(arr[i][j] + " ");
                 }
             }
-            System.out.println(rowOutput);
+            System.out.println();
         }
     }
 }
