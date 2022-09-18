@@ -2,6 +2,7 @@ public class Sum {
     public static void main(String[] args) {
         int sum = 0;
         for (String string : args) {
+            string = string + " ";
             boolean isSpace = true;
             int start = 0;
             for (int i = 0; i < string.length(); i++) {
@@ -17,10 +18,6 @@ public class Sum {
                     start = i;
                     isSpace = false;
                 }
-            }
-
-            if (!isSpace) {
-                sum += Integer.parseInt(string.substring(start, string.length()));
             }
         }
         System.out.println(sum);
