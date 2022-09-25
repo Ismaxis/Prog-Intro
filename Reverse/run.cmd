@@ -1,1 +1,1 @@
-javac Reverse.java && java -cp . Reverse
+javac %1.java && java -cp . %1
