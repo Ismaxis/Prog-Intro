@@ -1,1 +1,1 @@
-javac %1.java && java -cp . %1
+javac %1.java && java -cp . %*
