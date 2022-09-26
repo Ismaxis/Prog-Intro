@@ -4,6 +4,7 @@ import java.util.Map.Entry;
 
 
 public class WordStatInput {
+    static final int BUFFER_SIZE = 1024;
     public static void main(String[] args) {
         try {
             LinkedHashMap<String, Integer> hashMap = countWordsInFile(args[0]);
@@ -20,10 +21,12 @@ public class WordStatInput {
         try {
             BufferedReader reader = createReader(fileName);
             try {
-                String line = reader.readLine();
-                while (line != null) {
-                    parseWords(hashMap, line);
-                    line = reader.readLine();
+                char[] buffer = new char[BUFFER_SIZE];
+                int read = reader.read(buffer);
+                String reminder = "";
+                while (read >= 0) {
+                    reminder = parseWords(hashMap, reminder + new String(buffer, 0, read));
+                    read = reader.read(buffer);
                 }
             } finally {
                 reader.close();
@@ -39,10 +42,11 @@ public class WordStatInput {
 
     public static void outputResult(LinkedHashMap<String, Integer> hashMap, String fileName) {
         try {
-            PrintWriter writer = createWriter(fileName); 
+            BufferedWriter writer = createWriter(fileName); 
             try {
                 for (Entry<String, Integer> entry : hashMap.entrySet()) {
-                    writer.println(entry.getKey() + " " + entry.getValue());   
+                    writer.write(entry.getKey() + " " + entry.getValue());
+                    writer.newLine();   
                 }  
             } finally {
                 writer.close();
@@ -54,20 +58,27 @@ public class WordStatInput {
         }
     }
 
-    public static void parseWords(LinkedHashMap<String, Integer> hashMap, String string) {
-        for (int i = 0; i < string.length(); i++) {
+
+    public static String parseWords(LinkedHashMap<String, Integer> hashMap, String source) {
+        String reminder = "";
+        for (int i = 0; i < source.length(); i++) {
             int start = i;
 
-            while (i != string.length() && isPartOfWord(string.charAt(i))) {
+            while (isPartOfWord(source.charAt(i))) {
                 i++;
+                if (i == source.length()) {
+                    reminder = source.substring(start, i);
+                    break;
+                }
             }
-
-            if (start < i) {
-                String key = string.substring(start, i).toLowerCase();
+            if (start < i && reminder.isEmpty()) {
+                String key = source.substring(start, i).toLowerCase();
                 int value = hashMap.containsKey(key) ? hashMap.get(key) : 0;
                 hashMap.put(key, value + 1);
             }
         }
+
+        return reminder;
     }
 
     public static boolean isPartOfWord(char ch) {
@@ -77,12 +88,12 @@ public class WordStatInput {
     public static BufferedReader createReader(String fileName) throws FileNotFoundException, UnsupportedEncodingException {
         return new BufferedReader(
             new InputStreamReader(
-                new FileInputStream(fileName), "utf8")); 
+                new FileInputStream(fileName), "UTF8")); 
     }
 
-    public static PrintWriter createWriter(String fileName) throws FileNotFoundException, UnsupportedEncodingException {
-        return new PrintWriter(
+    public static BufferedWriter createWriter(String fileName) throws FileNotFoundException, UnsupportedEncodingException {
+        return new BufferedWriter(
                 new OutputStreamWriter(
-                    new FileOutputStream(fileName), "utf8"));
+                    new FileOutputStream(fileName), "UTF8"));
     }
 }
