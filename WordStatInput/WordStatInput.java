@@ -11,50 +11,41 @@ public class WordStatInput {
 
             outputResult(hashMap, args[1]);
         } catch (ArrayIndexOutOfBoundsException e) {
-            System.out.println("Not enougth command line variables (2 expexted): " + e.getMessage());
+            System.out.println("Not enougth command line variables (2 expected): " + e.getMessage());
+        } catch (FileNotFoundException e) {
+            System.out.println("File not found: " + e.getMessage());
+        } catch (IOException e) {   
+            System.out.println("Input/Output error: " + e.getMessage());
         }
     }
 
-    public static LinkedHashMap<String, Integer> countWordsInFile(String fileName) {
+    public static LinkedHashMap<String, Integer> countWordsInFile(String fileName) throws FileNotFoundException, IOException {
         LinkedHashMap<String, Integer> hashMap = new LinkedHashMap<>();
-
+        BufferedReader reader = createReader(fileName);
         try {
-            BufferedReader reader = createReader(fileName);
-            try {
-                char[] buffer = new char[BUFFER_SIZE];
-                int read = reader.read(buffer);
-                String reminder = "";
-                while (read >= 0) {
-                    reminder = parseWords(hashMap, reminder + new String(buffer, 0, read));
-                    read = reader.read(buffer);
-                }
-            } finally {
-                reader.close();
+            char[] buffer = new char[BUFFER_SIZE];
+            int read = reader.read(buffer);
+            String reminder = "";
+            while (read >= 0) {
+                reminder = parseWords(hashMap, reminder + new String(buffer, 0, read));
+                read = reader.read(buffer);
             }
-        } catch (FileNotFoundException e) {
-            System.out.println("File not found: " + e.getMessage());
-        } catch (IOException e) {
-            System.out.println("IO Exception: " + e.getMessage());
+        } finally {
+            reader.close();
         }
 
         return hashMap;
     }
 
-    public static void outputResult(LinkedHashMap<String, Integer> hashMap, String fileName) {
+    public static void outputResult(LinkedHashMap<String, Integer> hashMap, String fileName) throws FileNotFoundException, IOException {
+        BufferedWriter writer = createWriter(fileName); 
         try {
-            BufferedWriter writer = createWriter(fileName); 
-            try {
-                for (Entry<String, Integer> entry : hashMap.entrySet()) {
-                    writer.write(entry.getKey() + " " + entry.getValue());
-                    writer.newLine();   
-                }  
-            } finally {
-                writer.close();
-            }
-        } catch (FileNotFoundException e) {
-            System.out.println("File not found: " + e.getMessage());
-        } catch (IOException e) {
-            System.out.println("IO Exception: " + e.getMessage());
+            for (Entry<String, Integer> entry : hashMap.entrySet()) {
+                writer.write(entry.getKey() + " " + entry.getValue());
+                writer.newLine();   
+            }   
+        } finally {
+            writer.close();
         }
     }
 
