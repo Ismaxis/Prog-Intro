@@ -4,7 +4,6 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
 import java.util.NoSuchElementException;
-import java.util.Scanner;
 
 public class MyScanner {
     private static int BUFFER_SIZE = 1024;
