@@ -175,27 +175,27 @@ public class MyScanner {
 
 
 
-    public static void main(String[] args) {    
-        // CompareMethod cmp;
-        // cmp = new WhiteSpace();
-        // cmp = new PartOfWord();     
-        // MyScanner scn = new MyScanner(System.in, cmp);
-        // MyScanner scn;
-        // try {
-        // 	scn = new MyScanner(new FileInputStream("MyScanner/file.txt"), cmp);
-        //     while (scn.hasNextLine()) {
-        //         System.out.println(scn.nextLine());
-        //     }
-        // } catch (FileNotFoundException e) {
-        // 	e.printStackTrace(System.err);
-        // }
-        Scanner scn = new Scanner("123 \n\n\n 123 123 ");
+    // public static void main(String[] args) {    
+    //     // CompareMethod cmp;
+    //     // cmp = new WhiteSpace();
+    //     // cmp = new PartOfWord();     
+    //     // MyScanner scn = new MyScanner(System.in, cmp);
+    //     // MyScanner scn;
+    //     // try {
+    //     // 	scn = new MyScanner(new FileInputStream("MyScanner/file.txt"), cmp);
+    //     //     while (scn.hasNextLine()) {
+    //     //         System.out.println(scn.nextLine());
+    //     //     }
+    //     // } catch (FileNotFoundException e) {
+    //     // 	e.printStackTrace(System.err);
+    //     // }
+    //     Scanner scn = new Scanner("123 \n\n\n 123 123 ");
 
-        while (scn.hasNextLine()) {
-            System.out.println(scn.nextLine());
-        }
+    //     while (scn.hasNextLine()) {
+    //         System.out.println(scn.nextLine());
+    //     }
         
-    }
+    // }
 }
 
 
