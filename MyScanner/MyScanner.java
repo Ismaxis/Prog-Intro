@@ -3,21 +3,26 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
+import java.util.Arrays;
 import java.util.NoSuchElementException;
+import java.util.Scanner;
 
 public class MyScanner {
-    private static int BUFFER_SIZE = 1024;
+    private final static int DEFAULT_BUFFER_SIZE = 1024;
 
     private CompareMethod cmp;
     private InputStreamReader reader;
 
-    private String buffer;
+    private char[] buffer;
+    private int amountOfData;
     private boolean streamEnded;
-
-    private String nextToken;
-    private int offset;
-    private int endOfLine;
     
+    private int startOfNextToken;
+    private int lenOfNextToken;
+    //private int offset;
+    private int startOfNextLine;
+    private int endOfNextLine;
+
     MyScanner(InputStream stream, CompareMethod cmp) {
         this.cmp = cmp;
         try {
@@ -25,115 +30,110 @@ public class MyScanner {
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace(System.err);
         }
-        streamEnded = false;
-        nextToken = "";
-        offset = 0;
-        endOfLine = 0;
-
+        buffer = new char[DEFAULT_BUFFER_SIZE];
         try {
-			readInBuffer();
-		} catch (IOException e) {
-			System.err.println(e.getMessage());
-			e.printStackTrace(System.err);
-		}
+            readInBuffer();
+        } catch (IOException e) {
+            System.err.println(e.getMessage());
+            e.printStackTrace(System.err);
+        }
     }
 
     MyScanner(String str, CompareMethod cmp) {
         this(new ByteArrayInputStream(str.getBytes()), cmp);
     }
-    
+
     public CompareMethod getCompareMethodObj() {
         return cmp;
     }
 
-    public String nextLine() {
-        if (endOfLine <= offset) {
-            endOfLine = offset + findEndOfLine();
-        }
-        String result = buffer.substring(offset, endOfLine).replace(System.lineSeparator(), ""); // removing \n
-        offset = endOfLine;
-        return result;
-    }
+    // public String nextLine() {
+    //     if (endOfNextLine <= offset) {
+    //         endOfNextLine = offset + findEndOfLine();
+    //     }
+    //     String result = buffer.substring(offset, endOfNextLine).replace(System.lineSeparator(), ""); // removing \n
+    //     offset = endOfNextLine;
+    //     return result;
+    // }
 
-    public boolean hasNextLine() {
-        endOfLine = findEndOfLine() + offset;
-        return endOfLine > offset;
-    }
+    // public boolean hasNextLine() {
+    //     endOfNextLine = findEndOfLine() + offset;
+    //     return endOfNextLine > offset;
+    // }
 
-    private int findEndOfLine() {
-        int i = 0;
-        try {
-            offset = findStartOfLine();
+    // private int findEndOfLine() {
+    //     int i = 0;
+    //     try {
+    //         offset = findStartOfLine();
             
-            while(offset + i != buffer.length() && buffer.charAt(offset + i) != '\n') {
-                i++;
-            }
+    //         while(offset + i != buffer.length() && buffer.charAt(offset + i) != '\n') {
+    //             i++;
+    //         }
 
-            if (offset + i == buffer.length()) {
-                readInBuffer(buffer.substring(offset));
-                offset = 0;
-                endOfLine = 0;
-                if (!streamEnded) {
-                    i = findEndOfLine(); 
-                }
-            } else {
-                i++;
-            }
-        } catch (IOException e) {
-            return 0;
-        }
+    //         if (offset + i == buffer.length()) {
+    //             readInBuffer(buffer.substring(offset));
+    //             offset = 0;
+    //             endOfNextLine = 0;
+    //             if (!streamEnded) {
+    //                 i = findEndOfLine(); 
+    //             }
+    //         } else {
+    //             i++;
+    //         }
+    //     } catch (IOException e) {
+    //         return 0;
+    //     }
         
-        return i;
-    }
+    //     return i;
+    // }
 
-    private int findStartOfLine() {
-        if (streamEnded) {
-            return offset;
-        }
+    // private int findStartOfLine() {
+    //     if (streamEnded) {
+    //         return offset;
+    //     }
 
-        int i = offset;
-        while(i != buffer.length() && buffer.charAt(i) == '\n') {
-            i++;
-        }
+    //     int i = offset;
+    //     while(i != buffer.length && buffer[i] == '\n') {
+    //         i++;
+    //     }
         
-        return i;
-    }
+    //     return i;
+    // }
 
     public String nextToken() {
-        if (nextToken.isEmpty()) {
-            if (!hasNextToken()) {
+        if (lenOfNextToken == 0) {
+            startOfNextToken = findStart();
+            lenOfNextToken = findLen();
+    
+            if (lenOfNextToken == 0) {
                 throw new NoSuchElementException();
             }
         }
-        String result = nextToken;
-        nextToken = "";
+
+        String result = new String(buffer, startOfNextToken, lenOfNextToken);
+        startOfNextToken += lenOfNextToken;
+        lenOfNextToken = 0;
         return result;
     }
 
     public boolean hasNextToken() {
-        int endOfToken = findEnd();
-        if(endOfToken == 0) {
-            return false;
-        } else {
-            nextToken = buffer.substring(offset, offset + endOfToken);
-            offset += endOfToken;
-            return !nextToken.isEmpty();
-        }
+        startOfNextToken = findStart();
+        lenOfNextToken = findLen();
+        return lenOfNextToken != 0;
     }
 
-    private int findEnd() {
+    private int findLen() {
         int i = 0;
         try {
-            offset = findStart();
-            while(offset + i != buffer.length() && cmp.isPartOfToken(buffer.charAt(offset + i))) {
+            while(startOfNextToken + i != amountOfData && cmp.isPartOfToken(buffer[startOfNextToken + i])) {
                 i++;
             }
 
-            if (offset + i == buffer.length()) {
-                readInBuffer(buffer.substring(offset));
-                offset = 0;
+            if (startOfNextToken + i == buffer.length) {
+                readInBuffer(startOfNextToken, i);
+                startOfNextToken = 0;
                 if (!streamEnded) {
-                    i = findEnd(); 
+                    i = findLen(); 
                 }
             }
         } catch (IOException e) {
@@ -145,11 +145,11 @@ public class MyScanner {
 
     private int findStart() {
         if (streamEnded) {
-            return offset;
+            return startOfNextToken;
         }
 
-        int i = offset;
-        while(i != buffer.length() && !cmp.isPartOfToken(buffer.charAt(i))) {
+        int i = startOfNextToken;
+        while(i != buffer.length && !cmp.isPartOfToken(buffer[i])) {
             i++;
         }
         
@@ -157,46 +157,45 @@ public class MyScanner {
     }
 
     private void readInBuffer() throws IOException {
-        readInBuffer("");
+        readInBuffer(buffer.length,0);
     }
 
-    private void readInBuffer(String reminder) throws IOException {
-        char[] charBuf = new char[BUFFER_SIZE];
-        try {
-            int read = reader.read(charBuf);
-            if (read >= 0) {
-                buffer = reminder + new String(charBuf, 0, read);
-            } else {
-                buffer = reminder;
-                streamEnded = true;
-                reader.close();
-            }
-        } catch (IOException e) {
-            throw new IOException(e);
+    private void readInBuffer(int startOfReminder, int lenOfReminder) throws IOException {
+        if (startOfReminder == 0) {
+            buffer = Arrays.copyOf(buffer, buffer.length * 2);
+        } else {
+            buffer = Arrays.copyOfRange(buffer, startOfReminder, buffer.length + DEFAULT_BUFFER_SIZE);
+        }
+        
+        int read = reader.read(buffer, lenOfReminder, buffer.length - lenOfReminder);
+        amountOfData = read + lenOfReminder;
+        if(read < 0) {
+            streamEnded = true;
+            reader.close();
         }
     }
 
-    // public static void main(String[] args) {    
-    //     // CompareMethod cmp;
-    //     // cmp = new WhiteSpace();
-    //     // cmp = new PartOfWord();     
-    //     // MyScanner scn = new MyScanner(System.in, cmp);
-    //     // MyScanner scn;
-    //     // try {
-    //     // 	scn = new MyScanner(new FileInputStream("MyScanner/file.txt"), cmp);
-    //     //     while (scn.hasNextLine()) {
-    //     //         System.out.println(scn.nextLine());
-    //     //     }
-    //     // } catch (FileNotFoundException e) {
-    //     // 	e.printStackTrace(System.err);
-    //     // }
-    //     Scanner scn = new Scanner("123 \n\n\n 123 123 ");
 
-    //     while (scn.hasNextLine()) {
-    //         System.out.println(scn.nextLine());
-    //     }
-        
-    // }
+    public static void main(String[] args) {    
+        CompareMethod cmp;
+        cmp = new WhiteSpace();
+        // cmp = new PartOfWord();     
+        // MyScanner scn = new MyScanner(System.in, cmp);
+        MyScanner scn;
+        scn = new MyScanner("asd2 awdawd 123 sadwa d \n\n\n\n ", cmp);
+        while (scn.hasNextToken()) {
+            System.out.println(scn.nextToken());
+        }
+
+        // try {
+        // 	scn = new MyScanner(new FileInputStream("MyScanner/file.txt"), cmp);
+        //     while (scn.hasNextLine()) {
+        //         System.out.println(scn.nextLine());
+        //     }
+        // } catch (FileNotFoundException e) {
+        // 	e.printStackTrace(System.err);
+        // }
+    }
 }
 
 
