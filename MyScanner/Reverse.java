@@ -14,9 +14,8 @@ public class Reverse {
         int amount = 0;
 
         while (inputScanner.hasNextLine()) {
-            lineScanner = new MyScanner(inputScanner.nextLine(), new WhiteSpace());
+            lineScanner = new MyScanner(inputScanner.nextLine(), inputScanner.getCompareMethodObj());
             int[] newRow = parseLine(lineScanner);
-            // place for analyze
 
             if (amount >= resultArr.length) {
                 resultArr = Arrays.copyOf(resultArr, resultArr.length * 2);
@@ -34,7 +33,6 @@ public class Reverse {
         int amount = 0;
         while (lineScanner.hasNextToken()) {
             int value = Integer.parseInt(lineScanner.nextToken());
-            // place for analyze
 
             if (amount >= lineArr.length) {
                 lineArr = Arrays.copyOf(lineArr, lineArr.length * 2);

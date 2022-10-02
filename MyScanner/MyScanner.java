@@ -42,6 +42,10 @@ public class MyScanner {
         this(new ByteArrayInputStream(str.getBytes()), cmp);
     }
     
+    public CompareMethod getCompareMethodObj() {
+        return cmp;
+    }
+
     public String nextLine() {
         if (endOfLine <= offset) {
             endOfLine = offset + findEndOfLine();
@@ -172,8 +176,6 @@ public class MyScanner {
         }
     }
 
-
-
     // public static void main(String[] args) {    
     //     // CompareMethod cmp;
     //     // cmp = new WhiteSpace();
@@ -196,8 +198,6 @@ public class MyScanner {
         
     // }
 }
-
-
 
 
 interface CompareMethod{
