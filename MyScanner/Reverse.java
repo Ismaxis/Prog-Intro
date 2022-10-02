@@ -1,7 +1,7 @@
 import java.util.Arrays;
 
 public class Reverse {
-    public static void main(String[] args) {
+    public static void main(String[] args)  {
         MyScanner in = new MyScanner(System.in, new WhiteSpace());
         int[][] arr = parseInput(in);
 
@@ -55,5 +55,5 @@ public class Reverse {
             }
             System.out.println();
         }
-    }
+    } 
 }
