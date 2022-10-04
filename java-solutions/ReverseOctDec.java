@@ -1,8 +1,9 @@
 import java.util.Arrays;
 
-public class Reverse {
+public class ReverseOctDec {
     public static void main(String[] args)  {
         MyScanner in = new MyScanner(System.in, new WhiteSpace());
+        // MyScanner in = new MyScanner("1 2 3\r\n-4o -5o\r\n6", new WhiteSpace());
         int[][] arr = parseInput(in);
 
         printReverseArray(arr);
@@ -20,7 +21,6 @@ public class Reverse {
             }
             resultArr[amount++] = parseLine(lineScanner);
         }
-
         resultArr = Arrays.copyOf(resultArr, amount);
         return resultArr;
     }
@@ -32,6 +32,7 @@ public class Reverse {
             if (amount >= lineArr.length) {
                 lineArr = Arrays.copyOf(lineArr, lineArr.length * 2);
             }
+        
             lineArr[amount++] = lineScanner.nextInt();
         }
 
