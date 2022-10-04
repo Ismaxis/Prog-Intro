@@ -1,1 +1,0 @@
-javac MyScanner.java Reverse.java && java -ea -jar FastReverseTest.jar Base

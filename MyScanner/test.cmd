@@ -1,1 +1,0 @@
-javac MyScanner.java && testReverse.cmd %1 && testWordStat.cmd %2

@@ -1,1 +1,0 @@
-javac *.java && java -cp . MyScanner.java %*
