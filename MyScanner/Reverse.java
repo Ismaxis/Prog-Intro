@@ -15,13 +15,10 @@ public class Reverse {
 
         while (inputScanner.hasNextLine()) {
             lineScanner = new MyScanner(inputScanner.nextLine(), inputScanner.getCompareMethodObj());
-            int[] newRow = parseLine(lineScanner);
-
             if (amount >= resultArr.length) {
                 resultArr = Arrays.copyOf(resultArr, resultArr.length * 2);
             }
-            resultArr[amount] = newRow;
-            amount++;
+            resultArr[amount++] = parseLine(lineScanner);
         }
 
         resultArr = Arrays.copyOf(resultArr, amount);
@@ -31,14 +28,11 @@ public class Reverse {
     public static int[] parseLine(MyScanner lineScanner) {
         int[] lineArr = new int[1];
         int amount = 0;
-        while (lineScanner.hasNextToken()) {
-            int value = Integer.parseInt(lineScanner.nextToken());
-
+        while (lineScanner.hasNextInt()) {
             if (amount >= lineArr.length) {
                 lineArr = Arrays.copyOf(lineArr, lineArr.length * 2);
             }
-            lineArr[amount] = value;
-            amount++;
+            lineArr[amount++] = lineScanner.nextInt();
         }
 
         lineArr = Arrays.copyOf(lineArr, amount);

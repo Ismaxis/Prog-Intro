@@ -13,12 +13,13 @@ public class MyScanner {
     private InputStreamReader reader;
 
     private char[] buffer;
-    private int amountOfValidData;
     private boolean streamEnded;
     
     private int startOfNextToken;
     private int lenOfNextToken;
+    private int startOfNextLine;
     private int lenOfNextLine;
+    private int lenOfLineSeparator;
 
     MyScanner(InputStream stream, CompareMethod cmp) {
         this.cmp = cmp;
@@ -48,37 +49,127 @@ public class MyScanner {
         if (!hasNextLine()) {
             throw new NoSuchElementException();
         }
+        
+        lenOfNextLine = findLenOfNextLine();
 
-        String result = new String(buffer, startOfNextToken, lenOfNextLine);
-        startOfNextToken += lenOfNextLine + 1;
+        String result = new String(buffer, startOfNextLine, lenOfNextLine - lenOfLineSeparator);
+        startOfNextLine += lenOfNextLine;
         lenOfNextLine = 0;
+        startOfNextToken = startOfNextLine;
+        lenOfNextToken = 0;
         return result;
     }
 
     public boolean hasNextLine() {
-        lenOfNextLine = findLenOfNextLine();
-        return startOfNextToken < amountOfValidData;
+        if (buffer.length - startOfNextLine <= 0) { 
+            if (streamEnded) {
+                return false;
+            } else {
+                try {
+                    readInBuffer();
+                } catch (IOException e) {
+                    System.err.println("has next line read failure");
+                    return false;
+                }
+                startOfNextLine = 0;
+                return buffer.length > 0;
+            }
+            
+        } else {
+            return true;
+        } 
     }
 
     private int findLenOfNextLine() {
+        lenOfLineSeparator = 0;
         int i = 0;
         try {    
-            while (startOfNextToken + i < amountOfValidData && buffer[startOfNextToken + i] != '\n') {
-                i++;
-            }
-
-            if (startOfNextToken + i == buffer.length) {
-                readInBuffer(startOfNextToken, i);
-                if (!streamEnded) {
-                    startOfNextToken = 0;
-                    i = findLenOfNextLine(); 
+            while (true) {
+                if (startOfNextLine + i + 1 >= buffer.length) {
+                    if (streamEnded) {
+                        lenOfLineSeparator = parseLineSeparator(buffer[startOfNextLine + i], ' ');
+                        i = buffer.length;
+                        break;
+                    }
+                    readInBuffer(startOfNextLine, buffer.length - startOfNextLine);
+                    startOfNextLine = 0;
+                } else {
+                    int lineSeparatorLen = parseLineSeparator(buffer[startOfNextLine + i], buffer[startOfNextLine + i + 1]);
+                    if (lineSeparatorLen > 0) {
+                        lenOfLineSeparator = lineSeparatorLen;
+                        i += lineSeparatorLen; 
+                        break;
+                    }
+                    i++;
                 }
-            }
+            }       
         } catch (IOException e) {
-            return 0;
+            System.err.println("Find len of line failure");
         }
         
         return i;
+    }
+
+    private int parseLineSeparator(char ch1, char ch2) {
+        if (ch1 == '\r') {
+            if (ch2 == '\n') {
+                return 2;
+            }
+            return 1;
+        } else if (ch1 == '\n') {
+            return 1;
+        } else {
+            return 0;
+        }
+    }
+
+    public int nextInt() {
+        return Integer.parseInt(nextToken());
+    }
+
+    public boolean hasNextInt() {
+        return hasNextToken() && canParseNextTokenToInt();
+    }
+
+    private boolean canParseNextTokenToInt() { 
+        int maxLen = Integer.toString(Integer.MAX_VALUE).length();
+
+        boolean isNegative = false;
+        int offset = 0;
+        for (int i = 0; i < lenOfNextToken; i++) {
+            if (!Character.isDigit(buffer[startOfNextToken + i])) {
+                if (i == 0) {
+                    if (buffer[startOfNextToken + i] == '-') {
+                        offset = 1;
+                        isNegative = true;
+                    } else if(buffer[startOfNextToken + i] == '+') {
+                        offset = 1;
+                    }
+                    continue;
+                } else {
+                    return false;
+                }
+            }
+        }
+        
+        if (lenOfNextToken - offset > maxLen) {
+            return false;   
+        } 
+        if (lenOfNextToken - offset == maxLen) {
+            char[] maxInt = Integer.toString(Integer.MAX_VALUE).toCharArray();
+            if (isNegative) {
+                maxInt[maxInt.length - 1] = (char)((int)maxInt[maxInt.length - 1] + 1);
+            }
+            for (int i = 0; i < lenOfNextToken - offset; i++) {
+                if (buffer[startOfNextToken + offset + i] > maxInt[i]) {
+                    return false;
+                } else if (buffer[startOfNextToken + offset + i] < maxInt[i]) {
+                    return true;
+                }
+            }
+        }
+
+        return true;
     }
 
     public String nextToken() {
@@ -94,6 +185,8 @@ public class MyScanner {
         String result = new String(buffer, startOfNextToken, lenOfNextToken);
         startOfNextToken += lenOfNextToken;
         lenOfNextToken = 0;
+        startOfNextLine = startOfNextToken;
+        lenOfNextLine = 0;  
         return result;
     }
 
@@ -104,21 +197,26 @@ public class MyScanner {
     }
 
     private int findLenOfNextToken() {
+        if (streamEnded) {
+            return buffer.length - startOfNextToken;
+        }
+        
         int i = 0;
         try {
-            while(startOfNextToken + i < amountOfValidData && cmp.isPartOfToken(buffer[startOfNextToken + i])) {
-                i++;
-            }
-
-            if (startOfNextToken + i == buffer.length) {
-                readInBuffer(startOfNextToken, i);
-                if (!streamEnded) {
+            while(cmp.isPartOfToken(buffer[startOfNextToken + i])) {
+                if (startOfNextToken + i + 1 >= buffer.length) {
+                    if (streamEnded) {
+                        i = buffer.length;
+                        break;
+                    }
+                    readInBuffer(startOfNextToken, i + 1);
                     startOfNextToken = 0;
-                    i = findLenOfNextToken(); 
+                } else {
+                    i++;
                 }
             }
         } catch (IOException e) {
-            return 0;
+            System.err.println("Find len of token failure");
         }
         
         return i;
@@ -129,23 +227,25 @@ public class MyScanner {
             return startOfNextToken;
         }
 
-        int i = startOfNextToken;
-        while(i != buffer.length && !cmp.isPartOfToken(buffer[i])) {
-            i++;
-        }
-        
+        int i = 0;
         try {
-            if (i == buffer.length) {
-                readInBuffer();
-                if (!streamEnded) {
+            while(!cmp.isPartOfToken(buffer[startOfNextToken + i])) {
+                if (startOfNextToken + i + 1 >= buffer.length) {
+                    if (streamEnded) {
+                        i = buffer.length;
+                        break;
+                    }
+                    readInBuffer(startOfNextToken, i + 1);
+                    i = 0;
                     startOfNextToken = 0;
-                    i = findStartOfNextToken();
+                } else {
+                    i++;
                 }
             }
         } catch (IOException e) {
-            System.err.println("find start failure");
+            System.err.println("Find start of token failure");
         }
-        return i;
+        return startOfNextToken + i;
     }
     
     private void readInBuffer() throws IOException {
@@ -158,36 +258,19 @@ public class MyScanner {
         } else {
             buffer = Arrays.copyOfRange(buffer, startOfReminder, buffer.length + DEFAULT_BUFFER_SIZE);
         }
-        
         int read = reader.read(buffer, lenOfReminder, buffer.length - lenOfReminder);
+        int amountOfValidData = 0;
         if(read < 0) {
             streamEnded = true;
             reader.close();
+            amountOfValidData = lenOfReminder;
         } else {
             amountOfValidData = read + lenOfReminder;
         }
+        if (amountOfValidData != buffer.length) {
+            buffer = Arrays.copyOf(buffer, amountOfValidData);
+        }
     }
-
-    // public static void main(String[] args) {    
-    //     CompareMethod cmp;
-    //     // cmp = new WhiteSpace();
-    //     cmp = new PartOfWord();     
-    //     // MyScanner scn = new MyScanner(System.in, cmp);
-    //     MyScanner scn;
-    //     scn = new MyScanner("1\n\n3 2", cmp);
-    //     while (scn.hasNextLine()) {
-    //         System.out.println(scn.nextLine());
-    //     }
-
-    //     // try {
-    //     // 	scn = new MyScanner(new FileInputStream("MyScanner/file.txt"), cmp);
-    //     //     while (scn.hasNextLine()) {
-    //     //         System.out.println(scn.nextLine());
-    //     //     }
-    //     // } catch (FileNotFoundException e) {
-    //     // 	e.printStackTrace(System.err);
-    //     // }
-    // }
 }
 
 
