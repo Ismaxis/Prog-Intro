@@ -114,17 +114,25 @@ public class MyScanner {
         if (ch1 == '\r') {
             if (ch2 == '\n') {
                 return 2;
+            } else {
+                return 1;
             }
-            return 1;
         } else if (ch1 == '\n') {
-            return 1;
+                return 1;
         } else {
             return 0;
         }
     }
 
     public int nextInt() {
-        return Integer.parseInt(nextToken());
+        int value;
+        String token = nextToken();
+        if (Character.toLowerCase(token.charAt(token.length() - 1)) == 'o') {
+            value = (int)Long.parseLong(token.substring(0, token.length() - 1), 8);
+        } else {
+            value = (int)Long.parseLong(token);
+        }
+        return value;
     }
 
     public boolean hasNextInt() {
@@ -132,40 +140,29 @@ public class MyScanner {
     }
 
     private boolean canParseNextTokenToInt() { 
-        int maxLen = Integer.toString(Integer.MAX_VALUE).length();
-
-        boolean isNegative = false;
+        boolean isOctal = false;
         int offset = 0;
-        for (int i = 0; i < lenOfNextToken; i++) {
-            if (!Character.isDigit(buffer[startOfNextToken + i])) {
-                if (i == 0) {
-                    if (buffer[startOfNextToken + i] == '-') {
-                        offset = 1;
-                        isNegative = true;
-                    } else if(buffer[startOfNextToken + i] == '+') {
-                        offset = 1;
-                    }
-                    continue;
-                } else {
-                    return false;
-                }
+
+        if (!Character.isDigit(buffer[startOfNextToken])) {
+            if (buffer[startOfNextToken] == '-') {
+                offset = 1;
+            } else if(buffer[startOfNextToken] == '+') {
+                offset = 1;
+            } else {
+                return false;
             }
         }
-        
-        if (lenOfNextToken - offset > maxLen) {
-            return false;   
-        } 
-        if (lenOfNextToken - offset == maxLen) {
-            char[] maxInt = Integer.toString(Integer.MAX_VALUE).toCharArray();
-            if (isNegative) {
-                maxInt[maxInt.length - 1] = (char)((int)maxInt[maxInt.length - 1] + 1);
+        if (!Character.isDigit(buffer[startOfNextToken + lenOfNextToken - 1])) {
+            if (Character.toLowerCase(buffer[startOfNextToken + lenOfNextToken - 1]) == 'o') {
+                isOctal = true;
+            }   else {
+                return false;
             }
-            for (int i = 0; i < lenOfNextToken - offset; i++) {
-                if (buffer[startOfNextToken + offset + i] > maxInt[i]) {
-                    return false;
-                } else if (buffer[startOfNextToken + offset + i] < maxInt[i]) {
-                    return true;
-                }
+        }
+
+        for (int i = offset; i < lenOfNextToken - (isOctal ? 1 : 0); i++) {
+            if (!Character.isDigit(buffer[startOfNextToken + i])) {
+                return false;
             }
         }
 

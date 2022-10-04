@@ -1,1 +1,1 @@
-java -ea -jar "../tests/FastReverseTest.jar" Base
+java -ea -jar "../tests/FastReverseTest.jar" %1
