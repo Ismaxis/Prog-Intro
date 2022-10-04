@@ -26,11 +26,11 @@ public class ReverseSum {
     public static int[] parseLine(MyScanner lineScanner) {
         int[] lineArr = new int[1];
         int count = 0;
-        while (lineScanner.hasNextToken()) {
+        while (lineScanner.hasNextInt()) {
             if (count >= lineArr.length) {
                 lineArr = Arrays.copyOf(lineArr, lineArr.length * 2);
             }
-            lineArr[count++] = Integer.parseInt(lineScanner.nextToken());
+            lineArr[count++] = lineScanner.nextInt();
         }
 
         lineArr = Arrays.copyOf(lineArr, count);
