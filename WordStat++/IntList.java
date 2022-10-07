@@ -10,7 +10,7 @@ class IntList {
     }
 
     public IntList() {
-        this(0);
+        this(1);
     }
 
     public IntList(IntList that) {
@@ -18,23 +18,17 @@ class IntList {
         this.actualSize = that.actualSize; 
     }
 
-    public void set(int index, int value) {
-        if (isValidIndex(index)) {
-            storage[index] = value;
-        } else {
-            throw new ArrayIndexOutOfBoundsException(index);
-        }
+    public int size() {
+        return actualSize;
     }
-
+    
     public void append(int value) {
         adjustLength();
         storage[actualSize++] = value;
     }
 
-    private void adjustLength() {
-        if (actualSize == storage.length) {
-            storage = Arrays.copyOf(storage, actualSize * 2);
-        }
+    public int[] toIntArray() {
+        return Arrays.copyOf(storage, actualSize);
     }
 
     public int get(int index) {
@@ -45,11 +39,13 @@ class IntList {
         }
     }
 
-    private boolean isValidIndex(int index) {
-        return index > 0 && index < actualSize;
+    private void adjustLength() {
+        if (actualSize == storage.length) {
+            storage = Arrays.copyOf(storage, actualSize * 2);
+        }
     }
 
-    public int[] toIntArray() {
-        return Arrays.copyOf(storage, actualSize);
+    private boolean isValidIndex(int index) {
+        return index > 0 && index < actualSize;
     }
 }
