@@ -55,7 +55,7 @@ public class Wspp {
 
 class WordStatistics{
     private IntList occurences;
-
+    
     WordStatistics() {
         occurences = new IntList();
     }
