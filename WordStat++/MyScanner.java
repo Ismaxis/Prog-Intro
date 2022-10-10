@@ -146,12 +146,4 @@ public class MyScanner {
         }
         return startOfNextToken + i;
     }
-
-    public static void main(String[] args) {
-        MyScanner scn = new MyScanner("12\r\n2  3\n\n\n34", new WhiteSpace());
-
-        while (scn.hasNextLine()) {
-            System.out.println(scn.nextLine());
-        }
-    }
 }
