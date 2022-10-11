@@ -1,1 +1,1 @@
-javac -d .\out\ -cp .;..\Scanner\ *.java &&  cd "./out/" && java -ea -jar "../tests/WsppTest.jar" %1
+javac -d .\out\ -cp .;..\Scanner\ *.java &&  cd .\out && java -ea -jar ..\tests\WsppTest.jar %1

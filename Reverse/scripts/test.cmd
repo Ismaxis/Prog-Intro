@@ -1,0 +1,1 @@
+javac -d .\out *.java && cd .\out && java -ea -jar ..\tests\ReverseTest.jar %1

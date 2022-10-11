@@ -1,1 +1,1 @@
-javac -d out *.java && java -ea -cp out MarkupTest Base
+javac -d .\out *.java && cd .\out && java -ea Runner %1
