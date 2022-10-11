@@ -17,8 +17,8 @@ public class MyScanner {
         this.cmp = cmp;
     }
 
-    MyScanner(String str, CompareMethod cmp) {
-        this(new ByteArrayInputStream(str.getBytes()), cmp);
+    MyScanner(String str, CompareMethod cmp) throws UnsupportedEncodingException {
+        this(new ByteArrayInputStream(str.getBytes("utf-8")), cmp);
     }
 
     public CompareMethod getCompareMethodObj() {
@@ -51,16 +51,13 @@ public class MyScanner {
             i++;
 
             char curChar = buffer.nextChar();
-            if (curChar == '\r') {
+            if (curChar == '\r' || curChar == '\n') {
                 if (buffer.hasNextChar() && buffer.nextChar() == '\n') {
                     i++;
                     lenOfLineSeparator = 2;
                 } else {
                     lenOfLineSeparator = 1;
                 }
-                break;
-            } else if (curChar == '\n') {
-                lenOfLineSeparator = 1;
                 break;
             }
         }
@@ -72,9 +69,9 @@ public class MyScanner {
         String token = nextToken();
         int value;
         if (Character.toLowerCase(token.charAt(token.length() - 1)) == 'o') {
-            value = Integer.parseUnsignedInt(token.substring(0, token.length() - 1), 8);
+            value = (int)Long.parseLong(token.substring(0, token.length() - 1), 8);
         } else {
-            value = Integer.parseInt(token);
+            value = (int)Long.parseLong(token);
         }
         return value;
     }
