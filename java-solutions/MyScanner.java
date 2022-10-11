@@ -17,8 +17,12 @@ public class MyScanner {
         this.cmp = cmp;
     }
 
-    MyScanner(String str, CompareMethod cmp) throws UnsupportedEncodingException {
-        this(new ByteArrayInputStream(str.getBytes("utf-8")), cmp);
+    MyScanner(String str, CompareMethod cmp) {
+        this(new ByteArrayInputStream(str.getBytes()), cmp);
+    }
+
+    MyScanner(String str, CompareMethod cmp, String charsetName) throws UnsupportedEncodingException {
+        this(new ByteArrayInputStream(str.getBytes(charsetName)), cmp);
     }
 
     public CompareMethod getCompareMethodObj() {

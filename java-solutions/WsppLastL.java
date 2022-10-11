@@ -26,7 +26,7 @@ public class WsppLastL {
         int curLineNumber = 1;
         while (scn.hasNextLine()) {
             try {
-                countWordsInLine(map, new MyScanner(scn.nextLine(), scn.getCompareMethodObj()), curLineNumber++);
+                countWordsInLine(map, new MyScanner(scn.nextLine(), scn.getCompareMethodObj(), "utf-8"), curLineNumber++);
             } catch (UnsupportedEncodingException e) {
                 System.err.println("Unsupported encoding: " + e.getMessage());
             }

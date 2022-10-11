@@ -13,7 +13,7 @@ public class Reverse {
         MyScanner lineScanner;
         int amount = 0;
 
-        while (inputScanner.hasNextLine()) {
+        while (inputScanner.hasNextLine()) {    
             lineScanner = new MyScanner(inputScanner.nextLine(), inputScanner.getCompareMethodObj());
             if (amount >= resultArr.length) {
                 resultArr = Arrays.copyOf(resultArr, resultArr.length * 2);

@@ -3,7 +3,6 @@ import java.util.Arrays;
 public class ReverseOctDec {
     public static void main(String[] args)  {
         MyScanner in = new MyScanner(System.in, new WhiteSpace());
-        // MyScanner in = new MyScanner("1 2 3\r\n-4o -5o\r\n6", new WhiteSpace());
         int[][] arr = parseInput(in);
 
         printReverseArray(arr);
