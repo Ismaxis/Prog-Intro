@@ -1,0 +1,1 @@
+javac -d out *.java && java -ea -cp out MarkupTest Base
