@@ -69,9 +69,9 @@ public class MyScanner {
         String token = nextToken();
         int value;
         if (Character.toLowerCase(token.charAt(token.length() - 1)) == 'o') {
-            value = (int)Long.parseLong(token.substring(0, token.length() - 1), 8);
+            value = Integer.parseUnsignedInt(token.substring(0, token.length() - 1), 8);
         } else {
-            value = (int)Long.parseLong(token);
+            value = Integer.parseInt(token);
         }
         return value;
     }
