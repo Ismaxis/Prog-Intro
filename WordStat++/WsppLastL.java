@@ -6,7 +6,7 @@ import java.util.Map.Entry;
 import myscanner.MyScanner;
 import myscanner.PartOfWord;
 
-public class Wspp {
+public class WsppLastL {
     public static void main(String[] args) {
         try {
             if (args.length >= 2) {
@@ -26,21 +26,34 @@ public class Wspp {
         Map<String, WordStatistics> map = new LinkedHashMap<>();
         MyScanner scn = new MyScanner(new FileInputStream(fileName), new PartOfWord());
     
+        int curLineNumber = 1;
+        while (scn.hasNextLine()) {
+            try {
+                countWordsInLine(map, new MyScanner(scn.nextLine(), scn.getCompareMethodObj(), "utf-8"), curLineNumber++);
+            } catch (UnsupportedEncodingException e) {
+                System.err.println("Unsupported encoding: " + e.getMessage());
+            }
+        }
+        
+        return map;
+    }
+
+    public static void countWordsInLine(Map<String, WordStatistics> map, MyScanner lineScanner, int lineNumber) {
         int curWord = 1;
-        while (scn.hasNextToken()) {
-            String key = scn.nextToken().toLowerCase();
+        while (lineScanner.hasNextToken()) {
+            String key = lineScanner.nextToken().toLowerCase();
             WordStatistics curWordStat;
+
             if (map.containsKey(key)) {
                 curWordStat = map.get(key);
             } else {
                 curWordStat = new WordStatistics();
             }
 
-            curWordStat.addOccurency(curWord++);
+            curWordStat.addOccurency(curWord++, lineNumber);
+            
             map.put(key, curWordStat);
         }
-        
-        return map;
     }
 
     public static void outputResult(Map<String, WordStatistics> map, String fileName) throws FileNotFoundException, IOException{

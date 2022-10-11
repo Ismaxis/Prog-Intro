@@ -1,3 +1,4 @@
+package myscanner;
 import java.io.*;
 import java.util.NoSuchElementException;
 
@@ -12,13 +13,17 @@ public class MyScanner {
     
     private int lenOfLineSeparator;
 
-    MyScanner(InputStream stream, CompareMethod cmp) {
+    public MyScanner(InputStream stream, CompareMethod cmp) {
         this.buffer = new MyBuffer(stream);
         this.cmp = cmp;
     }
 
-    MyScanner(String str, CompareMethod cmp) {
+    public MyScanner(String str, CompareMethod cmp) {
         this(new ByteArrayInputStream(str.getBytes()), cmp);
+    }
+
+    public MyScanner(String str, CompareMethod cmp, String charsetName) throws UnsupportedEncodingException {
+        this(new ByteArrayInputStream(str.getBytes(charsetName)), cmp);
     }
 
     public CompareMethod getCompareMethodObj() {
@@ -51,13 +56,16 @@ public class MyScanner {
             i++;
 
             char curChar = buffer.nextChar();
-            if (curChar == '\r' || curChar == '\n') {
+            if (curChar == '\r') {
                 if (buffer.hasNextChar() && buffer.nextChar() == '\n') {
                     i++;
                     lenOfLineSeparator = 2;
                 } else {
                     lenOfLineSeparator = 1;
                 }
+                break;
+            } else if (curChar == '\n') {
+                lenOfLineSeparator = 1;
                 break;
             }
         }

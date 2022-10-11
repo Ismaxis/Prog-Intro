@@ -1,1 +1,1 @@
-javac -d out *.java &&  cd "./out/" && "../scripts/testReverse.cmd" %1 && "../scripts/testWordStat.cmd" %2 && "../scripts/testFastReverse.cmd" %3
+javac -d .\out\ -cp .;..\Scanner\ *.java && cd "./out/" && "../scripts/testReverse.cmd" %1 && "../scripts/testWordStat.cmd" %2 && "../scripts/testFastReverse.cmd" %3

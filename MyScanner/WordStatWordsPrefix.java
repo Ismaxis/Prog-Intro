@@ -3,6 +3,9 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.TreeSet;
 
+import myscanner.MyScanner;
+import myscanner.PartOfWord;
+
 
 public class WordStatWordsPrefix {
     public static void main(String[] args) {

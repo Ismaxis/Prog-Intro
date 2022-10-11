@@ -27,6 +27,12 @@ class IntList {
         storage[actualSize++] = value;
     }
 
+    public void set(int index, int value) {
+        if (isValidIndex(index)) {
+            storage[index] = value;
+        }
+    }
+
     public int[] toIntArray() {
         return Arrays.copyOf(storage, actualSize);
     }
@@ -46,6 +52,6 @@ class IntList {
     }
 
     private boolean isValidIndex(int index) {
-        return index > 0 && index < actualSize;
+        return index >= 0 && index < actualSize;
     }
 }

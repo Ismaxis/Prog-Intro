@@ -3,6 +3,9 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import myscanner.MyScanner;
+import myscanner.PartOfWord;
+
 
 public class WordStatInput {
     public static void main(String[] args) {

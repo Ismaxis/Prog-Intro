@@ -1,5 +1,8 @@
 import java.util.Arrays;
 
+import myscanner.MyScanner;
+import myscanner.WhiteSpace;
+
 public class Reverse {
     public static void main(String[] args)  {
         MyScanner in = new MyScanner(System.in, new WhiteSpace());
@@ -13,7 +16,7 @@ public class Reverse {
         MyScanner lineScanner;
         int amount = 0;
 
-        while (inputScanner.hasNextLine()) {
+        while (inputScanner.hasNextLine()) {    
             lineScanner = new MyScanner(inputScanner.nextLine(), inputScanner.getCompareMethodObj());
             if (amount >= resultArr.length) {
                 resultArr = Arrays.copyOf(resultArr, resultArr.length * 2);

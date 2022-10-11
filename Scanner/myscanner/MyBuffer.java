@@ -1,3 +1,4 @@
+package myscanner;
 import java.io.*;
 import java.util.Arrays;
 

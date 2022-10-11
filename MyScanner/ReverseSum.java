@@ -1,5 +1,8 @@
 import java.util.Arrays;
 
+import myscanner.MyScanner;
+import myscanner.WhiteSpace;
+
 public class ReverseSum {
     public static void main(String[] args) {
         MyScanner inputScanner = new MyScanner(System.in, new WhiteSpace());
