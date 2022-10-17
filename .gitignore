@@ -9,3 +9,11 @@ _*
 
 java-solutions/tests/
 java-solutions/out/
+java-solutions/base/
+
+# HW7 tests ignore 
+java-solutions/markup/MarkupTest.java
+java-solutions/markup/MarkupTester.java
+java-solutions/markup/package-info.java
+java-solutions/markup/test.cmd
+java-solutions/Runner.java
