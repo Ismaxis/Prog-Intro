@@ -4,8 +4,6 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 import myscanner.MyBuffer;
-import myscanner.CompareMethod;
-import myscanner.PartOfWord;
 
 public class WsppLastL {
     static final int BUFFER_SIZE = 1024;
@@ -23,42 +21,54 @@ public class WsppLastL {
         } catch (IOException e) {   
             System.out.println("Input/Output error: " + e.getMessage());
         }
+        
+        // try {
+        //     Map<String, WordStatistics> map = countWordsInFile("WordStat++\\in.txt");
+        //     outputResult(map, "WordStat++\\out.txt");
+        // } catch (FileNotFoundException e) {
+        //     System.out.println("File not found: " + e.getMessage());
+        // } catch (IOException e) {   
+        //     System.out.println("Input/Output error: " + e.getMessage());
+        // }
     }
 
     public static Map<String, WordStatistics> countWordsInFile(String fileName) throws FileNotFoundException, IOException {
         Map<String, WordStatistics> map = new LinkedHashMap<>();
-        BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(fileName), "UTF8"), BUFFER_SIZE); 
-        try {
-            char[] buffer = new char[BUFFER_SIZE];
-            int read = reader.read(buffer);
-            String reminder = "";
-            while (read >= 0) { 
-                reminder = parseWords(map, reminder + new String(buffer, 0, read));
-                read = reader.read(buffer);
-            }
-        } finally {
-            reader.close();
-        }
-
-        return map;
-    }
-
-    public static String parseWords(Map<String, WordStatistics> map, String source) {
-        for (int i = 0; i < source.length(); i++) {
-            int start = i;
-            
-            while (isPartOfWord(source.charAt(i))) {
-                i++;
-                if (i == source.length()) {
-                    return source.substring(start, i); // reminder
+        MyBuffer buffer = new MyBuffer(new FileInputStream(fileName));
+        int i = 0;
+        char curChar = buffer.nextChar();
+        while (buffer.hasNextChar()) { 
+            while (buffer.hasNextChar() && !isPartOfWord(curChar)) { 
+                if (curChar == '\r') {
+                    if (buffer.hasNextChar() && buffer.nextChar() != '\n') {
+                        buffer.resetLookIndex(i);
+                    }
+                    lineNumber++;
+                    wordNumber = 1;
+                    i++;
+                } else if (curChar == '\n') {
+                    lineNumber++;
+                    wordNumber = 1;
                 }
+                i++;
+                curChar = buffer.nextChar();
             }
-            if (source.charAt(i) == '\n') {
-                lineNumber++;
-                wordNumber = 1;
+
+            int start = i;
+            while (isPartOfWord(curChar)) {
+                i++;
+                if (!buffer.hasNextChar()) {
+                    break;
+                }
+                curChar = buffer.nextChar();
             }
-            if (start < i) {
-                String key = source.substring(start, i).toLowerCase();
+
+            if (start < i || isPartOfWord(curChar)) {
+                String key = new String(buffer.getChars(start, i - start)).toLowerCase();
+                if (buffer.hasNextChar()) {
+                    curChar = buffer.nextChar();
+                }
+                i = 0;
                 WordStatistics curWordStat;
                 
                 if (map.containsKey(key)) {
@@ -71,8 +81,40 @@ public class WsppLastL {
                 map.put(key, curWordStat);
             }
         }
-        return "";
+
+        return map;
     }
+
+    // public static String parseWords(Map<String, WordStatistics> map, String source) {
+    //     for (int i = 0; i < source.length(); i++) {
+    //         int start = i;
+            
+    //         while (isPartOfWord(source.charAt(i))) {
+    //             i++;
+    //             if (i == source.length()) {
+    //                 return source.substring(start, i); // reminder
+    //             }
+    //         }
+    //         if (source.charAt(i) == '\n') {
+    //             lineNumber++;
+    //             wordNumber = 1;
+    //         }
+    //         if (start < i) {
+    //             String key = source.substring(start, i).toLowerCase();
+    //             WordStatistics curWordStat;
+                
+    //             if (map.containsKey(key)) {
+    //                 curWordStat = map.get(key);
+    //             } else {
+    //                 curWordStat = new WordStatistics();
+    //             }
+                
+    //             curWordStat.addOccurency(wordNumber++, lineNumber);
+    //             map.put(key, curWordStat);
+    //         }
+    //     }
+    //     return "";
+    // }
 
     public static boolean isPartOfWord(char ch) {
         return Character.isLetter(ch) || Character.DASH_PUNCTUATION == Character.getType(ch) || ch == '\'';
