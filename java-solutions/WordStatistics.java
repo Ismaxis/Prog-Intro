@@ -3,7 +3,7 @@ public class WordStatistics{
     private int amountOfOccurences;
     private int lastLineOccur;
     
-    WordStatistics() {
+    public WordStatistics() {
         occurences = new IntList();
         lastLineOccur = 0;
     }

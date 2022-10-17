@@ -1,3 +1,4 @@
+package myscanner;
 import java.io.*;
 import java.util.NoSuchElementException;
 
@@ -12,16 +13,16 @@ public class MyScanner {
     
     private int lenOfLineSeparator;
 
-    MyScanner(InputStream stream, CompareMethod cmp) {
+    public MyScanner(InputStream stream, CompareMethod cmp) {
         this.buffer = new MyBuffer(stream);
         this.cmp = cmp;
     }
 
-    MyScanner(String str, CompareMethod cmp) {
+    public MyScanner(String str, CompareMethod cmp) {
         this(new ByteArrayInputStream(str.getBytes()), cmp);
     }
 
-    MyScanner(String str, CompareMethod cmp, String charsetName) throws UnsupportedEncodingException {
+    public MyScanner(String str, CompareMethod cmp, String charsetName) throws UnsupportedEncodingException {
         this(new ByteArrayInputStream(str.getBytes(charsetName)), cmp);
     }
 
@@ -76,9 +77,9 @@ public class MyScanner {
         String token = nextToken();
         int value;
         if (Character.toLowerCase(token.charAt(token.length() - 1)) == 'o') {
-            value = (int)Long.parseLong(token.substring(0, token.length() - 1), 8);
+            value = Integer.parseUnsignedInt(token.substring(0, token.length() - 1), 8);
         } else {
-            value = (int)Long.parseLong(token);
+            value = Integer.parseInt(token);
         }
         return value;
     }
@@ -88,9 +89,7 @@ public class MyScanner {
     }
 
     private boolean canParseNextTokenToInt() {
-
         buffer.resetLookIndex(startOfNextToken);
-        
         for (int i = 0; i < lenOfNextToken; i++) {
             char curChar = buffer.nextChar();
 
@@ -125,7 +124,6 @@ public class MyScanner {
 
     public boolean hasNextToken() {
         boolean result;
-
         if (lenOfNextToken != 0) {
             result = true;
         } else {

@@ -6,3 +6,6 @@ _*
 
 # Do not store .class files
 *.class
+
+java-solutions/tests/
+java-solutions/out/

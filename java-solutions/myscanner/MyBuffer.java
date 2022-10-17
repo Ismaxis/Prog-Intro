@@ -1,3 +1,4 @@
+package myscanner;
 import java.io.*;
 import java.util.Arrays;
 
@@ -13,7 +14,7 @@ public class MyBuffer {
     private int readIndex;
 
 
-    MyBuffer(InputStream stream) {
+    public MyBuffer(InputStream stream) {
         try {
             reader = new InputStreamReader(stream, "utf-8");
         } catch (UnsupportedEncodingException e) {
