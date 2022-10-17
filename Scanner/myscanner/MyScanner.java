@@ -89,9 +89,7 @@ public class MyScanner {
     }
 
     private boolean canParseNextTokenToInt() {
-
         buffer.resetLookIndex(startOfNextToken);
-        
         for (int i = 0; i < lenOfNextToken; i++) {
             char curChar = buffer.nextChar();
 
@@ -126,7 +124,6 @@ public class MyScanner {
 
     public boolean hasNextToken() {
         boolean result;
-
         if (lenOfNextToken != 0) {
             result = true;
         } else {

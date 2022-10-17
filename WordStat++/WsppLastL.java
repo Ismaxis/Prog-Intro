@@ -3,10 +3,13 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import myscanner.MyScanner;
+import myscanner.MyBuffer;
+import myscanner.CompareMethod;
 import myscanner.PartOfWord;
 
 public class WsppLastL {
+    static final int BUFFER_SIZE = 1024;
+    static int lineNumber = 1, wordNumber = 1;
     public static void main(String[] args) {
         try {
             if (args.length >= 2) {
@@ -24,36 +27,55 @@ public class WsppLastL {
 
     public static Map<String, WordStatistics> countWordsInFile(String fileName) throws FileNotFoundException, IOException {
         Map<String, WordStatistics> map = new LinkedHashMap<>();
-        MyScanner scn = new MyScanner(new FileInputStream(fileName), new PartOfWord());
-    
-        int curLineNumber = 1;
-        while (scn.hasNextLine()) {
-            try {
-                countWordsInLine(map, new MyScanner(scn.nextLine(), scn.getCompareMethodObj(), "utf-8"), curLineNumber++);
-            } catch (UnsupportedEncodingException e) {
-                System.err.println("Unsupported encoding: " + e.getMessage());
+        BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(fileName), "UTF8"), BUFFER_SIZE); 
+        try {
+            char[] buffer = new char[BUFFER_SIZE];
+            int read = reader.read(buffer);
+            String reminder = "";
+            while (read >= 0) { 
+                reminder = parseWords(map, reminder + new String(buffer, 0, read));
+                read = reader.read(buffer);
             }
+        } finally {
+            reader.close();
         }
-        
+
         return map;
     }
 
-    public static void countWordsInLine(Map<String, WordStatistics> map, MyScanner lineScanner, int lineNumber) {
-        int curWord = 1;
-        while (lineScanner.hasNextToken()) {
-            String key = lineScanner.nextToken().toLowerCase();
-            WordStatistics curWordStat;
-
-            if (map.containsKey(key)) {
-                curWordStat = map.get(key);
-            } else {
-                curWordStat = new WordStatistics();
-            }
-
-            curWordStat.addOccurency(curWord++, lineNumber);
+    public static String parseWords(Map<String, WordStatistics> map, String source) {
+        for (int i = 0; i < source.length(); i++) {
+            int start = i;
             
-            map.put(key, curWordStat);
+            while (isPartOfWord(source.charAt(i))) {
+                i++;
+                if (i == source.length()) {
+                    return source.substring(start, i); // reminder
+                }
+            }
+            if (source.charAt(i) == '\n') {
+                lineNumber++;
+                wordNumber = 1;
+            }
+            if (start < i) {
+                String key = source.substring(start, i).toLowerCase();
+                WordStatistics curWordStat;
+                
+                if (map.containsKey(key)) {
+                    curWordStat = map.get(key);
+                } else {
+                    curWordStat = new WordStatistics();
+                }
+                
+                curWordStat.addOccurency(wordNumber++, lineNumber);
+                map.put(key, curWordStat);
+            }
         }
+        return "";
+    }
+
+    public static boolean isPartOfWord(char ch) {
+        return Character.isLetter(ch) || Character.DASH_PUNCTUATION == Character.getType(ch) || ch == '\'';
     }
 
     public static void outputResult(Map<String, WordStatistics> map, String fileName) throws FileNotFoundException, IOException{
