@@ -1,9 +1,10 @@
 package myscanner;
 import java.io.*;
+import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 
 public class MyBuffer {
-    private static final int DEFAULT_BUFFER_SIZE = 1024;
+    private final static int DEFAULT_BUFFER_SIZE = 1024;
 
     private InputStreamReader reader;
 
@@ -15,34 +16,29 @@ public class MyBuffer {
 
 
     public MyBuffer(InputStream stream) {
-        try {
-            reader = new InputStreamReader(stream, "utf-8");
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
-        }
-
+        reader = new InputStreamReader(stream, StandardCharsets.UTF_8);
+        
         try {
             readInBuffer();
         } catch (IOException e) {
             System.err.println("Read in buffer error: " + e.getMessage());
-            e.printStackTrace(); // :NOTE: nope
+            streamEnded = true;
         }
     }
 
-    public char[] getChars(int len) {
-        return getChars(0, len);
+    public String getSubString(int len) {
+        return getSubString(0, len);
     }
 
-    public char[] getChars(int start, int len) {
+    public String getSubString(int start, int len) {
         if (start < 0 || start + len > buffer.length) {
             throw new ArrayIndexOutOfBoundsException();
         }
-        int from = readIndex + start;
-        int to = from + len;
+        
+        int offset = readIndex + start;
         readIndex += start + len;
         lookIndex = readIndex;
-        // :NOTE: allocation
-        return Arrays.copyOfRange(buffer, from, to);
+        return new String(buffer, offset, len);
     }
     
     public char nextChar() {
@@ -87,8 +83,7 @@ public class MyBuffer {
                 buffer = Arrays.copyOfRange(buffer, readIndex, buffer.length + DEFAULT_BUFFER_SIZE);
             }
         }
-
-        // :NOTE: NPE
+    
         int read = reader.read(buffer, lenOfReminder, buffer.length - lenOfReminder);
 
         if(read < buffer.length - lenOfReminder) {
