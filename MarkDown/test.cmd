@@ -1,1 +1,1 @@
-javac -d .\out *.java && cd .\out && java -ea Runner %1
+javac -d .\out *.java && cd .\out && java -ea Runner %*
