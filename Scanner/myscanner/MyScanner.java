@@ -1,5 +1,6 @@
 package myscanner;
 import java.io.*;
+import java.nio.charset.StandardCharsets;
 import java.util.NoSuchElementException;
 
 public class MyScanner {
@@ -13,17 +14,15 @@ public class MyScanner {
     
     private int lenOfLineSeparator;
 
+    private int lineSepsMet;
+
     public MyScanner(InputStream stream, CompareMethod cmp) {
         this.buffer = new MyBuffer(stream);
         this.cmp = cmp;
     }
 
     public MyScanner(String str, CompareMethod cmp) {
-        this(new ByteArrayInputStream(str.getBytes()), cmp);
-    }
-
-    public MyScanner(String str, CompareMethod cmp, String charsetName) throws UnsupportedEncodingException {
-        this(new ByteArrayInputStream(str.getBytes(charsetName)), cmp);
+        this(new ByteArrayInputStream(str.getBytes(StandardCharsets.UTF_8)), cmp);
     }
 
     public CompareMethod getCompareMethodObj() {
@@ -53,23 +52,30 @@ public class MyScanner {
 
         while (buffer.hasNextChar()) {
             i++;
-
-            char curChar = buffer.nextChar();
-            if (curChar == '\r') {
-                if (buffer.hasNextChar() && buffer.nextChar() == '\n') {
-                    i++;
-                    lenOfLineSeparator = 2;
-                } else {
-                    lenOfLineSeparator = 1;
-                }
-                break;
-            } else if (curChar == '\n') {
-                lenOfLineSeparator = 1;
+            lenOfLineSeparator = analyzeForLineSeparator(buffer.nextChar());
+            if (lenOfLineSeparator > 0) {
+                i += lenOfLineSeparator - 1;
+                lineSepsMet++;
                 break;
             }
         }
             
         return i;
+    }
+
+    private int analyzeForLineSeparator(char curChar) {
+        int length = 0;
+        if (curChar == '\r') {
+            if (buffer.hasNextChar() && buffer.nextChar() == '\n') {
+                length = 2;
+            } else {
+                length = 1;
+            }
+        } else if (curChar == '\n') {
+            length = 1;
+        }
+
+        return length;
     }
 
     public int nextInt() {
@@ -145,9 +151,24 @@ public class MyScanner {
 
     private int findStartOfNextToken() {
         int i = 0;
-        while(buffer.hasNextChar() && !cmp.isPartOfToken(buffer.nextChar())) {
-            i++;
+        while (buffer.hasNextChar()) {
+            char curChar = buffer.nextChar();
+            if (!cmp.isPartOfToken(curChar)) {     
+                i++;
+                int length = analyzeForLineSeparator(curChar);
+                if (length > 0) {
+                    i += length - 1;
+                    lineSepsMet++;
+                }
+            } else {
+                break;
+            }
         }
+
         return startOfNextToken + i;
+    }
+    
+    public int getLineNumber() {
+        return lineSepsMet + 1;
     }
 }

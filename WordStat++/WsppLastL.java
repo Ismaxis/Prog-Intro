@@ -1,13 +1,13 @@
 import java.io.*;
+import java.nio.charset.StandardCharsets;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import myscanner.MyBuffer;
+import myscanner.MyScanner;
+import myscanner.PartOfWord;
 
 public class WsppLastL {
-    static final int BUFFER_SIZE = 1024;
-    static int lineNumber = 1, wordNumber = 1;
     public static void main(String[] args) {
         try {
             if (args.length >= 2) {
@@ -23,56 +23,26 @@ public class WsppLastL {
         }
     }
 
-    public static Map<String, WordStatistics> countWordsInFile(String fileName) throws FileNotFoundException, IOException {
+    public static Map<String, WordStatistics> countWordsInFile(String fileName) throws IOException {
         Map<String, WordStatistics> map = new LinkedHashMap<>();
-        MyBuffer buffer = new MyBuffer(new FileInputStream(fileName));
-        int i = 0;
-        char curChar = buffer.nextChar();
-        while (buffer.hasNextChar()) { 
-            while (buffer.hasNextChar() && !isPartOfWord(curChar)) { 
-                if (curChar == '\r') {
-                    if (buffer.hasNextChar() && buffer.nextChar() != '\n') {
-                        buffer.resetLookIndex(i);
-                    }
-                    lineNumber++;
-                    wordNumber = 1;
-                    i++;
-                } else if (curChar == '\n') {
-                    lineNumber++;
-                    wordNumber = 1;
-                }
-                i++;
-                if (buffer.hasNextChar()) {
-                    curChar = buffer.nextChar();
-                }
+        MyScanner scn = new MyScanner(new FileInputStream(fileName), new PartOfWord());
+        int lineNumber = 1, wordNumber = 1;
+        while(scn.hasNextToken()) {
+            String key = scn.nextToken().toLowerCase();
+
+            if (lineNumber != scn.getLineNumber()) {
+                wordNumber = 1;
+                lineNumber = scn.getLineNumber();
             }
 
-            int start = i;
-            while (isPartOfWord(curChar)) {
-                i++;
-                if (!buffer.hasNextChar()) {
-                    break;
-                }
-                curChar = buffer.nextChar();
+            WordStatistics curWordStat;
+            if (map.containsKey(key)) {
+                curWordStat = map.get(key);
+            } else {
+                curWordStat = new WordStatistics();
             }
-
-            if (start < i || isPartOfWord(curChar)) {
-                String key = new String(buffer.getChars(start, i - start)).toLowerCase();
-                if (buffer.hasNextChar()) {
-                    curChar = buffer.nextChar();
-                }
-                i = 0;
-                WordStatistics curWordStat;
-                
-                if (map.containsKey(key)) {
-                    curWordStat = map.get(key);
-                } else {
-                    curWordStat = new WordStatistics();
-                }
-                
-                curWordStat.addOccurency(wordNumber++, lineNumber);
-                map.put(key, curWordStat);
-            }
+            curWordStat.addOccurency(wordNumber++, lineNumber);
+            map.put(key, curWordStat);
         }
 
         return map;
@@ -83,7 +53,7 @@ public class WsppLastL {
     }
 
     public static void outputResult(Map<String, WordStatistics> map, String fileName) throws FileNotFoundException, IOException{
-        BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(fileName), "utf-8"));
+        BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(fileName), StandardCharsets.UTF_8));
         try {
             for (Entry<String, WordStatistics> entry : map.entrySet()) {
                 writer.write(entry.getKey() + " " + entry.getValue());

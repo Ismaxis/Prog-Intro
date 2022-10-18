@@ -1,4 +1,4 @@
-public class WordStatistics{
+public class WordStatistics {
     private IntList occurences;
     private int amountOfOccurences;
     private int lastLineOccur;
