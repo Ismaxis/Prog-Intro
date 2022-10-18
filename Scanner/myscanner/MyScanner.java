@@ -35,7 +35,7 @@ public class MyScanner {
         }
         lenOfNextLine = findLenOfNextLine();
 
-        String result = new String(buffer.getChars(lenOfNextLine), 0, lenOfNextLine - lenOfLineSeparator);
+        String result = buffer.getSubString(lenOfNextLine).substring(0, lenOfNextLine - lenOfLineSeparator);
         lenOfNextLine = 0;
         startOfNextToken = 0;
         lenOfNextToken = 0;
@@ -120,7 +120,7 @@ public class MyScanner {
             throw new NoSuchElementException();
         }
 
-        String result = new String(buffer.getChars(startOfNextToken, lenOfNextToken));
+        String result = buffer.getSubString(startOfNextToken, lenOfNextToken);
         startOfNextToken = 0;
         lenOfNextToken = 0;
         lenOfNextLine = 0;

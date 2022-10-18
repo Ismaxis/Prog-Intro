@@ -1,6 +1,5 @@
 package myscanner;
 import java.io.*;
-import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 
@@ -27,19 +26,19 @@ public class MyBuffer {
         }
     }
 
-    public char[] getChars(int len) {
-        return getChars(0, len);
+    public String getSubString(int len) {
+        return getSubString(0, len);
     }
 
-    public char[] getChars(int start, int len) {
+    public String getSubString(int start, int len) {
         if (start < 0 || start + len > buffer.length) {
             throw new ArrayIndexOutOfBoundsException();
         }
-        int from = readIndex + start;
-        int to = from + len;
+        
+        int offset = readIndex + start;
         readIndex += start + len;
         lookIndex = readIndex;
-        return Arrays.copyOfRange(buffer, from, to);
+        return new String(buffer, offset, len);
     }
     
     public char nextChar() {
