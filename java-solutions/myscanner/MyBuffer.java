@@ -3,7 +3,7 @@ import java.io.*;
 import java.util.Arrays;
 
 public class MyBuffer {
-    private final static int DEFAULT_BUFFER_SIZE = 1024;
+    private static final int DEFAULT_BUFFER_SIZE = 1024;
 
     private InputStreamReader reader;
 
@@ -18,14 +18,14 @@ public class MyBuffer {
         try {
             reader = new InputStreamReader(stream, "utf-8");
         } catch (UnsupportedEncodingException e) {
-            e.printStackTrace(System.err);
+            e.printStackTrace();
         }
 
         try {
             readInBuffer();
         } catch (IOException e) {
             System.err.println("Read in buffer error: " + e.getMessage());
-            e.printStackTrace(System.err);
+            e.printStackTrace(); // :NOTE: nope
         }
     }
 
@@ -41,6 +41,7 @@ public class MyBuffer {
         int to = from + len;
         readIndex += start + len;
         lookIndex = readIndex;
+        // :NOTE: allocation
         return Arrays.copyOfRange(buffer, from, to);
     }
     
@@ -86,7 +87,8 @@ public class MyBuffer {
                 buffer = Arrays.copyOfRange(buffer, readIndex, buffer.length + DEFAULT_BUFFER_SIZE);
             }
         }
-    
+
+        // :NOTE: NPE
         int read = reader.read(buffer, lenOfReminder, buffer.length - lenOfReminder);
 
         if(read < buffer.length - lenOfReminder) {

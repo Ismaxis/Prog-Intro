@@ -6,9 +6,10 @@ import java.util.Map.Entry;
 import myscanner.MyBuffer;
 
 public class WsppLastL {
-    static final int BUFFER_SIZE = 1024;
+    // :NOTE: global
     static int lineNumber = 1, wordNumber = 1;
-    public static void main(String[] args) {
+
+    public static void main(final String[] args) {
         try {
             if (args.length >= 2) {
                 Map<String, WordStatistics> map = countWordsInFile(args[0]);
@@ -23,7 +24,7 @@ public class WsppLastL {
         }
     }
 
-    public static Map<String, WordStatistics> countWordsInFile(String fileName) throws FileNotFoundException, IOException {
+    public static Map<String, WordStatistics> countWordsInFile(String fileName) throws IOException {
         Map<String, WordStatistics> map = new LinkedHashMap<>();
         MyBuffer buffer = new MyBuffer(new FileInputStream(fileName));
         int i = 0;
