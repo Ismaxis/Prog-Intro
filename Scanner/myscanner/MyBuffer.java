@@ -1,5 +1,7 @@
 package myscanner;
 import java.io.*;
+import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 
 public class MyBuffer {
@@ -15,17 +17,13 @@ public class MyBuffer {
 
 
     public MyBuffer(InputStream stream) {
-        try {
-            reader = new InputStreamReader(stream, "utf-8");
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace(System.err);
-        }
-
+        reader = new InputStreamReader(stream, StandardCharsets.UTF_8);
+        
         try {
             readInBuffer();
         } catch (IOException e) {
             System.err.println("Read in buffer error: " + e.getMessage());
-            e.printStackTrace(System.err);
+            streamEnded = true;
         }
     }
 

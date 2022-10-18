@@ -34,7 +34,6 @@ public class MyScanner {
         if (!hasNextLine()) {
             throw new NoSuchElementException();
         }
-        
         lenOfNextLine = findLenOfNextLine();
 
         String result = new String(buffer.getChars(lenOfNextLine), 0, lenOfNextLine - lenOfLineSeparator);
