@@ -10,6 +10,8 @@ _*
 java-solutions/tests/
 java-solutions/out/
 java-solutions/base/
+java-solutions/for-prog-intro/
+java-solutions/markupTest.cmd
 
 # HW7 tests ignore 
 java-solutions/markup/MarkupTest.java
