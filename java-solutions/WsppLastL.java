@@ -8,7 +8,7 @@ import myscanner.MyScanner;
 import myscanner.PartOfWord;
 
 public class WsppLastL {
-    public static void main(String[] args) {
+    public static void main(final String[] args) {
         try {
             if (args.length >= 2) {
                 Map<String, WordStatistics> map = countWordsInFile(args[0]);
