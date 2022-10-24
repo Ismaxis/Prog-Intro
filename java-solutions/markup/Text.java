@@ -1,6 +1,6 @@
 package markup;
 
-public class Text implements MarkDownCompatable{
+public class Text implements Drawable {
     private String text;
 
     public Text(String text) {
@@ -9,6 +9,15 @@ public class Text implements MarkDownCompatable{
 
     @Override
     public void toMarkdown(StringBuilder builder) {
+        getText(builder);
+    }
+
+    @Override
+    public void toHtml(StringBuilder builder) {
+       getText(builder);
+    }
+
+    private void getText(StringBuilder builder) {
         builder.append(text);
     }
 }
