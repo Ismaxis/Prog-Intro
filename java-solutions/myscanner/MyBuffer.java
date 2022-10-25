@@ -72,6 +72,7 @@ public class MyBuffer {
             int read = reader.read(buffer, lenOfReminder, buffer.length - lenOfReminder);
             if(read < buffer.length - lenOfReminder) {
                 streamEnded = true;
+                reader.close();
             } 
             
             int amountOfValidData = (read < 0 ? 0 : read) + lenOfReminder;

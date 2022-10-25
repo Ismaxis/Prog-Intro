@@ -26,31 +26,25 @@ public class WsppLastL {
         Map<String, WordStatistics> map = new LinkedHashMap<>();
         MyScanner scn = new MyScanner(new FileInputStream(fileName), new PartOfWord());
         int lineNumber = 1, wordNumber = 1;
-        while (scn.hasNextToken()) {
-            String key = scn.nextToken().toLowerCase();
-
-            if (lineNumber != scn.getLineNumber()) {
-                wordNumber = 1;
-                lineNumber = scn.getLineNumber();
-            }
-
-            WordStatistics curWordStat;
-            // :NOTE: эффективность
-            if (map.containsKey(key)) {
-                curWordStat = map.get(key);
-            } else {
-                curWordStat = new WordStatistics();
-            }
-
-            curWordStat.addOccurency(wordNumber++, lineNumber);
-            map.put(key, curWordStat);
-        }
-
         try {
-            // :NOTE: leak
+            while (scn.hasNextToken()) {
+                String key = scn.nextToken().toLowerCase();
+    
+                if (lineNumber != scn.getLineNumber()) {
+                    wordNumber = 1;
+                    lineNumber = scn.getLineNumber();
+                }
+    
+                WordStatistics curWordStat;
+                curWordStat = map.getOrDefault(key, null);
+                if (curWordStat == null) {
+                    curWordStat = new WordStatistics();
+                    map.put(key, curWordStat);
+                }
+                curWordStat.addOccurency(wordNumber++, lineNumber);
+            }
+        } finally {
             scn.close();
-        } catch (IllegalStateException e) {
-            System.err.println(e.getMessage());
         }
 
         return map;
