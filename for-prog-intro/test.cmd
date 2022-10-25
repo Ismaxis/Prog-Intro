@@ -1,1 +1,0 @@
-javac -d .\out -cp . *.java && cd .\out && java -ea -jar ..\tests\WordStatTest.jar WordsPrefix && java -ea -jar ..\tests\WsppTest.jar LastL && java -ea -jar ..\tests\FastReverseTest.jar OctDec
