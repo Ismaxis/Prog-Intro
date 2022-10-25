@@ -40,6 +40,12 @@ public class Wspp {
             map.put(key, curWordStat);
         }
         
+        try {
+            scn.close();
+        } catch (IllegalStateException e) {
+            System.err.println(e.getMessage());
+        }
+        
         return map;
     }
 

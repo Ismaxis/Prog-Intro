@@ -20,7 +20,7 @@ public class WordStatWordsPrefix {
             System.out.println("Unsupported encoding: " + e.getMessage());
         } catch (IOException e) {   
             System.out.println("Input/Output error: " + e.getMessage());
-            e.printStackTrace(System.out);
+            e.printStackTrace();
         }
     }
 

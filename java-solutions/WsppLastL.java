@@ -45,6 +45,12 @@ public class WsppLastL {
             map.put(key, curWordStat);
         }
 
+        try {
+            scn.close();
+        } catch (IllegalStateException e) {
+            System.err.println(e.getMessage());
+        }
+
         return map;
     }
 
