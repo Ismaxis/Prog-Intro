@@ -4,6 +4,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.NoSuchElementException;
 
 public class MyScanner {
+    private boolean isClosed;
     private CompareMethod cmp;
     private MyBuffer buffer;
 
@@ -30,6 +31,8 @@ public class MyScanner {
     }
 
     public String nextLine() {
+        ensureOpen();
+        
         if (!hasNextLine()) {
             throw new NoSuchElementException();
         }
@@ -43,6 +46,7 @@ public class MyScanner {
     }
 
     public boolean hasNextLine() {
+        ensureOpen();
         return buffer.hasNextChar();
     }
 
@@ -79,6 +83,8 @@ public class MyScanner {
     }
 
     public int nextInt() {
+        ensureOpen();
+
         String token = nextToken();
         int value;
         if (Character.toLowerCase(token.charAt(token.length() - 1)) == 'o') {
@@ -90,6 +96,7 @@ public class MyScanner {
     }
 
     public boolean hasNextInt() {
+        ensureOpen();
         return hasNextToken() && canParseNextTokenToInt();
     }
 
@@ -116,6 +123,7 @@ public class MyScanner {
     }
 
     public String nextToken() {
+        ensureOpen();
         if (!hasNextToken()) {
             throw new NoSuchElementException();
         }
@@ -128,6 +136,7 @@ public class MyScanner {
     }
 
     public boolean hasNextToken() {
+        ensureOpen();
         boolean result;
         if (lenOfNextToken != 0) {
             result = true;
@@ -170,5 +179,16 @@ public class MyScanner {
     
     public int getLineNumber() {
         return lineSepsMet + 1;
+    }
+
+    public void close() {
+        isClosed = true;
+        buffer.close();
+    }
+
+    private void ensureOpen() {
+        if (isClosed) {
+            throw new IllegalStateException();
+        }
     }
 }

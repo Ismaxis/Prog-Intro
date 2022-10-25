@@ -17,13 +17,7 @@ public class MyBuffer {
 
     public MyBuffer(InputStream stream) {
         reader = new InputStreamReader(stream, StandardCharsets.UTF_8);
-        
-        try {
-            readInBuffer();
-        } catch (IOException e) {
-            System.err.println("Read in buffer error: " + e.getMessage());
-            streamEnded = true;
-        }
+        readInBuffer();
     }
 
     public String getSubString(int len) {
@@ -43,24 +37,14 @@ public class MyBuffer {
     
     public char nextChar() {
         if (lookIndex >= buffer.length) {
-            try {
-                readInBuffer();
-            } catch (IOException e) {
-                System.err.println("Reading error: " + e.getMessage());
-                e.printStackTrace(System.err);
-            }
+            readInBuffer();
         }
         return buffer[lookIndex++];
     }
 
     public boolean hasNextChar() {
         if (lookIndex == buffer.length && !streamEnded) {
-            try {
-                readInBuffer();
-            } catch (IOException e) {
-                System.err.println("Reading error: " + e.getMessage());
-                e.printStackTrace(System.err);
-            }
+            readInBuffer();
         }
         return !(lookIndex == buffer.length && streamEnded);
     }
@@ -69,34 +53,46 @@ public class MyBuffer {
         lookIndex = readIndex + offsetFromRead;
     }
 
-    private void readInBuffer() throws IOException {
-        int lenOfReminder;
+    private void readInBuffer() {
+        try {
+            int lenOfReminder;
 
-        if (buffer == null) {
-            buffer = new char[DEFAULT_BUFFER_SIZE];
-            lenOfReminder = 0;
-        } else {
-            lenOfReminder = buffer.length - readIndex;
-            if (readIndex == 0) {
-                buffer = Arrays.copyOf(buffer, buffer.length * 2);
+            if (buffer == null) {
+                buffer = new char[DEFAULT_BUFFER_SIZE];
+                lenOfReminder = 0;
             } else {
-                buffer = Arrays.copyOfRange(buffer, readIndex, buffer.length + DEFAULT_BUFFER_SIZE);
+                lenOfReminder = buffer.length - readIndex;
+                if (readIndex == 0) {
+                    buffer = Arrays.copyOf(buffer, buffer.length * 2);
+                } else {
+                    buffer = Arrays.copyOfRange(buffer, readIndex, buffer.length + DEFAULT_BUFFER_SIZE);
+                }
             }
-        }
-    
-        int read = reader.read(buffer, lenOfReminder, buffer.length - lenOfReminder);
-
-        if(read < buffer.length - lenOfReminder) {
-            streamEnded = true;
-            reader.close();
-        } 
         
-        int amountOfValidData = (read < 0 ? 0 : read) + lenOfReminder;
-        if (amountOfValidData != buffer.length) {
-            buffer = Arrays.copyOf(buffer, amountOfValidData);
+            int read = reader.read(buffer, lenOfReminder, buffer.length - lenOfReminder);
+            if(read < buffer.length - lenOfReminder) {
+                streamEnded = true;
+                reader.close();
+            } 
+            
+            int amountOfValidData = (read < 0 ? 0 : read) + lenOfReminder;
+            if (amountOfValidData != buffer.length) {
+                buffer = Arrays.copyOf(buffer, amountOfValidData);
+            }
+            
+            readIndex = 0;
+            lookIndex = Math.max(0, lenOfReminder);
+        } catch (Exception e) {
+            System.err.println("Reading error in MyBuffer: " + e.getMessage());
+            streamEnded = true;
         }
+    }
 
-        readIndex = 0;
-        lookIndex = Math.max(0, lenOfReminder);
+    public void close() {
+        try {
+            reader.close();
+        } catch (IOException e) {
+            throw new IllegalStateException(e);
+        }
     }
 }
