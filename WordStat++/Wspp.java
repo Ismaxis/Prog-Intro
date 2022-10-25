@@ -26,18 +26,20 @@ public class Wspp {
         Map<String, WordStatistics> map = new LinkedHashMap<>();
         MyScanner scn = new MyScanner(new FileInputStream(fileName), new PartOfWord());
     
-        int curWord = 1;
-        while (scn.hasNextToken()) {
-            String key = scn.nextToken().toLowerCase();
-            WordStatistics curWordStat;
-            if (map.containsKey(key)) {
+        try {
+            int curWord = 1;
+            while (scn.hasNextToken()) {
+                String key = scn.nextToken().toLowerCase();
+                WordStatistics curWordStat;
                 curWordStat = map.get(key);
-            } else {
-                curWordStat = new WordStatistics();
+                if (curWordStat == null) {
+                    curWordStat = new WordStatistics();
+                    map.put(key, curWordStat);
+                }
+                curWordStat.addOccurency(curWord++);
             }
-
-            curWordStat.addOccurency(curWord++);
-            map.put(key, curWordStat);
+        } finally {
+            scn.close();
         }
         
         return map;
