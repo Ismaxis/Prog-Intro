@@ -1,7 +1,7 @@
 package markup;
 
 public class Text implements Drawable {
-    private String text;
+    private final String text;
 
     public Text(String text) {
         this.text = text;

@@ -3,7 +3,7 @@ package markup;
 import java.util.List;
 
 public abstract class HtmlList implements Listable {
-    private List<ListItem> content;
+    private final List<ListItem> content;
 
     public HtmlList(List<ListItem> content) {
         this.content = content;

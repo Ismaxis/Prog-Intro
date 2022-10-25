@@ -3,7 +3,7 @@ package markup;
 import java.util.List;
 
 public abstract class TextModificator implements Drawable {
-    private List<Drawable> content; 
+    private final List<Drawable> content;
     protected TextModificator(List<Drawable> content) {
         this.content = content;
     }

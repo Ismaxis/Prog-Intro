@@ -3,7 +3,7 @@ package markup;
 import java.util.List;
 
 public class Paragraph implements Listable, MarkDownCompatable, HtmlCompatable {
-    List<Drawable> content;
+    private final List<Drawable> content;
     
     public Paragraph(List<Drawable> content) {
         this.content = content;

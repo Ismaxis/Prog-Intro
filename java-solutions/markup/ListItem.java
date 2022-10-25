@@ -3,7 +3,7 @@ package markup;
 import java.util.List;
 
 public class ListItem implements HtmlCompatable {
-    private List<Listable> content;
+    private final List<Listable> content;
     private static final String htmlOpenTag = "<li>";
     private static final String htmlCloseTag = "</li>";
     
