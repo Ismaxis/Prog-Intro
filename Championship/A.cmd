@@ -1,0 +1,1 @@
+javac -cp "..\Scanner" .\A\*.java -d .\out && java -cp ".\out" A.AccurateMovement 

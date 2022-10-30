@@ -1,0 +1,1 @@
+javac -cp "..\Scanner" .\C\*.java -d .\out && java -cp ".\out" C.CrossStitch 

@@ -1,0 +1,1 @@
+javac -cp "..\Scanner"  .\B\*.java -d .\out && java -cp ".\out" B.BadTreap 
