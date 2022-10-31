@@ -1,0 +1,1 @@
+javac .\I\*.java -d .\out && java -cp ".\out" I.IdealPyramid

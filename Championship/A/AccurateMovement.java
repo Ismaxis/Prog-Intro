@@ -19,6 +19,6 @@ public class AccurateMovement {
     }
 
     public static int ceilDiv(int a, int b) {
-        return a%b == 0 ? a/b : a/b + 1;
+        return (a+b-1) / b;
     }
 }
