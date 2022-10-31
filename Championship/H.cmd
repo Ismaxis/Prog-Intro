@@ -1,0 +1,1 @@
+javac .\H\*.java -d .\out && java -cp ".\out" H.HighLoadDB
