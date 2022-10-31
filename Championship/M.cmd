@@ -1,0 +1,1 @@
+javac .\M\*.java -d .\out && java -cp ".\out" M.ManagingDifficulties

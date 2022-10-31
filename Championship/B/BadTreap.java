@@ -1,8 +1,9 @@
 package B;
-import myscanner.*;;
+import java.util.Scanner;
+
 public class BadTreap {
     public static void main(String[] args) {
-        MyScanner scn = new MyScanner(System.in, new WhiteSpace());
+        Scanner scn = new Scanner(System.in);
 
         final int n = scn.nextInt();
         scn.close();

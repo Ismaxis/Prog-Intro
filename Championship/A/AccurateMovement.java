@@ -1,8 +1,9 @@
 package A;
-import myscanner.*;
+import java.util.Scanner;
+
 public class AccurateMovement {
     public static void main(String[] args) {
-        MyScanner scn = new MyScanner(System.in, new WhiteSpace());
+        Scanner scn = new Scanner(System.in);
 
         int a = scn.nextInt(); // short
         int b = scn.nextInt(); // long
