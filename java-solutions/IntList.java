@@ -38,11 +38,11 @@ class IntList {
     }
 
     public int get(int index) {
-        if (isValidIndex(index)) {
-            return storage[index];
-        } else {
+        if (!isValidIndex(index)) {
             throw new ArrayIndexOutOfBoundsException(index);
         }
+
+        return storage[index];
     }
 
     private void adjustLength() {
@@ -52,6 +52,6 @@ class IntList {
     }
 
     private boolean isValidIndex(int index) {
-        return index >= 0 && index < actualSize;
+        return 0 <= index && index < actualSize;
     }
 }
