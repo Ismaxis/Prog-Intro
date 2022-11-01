@@ -13,13 +13,13 @@ public class JustLastDigit {
                     a[i][j] = Character.getNumericValue(line.charAt(j));
                 }
             }
-            for (int vert = 0; vert < n; vert++) { 
-                for (int j = vert + 1; j < n; j++) { 
+            for (int vert = 0; vert < n; vert++) {
+                for (int j = vert + 1; j < n; j++) {
                     if (a[vert][j] == 1) {
                         for (int i = j + 1; i < n; i++) {
-                            a[vert][i] =  Math.floorMod(a[vert][i] - a[j][i], 10);
+                            a[vert][i] = Math.floorMod(a[vert][i] - a[j][i], 10);
                         }
-                    } 
+                    }
                 }
             }
 

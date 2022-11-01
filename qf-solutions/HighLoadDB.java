@@ -3,7 +3,7 @@ import java.util.Scanner;
 public class HighLoadDB {
     public static void main(String[] args) {
         Scanner scn = new Scanner(System.in);
-        
+
         try {
             int n = scn.nextInt();
             int[] a = new int[n];
@@ -18,7 +18,7 @@ public class HighLoadDB {
 
             int[] f = new int[sum];
             int curTransaction = 0;
-            for (int i = 0; i < sum;) {
+            for (int i = 0; i < sum; ) {
                 while (i < a[curTransaction]) {
                     f[i] = curTransaction;
                     i++;
@@ -40,14 +40,14 @@ public class HighLoadDB {
 
                 ans[i] = 2;
                 int b = f[t];
-                int curIndex = a[b-1] + t;
+                int curIndex = a[b - 1] + t;
                 while (curIndex < sum) {
                     b = f[curIndex];
                     ans[i]++;
-                    curIndex = a[b-1] + t;
+                    curIndex = a[b - 1] + t;
                 }
             }
-            
+
             for (int i : ans) {
                 System.out.println(i == -1 ? "Impossible" : i);
             }
