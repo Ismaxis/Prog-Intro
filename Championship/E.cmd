@@ -1,0 +1,1 @@
+javac .\E\*.java -d .\out && java -cp ".\out" E.Equidistant
