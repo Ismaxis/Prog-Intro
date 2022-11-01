@@ -1,4 +1,3 @@
-package B;
 import java.util.Scanner;
 
 public class BadTreap {

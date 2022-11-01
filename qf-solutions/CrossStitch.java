@@ -1,4 +1,3 @@
-package C;
 import java.util.Scanner;
 import java.util.Stack;
 
@@ -67,7 +66,7 @@ public class CrossStitch {
         int[][] mainEdges = isFace ? faceEdges : backEdges;
         int[][] secEdges = isFace ? backEdges : faceEdges;
 
-        for (int i = 1; i > -1; i--) {
+        for (int i = 1; i >= -1; i--) {
             for (int j = -1; j < 2; j++) {
                 int[] secVert = {j + vertex[0], i + vertex[1]};
                 if ((secVert[1] >= 0 && secVert[1] < y + 1) && (secVert[0] >= 0 && secVert[0] < x + 1)) {

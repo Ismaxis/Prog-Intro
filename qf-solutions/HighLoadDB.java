@@ -1,5 +1,3 @@
-package H;
-
 import java.util.Scanner;
 
 public class HighLoadDB {
@@ -49,11 +47,10 @@ public class HighLoadDB {
                     curIndex = a[b-1] + t;
                 }
             }
-
+            
             for (int i : ans) {
                 System.out.println(i == -1 ? "Impossible" : i);
             }
-
         } finally {
             scn.close();
         }

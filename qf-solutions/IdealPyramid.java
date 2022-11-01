@@ -1,5 +1,3 @@
-package I;
-
 import java.util.Scanner;
 
 public class IdealPyramid {

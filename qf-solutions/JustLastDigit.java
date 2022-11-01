@@ -1,5 +1,3 @@
-package J;
-
 import java.util.Scanner;
 
 public class JustLastDigit {
