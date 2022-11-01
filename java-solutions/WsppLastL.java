@@ -36,7 +36,7 @@ public class WsppLastL {
                 }
     
                 WordStatistics curWordStat;
-                curWordStat = map.getOrDefault(key, null);
+                curWordStat = map.get(key);
                 if (curWordStat == null) {
                     curWordStat = new WordStatistics();
                     map.put(key, curWordStat);
