@@ -25,26 +25,24 @@ public class Wspp {
     public static Map<String, WordStatistics> countWordsInFile(String fileName) throws FileNotFoundException, IOException {
         Map<String, WordStatistics> map = new LinkedHashMap<>();
         MyScanner scn = new MyScanner(new FileInputStream(fileName), new PartOfWord());
-    
-        int curWord = 1;
-        while (scn.hasNextToken()) {
-            String key = scn.nextToken().toLowerCase();
-            WordStatistics curWordStat;
-            if (map.containsKey(key)) {
-                curWordStat = map.get(key);
-            } else {
-                curWordStat = new WordStatistics();
-            }
-
-            curWordStat.addOccurency(curWord++);
-            map.put(key, curWordStat);
-        }
-        
         try {
+            int curWord = 1;
+            while (scn.hasNextToken()) {
+                String key = scn.nextToken().toLowerCase();
+                WordStatistics curWordStat;
+                if (map.containsKey(key)) {
+                    curWordStat = map.get(key);
+                } else {
+                    curWordStat = new WordStatistics();
+                }
+    
+                curWordStat.addOccurency(curWord++);
+                map.put(key, curWordStat);
+            }
+        } finally {
             scn.close();
-        } catch (IllegalStateException e) {
-            System.err.println(e.getMessage());
         }
+
         
         return map;
     }
