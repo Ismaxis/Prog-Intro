@@ -6,7 +6,6 @@ import md2html.MdTokinizer;
 
 public class Main {
     public static void main(String[] args) {
-        MdTokinizer p = new MdTokinizer();
         String s = """
             Любите ли вы *вложеные __выделения__* так,
             как __--люблю--__ их я?
@@ -15,7 +14,7 @@ public class Main {
         BufferedReader reader = new BufferedReader(new StringReader(s));
         
         try {
-            p.parseMd(reader);
+            MdTokinizer.parseMd(reader);
         } catch (IOException e) {
             e.printStackTrace();
         }

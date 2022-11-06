@@ -7,7 +7,7 @@ public class TextToken extends Token {
 
     public TextToken(String text) {
         super(text.length(), Tag.Text);
-        this.text = text;
+        this.text = text.replace("\\", "");
     }
 
     public String text() {

@@ -55,7 +55,11 @@ public class TreeBuiler {
         }
         stack.remove(stack.size() - 1);
         for (StackEntry stackEntry : stack) {
-            curRoot.addChild((Node) stackEntry);
+            if (stackEntry instanceof Token) {
+                curRoot.addChild(new Text(((Token) stackEntry).getMdTag()));
+            } else {
+                curRoot.addChild((Node) stackEntry);
+            }
         }
 
         listOfRoot.add(curRoot);

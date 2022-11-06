@@ -1,7 +1,5 @@
 package md2html.mark;
 
-import java.util.List;
-
 public class Strong extends TextModificator {
     private static final String markdownTag = "__";
     private static final String htmlOpenTag = "<strong>";

@@ -3,10 +3,8 @@ package md2html.mark;
 import java.util.ArrayList;
 import java.util.List;
 
-import md2html.Tag;
-
 public abstract class TextModificator extends Node { 
-    private List<Node> childs;
+    protected List<Node> childs;
     public TextModificator() {
         childs = new ArrayList<>();
     }
@@ -21,7 +19,7 @@ public abstract class TextModificator extends Node {
             element.toMarkdown(builder);
         } 
         builder.append(markdownTag);
-    }
+    } 
 
     protected void insertChildsHTML(StringBuilder builder, String openTag, String closeTag) {
         builder.append(openTag);

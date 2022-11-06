@@ -96,9 +96,10 @@ public class MdTokinizer {
     private static Token parseTextToken(String section, int start) {
         int sectionLen = section.length();
         int i = start;
+        boolean isShielded = false;
         for (; i < sectionLen; i++) {
             char curChar = section.charAt(i);
-            if (isPartOfTag(curChar) || curChar == '\n') {
+            if (!isShielded && (isPartOfTag(curChar) || curChar == '\n')) {
                 if (curChar == '-' && i != sectionLen - 1) {
                     if (section.charAt(i + 1) == '-') {
                         break;
@@ -107,6 +108,7 @@ public class MdTokinizer {
                     break;
                 }
             }
+            isShielded = curChar == '\\';
         }
 
         return new TextToken(section.substring(start, i));
