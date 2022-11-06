@@ -11,6 +11,13 @@ public abstract class Root implements MarkDownCompatable, HtmlCompatable {
     }
 
     public void addChild(Node child) {
+        if (child instanceof Text && !childs.isEmpty()) {
+            Node prevChild = childs.get(childs.size() - 1);
+            if (prevChild instanceof Text) {
+                ((Text) prevChild).merge((Text) child);
+                return;
+            }
+        }
         childs.add(child);
     }
 

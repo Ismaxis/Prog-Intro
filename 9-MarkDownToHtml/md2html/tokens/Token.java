@@ -3,7 +3,7 @@ package md2html.tokens;
 import md2html.StackEntry;
 import md2html.Tag;
 
-public abstract class Token extends StackEntry {
+public abstract class Token implements StackEntry {
     protected int length;
     protected Tag type;
 

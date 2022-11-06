@@ -1,6 +1,6 @@
 package md2html.mark;
 
-public class Text extends Node {
+public class Text implements Node {
     private String text;
 
     public Text() {
@@ -13,6 +13,10 @@ public class Text extends Node {
 
     public void setText(String text) {
         this.text = text;
+    }
+
+    public void merge(Text that) {
+        this.text += that.text;
     }
 
     @Override

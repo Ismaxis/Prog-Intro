@@ -1,5 +1,5 @@
 package md2html;
 
-public abstract class StackEntry {
+public interface StackEntry {
     
 }
