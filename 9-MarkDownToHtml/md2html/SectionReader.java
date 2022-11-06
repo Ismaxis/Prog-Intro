@@ -6,11 +6,11 @@ import java.io.IOException;
 class SectionReader {
     private BufferedReader reader;
     private StringBuilder section;
-    private boolean streamEnded;
+    private boolean sectionReaderClosed;
 
     public SectionReader(BufferedReader reader) {
         this.reader = reader;
-        streamEnded = false;
+        sectionReaderClosed = false;
         section = new StringBuilder();
     }
 
@@ -19,8 +19,8 @@ class SectionReader {
     }
 
     public void goToNextSection() throws IOException {
-        if (streamEnded) {
-            throw new IOException("Cannor get next section: reader closed");
+        if (sectionReaderClosed) {
+            throw new IOException("Cannor read next section: reader closed");
         }
         section.setLength(0);
         String curLine = reader.readLine();
@@ -49,12 +49,11 @@ class SectionReader {
         return curSection();
     }
 
-    public boolean ready() throws IOException {
-        return !streamEnded;
+    public boolean ready() {
+        return !sectionReaderClosed;
     }
 
-    public void close() throws IOException {
-        streamEnded = true;
-        reader.close();
+    public void close(){
+        sectionReaderClosed = true;
     }
 }

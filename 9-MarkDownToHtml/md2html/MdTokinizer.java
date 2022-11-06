@@ -4,15 +4,14 @@ import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 
-import md2html.mark.Text;
 import md2html.tokens.*;
 
 public class MdTokinizer {
-    public static void parseMd(BufferedReader givenReader) throws IOException {
+    public static List<List<Token>> parseMd(BufferedReader givenReader) throws IOException {
         SectionReader reader = new SectionReader(givenReader);
-        TreeBuiler tree = new TreeBuiler();
+        List<List<Token>> sections = new ArrayList<>(); 
         String curSection = reader.nextSection();
-        while(reader.ready()) {
+        while (true) {
             int sectionLen = curSection.length();
             int alreadyRead = 0;
             List<Token> tokens = new ArrayList<>();
@@ -21,15 +20,15 @@ public class MdTokinizer {
                 tokens.add(nextToken);
                 alreadyRead += nextToken.length();
             }
-            tree.addSection(tokens);
-            curSection = reader.nextSection();
+            sections.add(tokens);
+            if (reader.ready()) {
+                curSection = reader.nextSection();
+            } else {
+                break;
+            }
         }
 
-        StringBuilder builder = new StringBuilder();
-
-        tree.toHTML(builder);
-
-        System.out.println(builder.toString());
+        return sections;
     }
     
     private static Token getNextToken(String section, int start) throws IOException {
@@ -115,21 +114,5 @@ public class MdTokinizer {
 
     private static boolean isPartOfTag(char ch) {
         return ch == '*' || ch == '_' || ch == '`' || ch == '-';
-    }
-
-    private static int findLenOfTag(String line, int startIndex) {
-        char curChar = line.charAt(startIndex);
-        if (curChar == '*' || curChar == '_' || curChar == '`' || curChar == '-') {
-            if (startIndex != line.length() - 1) {
-                char nextChar = line.charAt(startIndex + 1);
-                if (curChar == nextChar) {
-                    if (curChar == '*' || curChar == '_' || curChar == '-') {
-                        return 2;
-                    }
-                }  
-            } 
-            return 1;
-        } 
-        return 0;
     }
 }
