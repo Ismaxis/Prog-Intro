@@ -2,7 +2,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.StringReader;
 
-import md2html.MdTokinizer;
+import md2html.MdParser;
 
 public class Main {
     public static void main(String[] args) {
@@ -14,7 +14,7 @@ public class Main {
         BufferedReader reader = new BufferedReader(new StringReader(s));
         
         try {
-            MdTokinizer.parseMd(reader);
+            MdParser.parseMdToHTML(reader);
         } catch (IOException e) {
             e.printStackTrace();
         }

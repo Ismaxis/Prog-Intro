@@ -1,37 +1,10 @@
 package md2html;
 
 import java.io.*;
-import java.util.ArrayList;
-import java.util.List;
-
 import md2html.tokens.*;
 
 public class MdTokinizer {
-    public static List<List<Token>> parseMd(BufferedReader givenReader) throws IOException {
-        SectionReader reader = new SectionReader(givenReader);
-        List<List<Token>> sections = new ArrayList<>(); 
-        String curSection = reader.nextSection();
-        while (true) {
-            int sectionLen = curSection.length();
-            int alreadyRead = 0;
-            List<Token> tokens = new ArrayList<>();
-            while (alreadyRead < sectionLen) {
-                Token nextToken = getNextToken(curSection, alreadyRead);
-                tokens.add(nextToken);
-                alreadyRead += nextToken.length();
-            }
-            sections.add(tokens);
-            if (reader.ready()) {
-                curSection = reader.nextSection();
-            } else {
-                break;
-            }
-        }
-
-        return sections;
-    }
-    
-    private static Token getNextToken(String section, int start) throws IOException {
+    public static Token getNextToken(String section, int start) throws IOException {
         char firstChar = section.charAt(start);
         if (firstChar == '#') {
             return parseHeaderToken(section, start);
