@@ -1,11 +1,12 @@
 package md2html.mark;
 
+import java.util.List;
+import md2html.Pair;
+
 public class Text implements Node {
     private String text;
 
-    public Text() {
-
-    }
+    public Text() {}
 
     public Text(String text) {
         this.text = text;
@@ -26,14 +27,19 @@ public class Text implements Node {
 
     @Override
     public void toHtml(StringBuilder builder) {
-        builder.append(escapeHtml(text));
+        builder.append(escapeHTML(text));
     }
 
-    private Object escapeHtml(String text) {
-        return text
-                .replace("&", "&amp;")
-                .replace("<", "&lt;")
-                .replace(">", "&gt;")
-                .replace("\"", "&quot;");
+    private String escapeHTML(String text) {
+        for (Pair<String, String> pair : htmlSpecialSymbols) {
+            text = text.replace(pair.first(), pair.second());
+        }
+        return text;
     }
+
+    private static List<Pair<String, String>> htmlSpecialSymbols = List.of(
+        new Pair<String, String>("&", "&amp;"),
+        new Pair<String, String>("<", "&lt;"),
+        new Pair<String, String>(">", "&gt;")
+    );
 }
