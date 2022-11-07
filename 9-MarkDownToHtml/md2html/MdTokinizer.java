@@ -6,11 +6,11 @@ import md2html.tokens.*;
 public class MdTokinizer {
     public static Token getNextToken(String section, int start) throws IOException {
         char firstChar = section.charAt(start);
-        if (firstChar == '#') {
+        if (TagsStorage.isPartOfHeader(firstChar)) {
             return parseHeaderToken(section, start);
-        } else if (isPartOfTag(firstChar)) {
+        } else if (TagsStorage.isPartOfTag(firstChar)) {
             return parseTextModToken(section, start);
-        } else if (firstChar == '\n') {
+        } else if (TagsStorage.isLineSep(firstChar)) {
             return new EndOfLineToken();
         } else {
             return parseTextToken(section, start);
@@ -20,11 +20,11 @@ public class MdTokinizer {
     private static Token parseHeaderToken(String section, int start) throws IOException {
         char curChar = section.charAt(start + 1);
         int length = 1;
-        while (curChar == '#') {
+        while (TagsStorage.isPartOfHeader(curChar)) {
             length++;
             curChar = section.charAt(start + length);
         }
-        if (curChar != ' ') {
+        if (!TagsStorage.isEndOfHeader(curChar)) {
             return new TextToken(section.substring(start, start + length));
         } else {
             length++; // last is space after #
@@ -37,20 +37,8 @@ public class MdTokinizer {
     }
 
     private static Tag parseTextModType(String section, int start) {
-        int i = 1;
-        Tag modType = null;
-        while(i <= TagsStorage.maxTagLength()) {
-            Tag curTag = TagsStorage.get(section.substring(start, start + i));
-            if (modType != null && curTag == null) {
-                break;
-            }
-            modType = curTag;
-            i++;
-        }
-
-        return modType;
+        return TagsStorage.get(section, start);
     }
-
 
     private static Token parseTextToken(String section, int start) {
         int sectionLen = section.length();
@@ -58,21 +46,17 @@ public class MdTokinizer {
         boolean isShielded = false;
         for (; i < sectionLen; i++) {
             char curChar = section.charAt(i);
-            if (!isShielded && isPartOfTag(curChar)) {
+            if (!isShielded && TagsStorage.isPartOfTag(curChar)) {
                 if (parseTextModType(section, i) != null) {
                     break;
                 }
             }
-            if (curChar == '\n') {
+            if (TagsStorage.isLineSep(curChar)) {
                 break;
             }
-            isShielded = curChar == '\\';
+            isShielded = TagsStorage.isShield(curChar);
         }
 
         return new TextToken(section.substring(start, i));
-    }
-
-    private static boolean isPartOfTag(char ch) {
-        return ch == '*' || ch == '_' || ch == '`' || ch == '-';
     }
 }
