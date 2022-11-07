@@ -10,8 +10,6 @@ public class MdTokinizer {
             return parseHeaderToken(section, start);
         } else if (TagsStorage.isPartOfTag(firstChar)) {
             return parseTextModToken(section, start);
-        } else if (TagsStorage.isLineSep(firstChar)) {
-            return new EndOfLineToken();
         } else {
             return parseTextToken(section, start);
         }
@@ -50,9 +48,6 @@ public class MdTokinizer {
                 if (parseTextModType(section, i) != null) {
                     break;
                 }
-            }
-            if (TagsStorage.isLineSep(curChar)) {
-                break;
             }
             isShielded = TagsStorage.isShield(curChar);
         }

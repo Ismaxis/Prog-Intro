@@ -17,7 +17,7 @@ public class TreeBuiler {
         List<StackEntry> stack = new ArrayList<>();
         int[] openedTags = new int[Tag.values().length];
         Arrays.fill(openedTags, -1);
-        
+
         Root curRoot;
         if (tokens.get(0) instanceof HeaderToken) {
             curRoot = new Header(tokens.get(0).length() - 1); // level = length - 1, because of end space
@@ -29,8 +29,6 @@ public class TreeBuiler {
             Tag curTokenTag = curToken.type();
             if (curTokenTag == Tag.Text) {
                 stack.add(new Text(((TextToken) curToken).text()));
-            } else if (curTokenTag == Tag.EndOfLine) {
-                stack.add(new Text(curToken.getMdTag()));
             } else {
                 int stackSize = stack.size();
                 Integer openedTag = openedTags[curTokenTag.ordinal()];
@@ -53,7 +51,7 @@ public class TreeBuiler {
                 } 
             }
         }
-        stack.remove(stack.size() - 1);
+        // stack.remove(stack.size() - 1);
         for (StackEntry stackEntry : stack) {
             addStackEntryAsChild(curRoot, stackEntry);
         }

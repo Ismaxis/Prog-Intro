@@ -29,10 +29,6 @@ public class TagsStorage {
         return maxTagLength;
     }
 
-    public static int amountOfTags() {
-        return tags.length;
-    }
-
     public static boolean isPartOfTag(char ch) {
         return ch == '*' || ch == '_' || ch == '`' || ch == '-';
     }
@@ -43,10 +39,6 @@ public class TagsStorage {
 
     public static boolean isEndOfHeader(char ch) {
         return ch == ' ';
-    }
-
-    public static boolean isLineSep(char ch) {
-        return ch == '\n';
     }
 
     public static boolean isShield(char ch) {

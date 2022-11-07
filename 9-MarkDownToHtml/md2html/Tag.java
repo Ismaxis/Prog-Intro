@@ -9,7 +9,6 @@ public enum Tag {
     Code,
     
     Text,
-    EndOfLine,
     Header,
     Paragraph,
 }
