@@ -33,38 +33,24 @@ public class MdTokinizer {
     }
     
     private static Token parseTextModToken(String section, int start) {
-        char curChar = section.charAt(start);
-        if (curChar == '*' || curChar == '_') {
-            char nextChar = section.charAt(start + 1);
-
-            Tag type = null;
-            if (nextChar == curChar) {
-                if (curChar == '*') {
-                    type = Tag.StrongStar;
-                } else if (curChar == '_') {
-                    type = Tag.StrongUnderLine;
-                }    
-                return new StrongToken(type);
-            } else {
-                if (curChar == '*') {
-                    type = Tag.EmphasisStar;
-                } else if (curChar == '_') {
-                    type = Tag.EmphasisUnderLine;
-                }
-
-                return new EmphasisToken(type);
-            }
-        } else if (curChar == '-') {
-            char nextChar = section.charAt(start + 1);
-            if (nextChar == curChar) {
-                return new StrikeoutToken();
-            }
-        } else if (curChar == '`') {
-            return new CodeToken();
-        } 
-
-        return parseTextToken(section, start);
+        return TextModFabric.getTextModToken(parseTextModType(section, start));
     }
+
+    private static Tag parseTextModType(String section, int start) {
+        int i = 1;
+        Tag modType = null;
+        while(i <= TagsStorage.maxTagLength()) {
+            Tag curTag = TagsStorage.get(section.substring(start, start + i));
+            if (modType != null && curTag == null) {
+                break;
+            }
+            modType = curTag;
+            i++;
+        }
+
+        return modType;
+    }
+
 
     private static Token parseTextToken(String section, int start) {
         int sectionLen = section.length();
@@ -72,14 +58,13 @@ public class MdTokinizer {
         boolean isShielded = false;
         for (; i < sectionLen; i++) {
             char curChar = section.charAt(i);
-            if (!isShielded && (isPartOfTag(curChar) || curChar == '\n')) {
-                if (curChar == '-' && i != sectionLen - 1) {
-                    if (section.charAt(i + 1) == '-') {
-                        break;
-                    }
-                } else {
+            if (!isShielded && isPartOfTag(curChar)) {
+                if (parseTextModType(section, i) != null) {
                     break;
                 }
+            }
+            if (curChar == '\n') {
+                break;
             }
             isShielded = curChar == '\\';
         }
