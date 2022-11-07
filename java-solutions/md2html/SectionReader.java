@@ -42,6 +42,8 @@ class SectionReader {
                 break;
             }
         }
+
+        section.deleteCharAt(section.length() - 1); 
     }
 
     public String nextSection() throws IOException {

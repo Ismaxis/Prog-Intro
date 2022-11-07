@@ -2,9 +2,6 @@ package md2html;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
-import java.util.List;
-
-import md2html.tokens.Token;
 
 public class Md2Html {
     public static void main(String[] args) {
@@ -14,11 +11,11 @@ public class Md2Html {
         }
 
         BufferedReader reader;
-        List<List<Token>> sections;
+        String html;
         try {
             reader = new BufferedReader(new InputStreamReader(new FileInputStream(args[0]), StandardCharsets.UTF_8));
             try {
-                sections = MdTokinizer.parseMd(reader);
+                html = MdParser.parseMdToHTML(reader);
             } catch (IOException e) {
                 System.err.println("Reading error in tokinizer: " + e.getMessage());
                 return;
@@ -35,18 +32,11 @@ public class Md2Html {
             return;
         }
         
-        TreeBuiler tree = new TreeBuiler();
-        for (List<Token> section : sections) {
-            tree.addSection(section);
-        }
-        StringBuilder builder = new StringBuilder();
-        tree.toHTML(builder);
-
         BufferedWriter writer;
         try {
             writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(args[1]), StandardCharsets.UTF_8));
             try {
-                writer.write(builder.toString());
+                writer.write(html);
             } catch (IOException e) {
                 System.err.println("Writing error: " + e.getMessage());
                 return;
