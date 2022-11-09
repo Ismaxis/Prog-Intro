@@ -3,6 +3,9 @@ package md2html;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+
+import javax.naming.StringRefAddr;
+
 import md2html.mark.*;
 import md2html.tokens.*;
 
@@ -27,20 +30,53 @@ public class TreeBuiler {
         }
         mainloop: for (Token curToken : tokens) {
             Tag curTokenTag = curToken.type();
+            int stackSize = stack.size();
             if (curTokenTag == Tag.Text) {
                 stack.add(new Text(((TextToken) curToken).text()));
+            } else if (curTokenTag == Tag.CloseImgTag) {
+                int openIndex = openedTags[Tag.OpenImgTag.ordinal()];
+                int midIndex = openedTags[Tag.MidImgTag.ordinal()];
+                if (openIndex != -1 && midIndex != -1 && openIndex < midIndex) {
+                    TextModificator img = TextModFabric.getNode(curTokenTag);
+                    StringBuilder builder = new StringBuilder();
+                    System.err.println(stack);
+                    for (int i = midIndex; i < stackSize - 1; i++) {
+                        getTextFromRemoved(stack.remove(midIndex + 1), openedTags, builder);
+                    }
+
+                    String src = builder.toString();
+                    stack.remove(midIndex);
+                    
+                    builder.setLength(0);
+
+                    System.err.println(midIndex);
+                    for (int i = openIndex + 1; i < midIndex; i++) {
+                        System.err.println(stack);
+                        System.err.println(stack.size());
+                        System.err.println(openIndex);
+                        getTextFromRemoved(stack.remove(openIndex + 1), openedTags, builder);  
+                    }
+
+                    String alt = builder.toString();
+                    stack.remove(openIndex);                    
+
+                    ((Img) img).setProps(alt, src); 
+                    stack.add(img);
+                    
+                } else {
+                    stack.add(new Text((curToken.getMdTag())));
+                }
             } else {
-                int stackSize = stack.size();
                 Integer openedTag = openedTags[curTokenTag.ordinal()];
                 if (openedTag == -1) {
                     openedTags[curTokenTag.ordinal()] = stackSize;
-                } else {
+                } else if (curTokenTag != Tag.OpenImgTag && curTokenTag != Tag.MidImgTag) {
                     TextModificator newTextMod = TextModFabric.getNode(curTokenTag);
                     for (int j = openedTag; j < stackSize - 1; j++) {
-                        addChildToTextMod(openedTags, newTextMod, stack.remove(openedTag + 1));
+                        newTextMod.addChild(castRemovedToNode(openedTags, stack.remove(openedTag + 1)));
                     }
                     openedTags[curTokenTag.ordinal()] = -1;
-                    stack.remove(openedTag.intValue());
+                    stack.remove(stack.size() - 1);
                     stack.add(newTextMod);
                     continue mainloop;
                 }
@@ -51,12 +87,22 @@ public class TreeBuiler {
                 } 
             }
         }
-        // stack.remove(stack.size() - 1);
+
         for (StackEntry stackEntry : stack) {
             addStackEntryAsChild(curRoot, stackEntry);
         }
-
         listOfRoot.add(curRoot);
+    }
+
+    private void getTextFromRemoved(StackEntry removed, int[] openedTags, StringBuilder s) {
+        if (removed instanceof Token) {
+            Token removedToken = (Token) removed;
+            openedTags[removedToken.type().ordinal()] = -1;
+            s.append(removedToken.getMdTag());
+        } else {
+            Node removedNode = (Node) removed;
+            removedNode.toMarkdown(s);
+        }
     }
 
     private void addStackEntryAsChild(Root curRoot, StackEntry stackEntry) {
@@ -67,13 +113,13 @@ public class TreeBuiler {
         }
     }
 
-    private void addChildToTextMod(int[] openedTags, TextModificator newTextMod, StackEntry removed) {
+    private Node castRemovedToNode(int[] openedTags, StackEntry removed) {
         if (removed instanceof Token) {
             Token removedToken = (Token) removed;
-            openedTags[removedToken.type().ordinal()] = - 1;
-            newTextMod.addChild(new Text(removedToken.getMdTag()));
-        } else if (removed instanceof Node) {
-            newTextMod.addChild((Node) removed);
+            openedTags[removedToken.type().ordinal()] = -1;
+            return new Text(removedToken.getMdTag());
+        } else {
+            return ((Node) removed);
         }
     }
 
