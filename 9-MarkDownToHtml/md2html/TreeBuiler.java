@@ -37,30 +37,24 @@ public class TreeBuiler {
                 if (openIndex != -1 && midIndex != -1 && openIndex < midIndex) {
                     TextModificator img = TextModFabric.getNode(curTokenTag);
                     StringBuilder builder = new StringBuilder();
-                    
-                    // if (openIndex == 29 || midIndex == 29) {
-                    //     System.err.println();
-                    // }
 
                     for (int i = midIndex; i < stackSize - 1; i++) {
                         getTextFromRemoved(stack.remove(midIndex + 1), openedTags, builder);
                     }
+                    stack.remove(midIndex);
 
                     String src = builder.toString();
-                    stack.remove(midIndex);
-                    
                     builder.setLength(0);
                     
                     for (int i = openIndex + 1; i < midIndex; i++) {
                         getTextFromRemoved(stack.remove(openIndex + 1), openedTags, builder);  
                     }
+                    stack.remove(openIndex);                    
 
                     String alt = builder.toString();
-                    stack.remove(openIndex);                    
 
                     ((Img) img).setProps(alt, src); 
                     stack.add(img);
-                    
                 } else {
                     stack.add(new Text((curToken.getMdTag())));
                 }

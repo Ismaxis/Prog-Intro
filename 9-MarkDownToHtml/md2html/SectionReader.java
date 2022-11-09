@@ -28,7 +28,7 @@ class SectionReader {
             close();
             return;
         }
-        // Find first not empty line
+
         while (curLine.length() == 0) {
             curLine = reader.readLine();
         }

@@ -1,6 +1,9 @@
 package md2html.mark;
 
 public class Paragraph extends Root {
+    private static final String htmlOpenTag = "<p>";
+    private static final String htmlCloseTag = "</p>";
+
     public Paragraph() {
         super();
     }
@@ -12,8 +15,8 @@ public class Paragraph extends Root {
 
     @Override
     public void toHtml(StringBuilder builder) {
-        builder.append("<p>");
+        builder.append(htmlOpenTag);
         super.toHtml(builder);
-        builder.append("</p>");
+        builder.append(htmlCloseTag);
     }
 }

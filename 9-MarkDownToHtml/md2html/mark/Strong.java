@@ -3,8 +3,8 @@ package md2html.mark;
 import md2html.Tag;
 
 public class Strong extends TextModificator {
-    private static final String markdownTagStar = "**";
-    private static final String markdownTagUnderLine = "__";
+    private static final String markdownTagStar = Tag.StrongStar.tagString;
+    private static final String markdownTagUnderLine = Tag.StrongUnderLine.tagString;
     private static final String htmlOpenTag = "<strong>";
     private static final String htmlCloseTag = "</strong>";
 

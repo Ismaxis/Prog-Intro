@@ -15,10 +15,10 @@ public class Header extends Root {
 
     @Override
     public void toHtml(StringBuilder builder) {
-        String tag = String.format("h%d", level);
-        surroundTag(builder, tag, false);
+        String htmlTag = String.format("h%d", level);
+        surroundTag(builder, htmlTag, false);
         super.toHtml(builder);
-        surroundTag(builder, tag, true);
+        surroundTag(builder, htmlTag, true);
     }
     
     private void surroundTag(StringBuilder builder, String tag, boolean isClose) {

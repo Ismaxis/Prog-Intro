@@ -9,6 +9,6 @@ public class HeaderToken extends Token {
 
     @Override
     public String getMdTag() {
-        return "#".repeat(super.length - 1) + " "; // last is space 
+        return Tag.Header.tagString.repeat(super.length - 1) + " ";
     }
 }

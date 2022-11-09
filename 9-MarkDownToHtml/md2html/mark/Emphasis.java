@@ -3,8 +3,8 @@ package md2html.mark;
 import md2html.Tag;
 
 public class Emphasis extends TextModificator {
-    private static final String markdownTagStar = "*" ;
-    private static final String markdownTagUnderLine = "_" ;
+    private static final String markdownTagStar = Tag.EmphasisStar.tagString;
+    private static final String markdownTagUnderLine = Tag.EmphasisUnderLine.tagString;
     private static final String htmlOpenTag = "<em>";
     private static final String htmlCloseTag = "</em>";
 
