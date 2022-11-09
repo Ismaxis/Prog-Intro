@@ -1,7 +1,7 @@
 package md2html.mark;
 
 public class Strikeout extends TextModificator {
-    private static final String markdownTag = "~";
+    private static final String markdownTag = "--";
     private static final String htmlOpenTag = "<s>";
     private static final String htmlCloseTag = "</s>";
 

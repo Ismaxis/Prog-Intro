@@ -5,11 +5,17 @@ import md2html.tokens.*;
 
 public abstract class TextModFabric {
     public static TextModificator getNode(Tag type) {
-        if (type == Tag.EmphasisStar || type == Tag.EmphasisUnderLine) {
-            return new Emphasis();
+        if (type == Tag.EmphasisStar) {
+            return new Emphasis(Tag.EmphasisStar);
         }
-        if (type == Tag.StrongStar || type == Tag.StrongUnderLine) {
-            return new Strong();
+        if (type == Tag.EmphasisUnderLine) {
+            return new Emphasis(Tag.EmphasisUnderLine);
+        }
+        if (type == Tag.StrongStar) {
+            return new Strong(Tag.StrongStar);
+        }
+        if (type == Tag.StrongUnderLine) {
+            return new Strong(Tag.StrongUnderLine);
         }
         if (type == Tag.Strikeout) {;
             return new Strikeout();

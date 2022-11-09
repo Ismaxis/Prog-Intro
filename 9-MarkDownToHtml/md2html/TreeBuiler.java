@@ -4,8 +4,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import javax.naming.StringRefAddr;
-
 import md2html.mark.*;
 import md2html.tokens.*;
 
@@ -39,7 +37,11 @@ public class TreeBuiler {
                 if (openIndex != -1 && midIndex != -1 && openIndex < midIndex) {
                     TextModificator img = TextModFabric.getNode(curTokenTag);
                     StringBuilder builder = new StringBuilder();
-                    System.err.println(stack);
+                    
+                    // if (openIndex == 29 || midIndex == 29) {
+                    //     System.err.println();
+                    // }
+
                     for (int i = midIndex; i < stackSize - 1; i++) {
                         getTextFromRemoved(stack.remove(midIndex + 1), openedTags, builder);
                     }
@@ -48,12 +50,8 @@ public class TreeBuiler {
                     stack.remove(midIndex);
                     
                     builder.setLength(0);
-
-                    System.err.println(midIndex);
+                    
                     for (int i = openIndex + 1; i < midIndex; i++) {
-                        System.err.println(stack);
-                        System.err.println(stack.size());
-                        System.err.println(openIndex);
                         getTextFromRemoved(stack.remove(openIndex + 1), openedTags, builder);  
                     }
 
@@ -70,7 +68,9 @@ public class TreeBuiler {
                 Integer openedTag = openedTags[curTokenTag.ordinal()];
                 if (openedTag == -1) {
                     openedTags[curTokenTag.ordinal()] = stackSize;
-                } else if (curTokenTag != Tag.OpenImgTag && curTokenTag != Tag.MidImgTag) {
+                } else if (curTokenTag == Tag.OpenImgTag || curTokenTag == Tag.MidImgTag){
+                    openedTags[curTokenTag.ordinal()] = stackSize;
+                } else {
                     TextModificator newTextMod = TextModFabric.getNode(curTokenTag);
                     for (int j = openedTag; j < stackSize - 1; j++) {
                         newTextMod.addChild(castRemovedToNode(openedTags, stack.remove(openedTag + 1)));

@@ -1,5 +1,4 @@
-<p>(и с пропуском заголовков предыдущих уровней)</p>
-<p><img  alt='картинок' src='http://www.ifmo.ru/images/menu/small/p10.jpg'  ><img  ></p>
+<p><img alt='картинка с __псевдо-выделением__' src='http://www.ifmo.ru/images/menu/small/p10.jpg'></p>
 <h1>Заголовок первого уровня</h1>
 <h2>Второго</h2>
 <h3>Третьего ## уровня</h3>

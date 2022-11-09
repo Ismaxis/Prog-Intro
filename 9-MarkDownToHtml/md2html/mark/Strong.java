@@ -1,13 +1,26 @@
 package md2html.mark;
 
+import md2html.Tag;
+
 public class Strong extends TextModificator {
-    private static final String markdownTag = "__";
+    private static final String markdownTagStar = "**";
+    private static final String markdownTagUnderLine = "__";
     private static final String htmlOpenTag = "<strong>";
     private static final String htmlCloseTag = "</strong>";
 
+    private Tag type;
+
+    public Strong(Tag type) {
+        this.type = type;
+    }
+
     @Override
     public void toMarkdown(StringBuilder builder) {
-        super.insertChildsMD(builder, markdownTag);
+        if (type == Tag.StrongStar) {
+            super.insertChildsMD(builder, markdownTagStar);
+        } else if (type == Tag.StrongUnderLine) {
+            super.insertChildsMD(builder, markdownTagUnderLine);
+        }
     }
 
     @Override

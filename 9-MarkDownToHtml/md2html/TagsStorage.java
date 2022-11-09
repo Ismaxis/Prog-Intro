@@ -39,7 +39,6 @@ public class TagsStorage {
             }
         }
         return false;
-        // return ch == '*' || ch == '_' || ch == '`' || ch == '-';
     }
 
     public static boolean isPartOfHeader(char ch) {
