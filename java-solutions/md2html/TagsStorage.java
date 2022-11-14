@@ -1,17 +1,12 @@
 package md2html;
 
 public class TagsStorage { 
-    private static String[] tags = {
-        "--",
-        "__",
-        "**",
-        "_",
-        "*",
-        "`"
-    };
+    private static String[] tags;
     private static int maxTagLength;
 
     static {
+        tags = Tag.getTagsStrings();
+
         maxTagLength = tags.length > 0 ? tags[0].length() : 0;
     }
 
@@ -30,11 +25,16 @@ public class TagsStorage {
     }
 
     public static boolean isPartOfTag(char ch) {
-        return ch == '*' || ch == '_' || ch == '`' || ch == '-';
+        for (int i = 0; i < tags.length; i++) {
+            if (tags[i].charAt(0) == ch) {
+                return true;
+            }
+        }
+        return false;
     }
 
     public static boolean isPartOfHeader(char ch) {
-        return ch == '#';
+        return ch == Tag.Header.tagString.charAt(0);
     }   
 
     public static boolean isEndOfHeader(char ch) {
