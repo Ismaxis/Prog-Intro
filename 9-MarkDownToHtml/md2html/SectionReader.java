@@ -35,7 +35,7 @@ class SectionReader {
 
         while (curLine.length() != 0) {
             section.append(curLine);
-            section.append("\n");
+            section.append(System.lineSeparator());
             curLine = reader.readLine();
             if (curLine == null) {
                 close();
@@ -43,7 +43,7 @@ class SectionReader {
             }
         }
 
-        section.deleteCharAt(section.length() - 1); 
+        section.delete(section.length() - System.lineSeparator().length(), section.length());
     }
 
     public String nextSection() throws IOException {
@@ -55,7 +55,7 @@ class SectionReader {
         return !sectionReaderClosed;
     }
 
-    public void close(){
+    public void close() {
         sectionReaderClosed = true;
     }
 }
