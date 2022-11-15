@@ -31,7 +31,7 @@ public class Md2Html {
             handleFNFE(args[0]);
             return;
         }
-        
+
         BufferedWriter writer;
         try {
             writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(args[1]), StandardCharsets.UTF_8));

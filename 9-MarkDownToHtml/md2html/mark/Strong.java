@@ -25,6 +25,6 @@ public class Strong extends TextModificator {
 
     @Override
     public void toHtml(StringBuilder builder) {
-        super.insertChildsHTML(builder, htmlOpenTag, htmlCloseTag);             
-    }   
+        super.insertChildsHTML(builder, htmlOpenTag, htmlCloseTag);
+    }
 }

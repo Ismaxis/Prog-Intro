@@ -3,7 +3,7 @@ package md2html.mark;
 import md2html.Tag;
 
 public class Img extends TextModificator {
-    private static final String mdOpenTag = Tag.OpenImgTag.tagString; 
+    private static final String mdOpenTag = Tag.OpenImgTag.tagString;
     private static final String mdMidTag = Tag.MidImgTag.tagString;
     private static final String mdCloseTag = Tag.CloseImgTag.tagString;
 
@@ -13,7 +13,8 @@ public class Img extends TextModificator {
     private String alt;
     private String src;
 
-    public Img() {}
+    public Img() {
+    }
 
     public void setProps(String alt, String src) {
         this.alt = alt;
@@ -29,11 +30,11 @@ public class Img extends TextModificator {
         builder.append(src);
         builder.append(mdCloseTag);
     }
-    
+
     @Override
     public void toHtml(StringBuilder builder) {
         builder.append(htmlOpenTag);
         builder.append(String.format(" alt='%s' src='%s'", alt, src));
-        builder.append(htmlCloseTag);     
-    }   
+        builder.append(htmlCloseTag);
+    }
 }

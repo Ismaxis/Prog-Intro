@@ -6,7 +6,8 @@ import md2html.Pair;
 public class Text implements Node {
     private String text;
 
-    public Text() {}
+    public Text() {
+    }
 
     public Text(String text) {
         this.text = text;
@@ -38,8 +39,7 @@ public class Text implements Node {
     }
 
     private static List<Pair<String, String>> htmlSpecialSymbols = List.of(
-        new Pair<String, String>("&", "&amp;"),
-        new Pair<String, String>("<", "&lt;"),
-        new Pair<String, String>(">", "&gt;")
-    );
+            new Pair<String, String>("&", "&amp;"),
+            new Pair<String, String>("<", "&lt;"),
+            new Pair<String, String>(">", "&gt;"));
 }

@@ -2,7 +2,7 @@ package md2html.mark;
 
 public class Header extends Root {
     private final int level;
-    
+
     public Header(int level) {
         super();
         this.level = level;
@@ -20,7 +20,7 @@ public class Header extends Root {
         super.toHtml(builder);
         surroundTag(builder, htmlTag, true);
     }
-    
+
     private void surroundTag(StringBuilder builder, String tag, boolean isClose) {
         builder.append("<");
         if (isClose) {

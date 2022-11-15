@@ -26,10 +26,10 @@ public class MdTokinizer {
             return new TextToken(section.substring(start, start + length));
         } else {
             length++; // last is space after #
-            return new HeaderToken(length); 
+            return new HeaderToken(length);
         }
     }
-    
+
     private static Token parseTextModToken(String section, int start) {
         return TextModFabric.getTextModToken(parseTextModType(section, start));
     }

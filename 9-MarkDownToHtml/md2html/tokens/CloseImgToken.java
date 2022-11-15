@@ -12,5 +12,5 @@ public class CloseImgToken extends TextModToken {
     public String getMdTag() {
         return ")";
     }
-    
+
 }
