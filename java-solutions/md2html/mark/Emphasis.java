@@ -23,9 +23,9 @@ public class Emphasis extends TextModificator {
             super.insertChildsMD(builder, markdownTagUnderLine);
         }
     }
-    
+
     @Override
     public void toHtml(StringBuilder builder) {
-        super.insertChildsHTML(builder, htmlOpenTag, htmlCloseTag);        
-    }  
+        super.insertChildsHTML(builder, htmlOpenTag, htmlCloseTag);
+    }
 }

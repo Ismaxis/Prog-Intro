@@ -1,6 +1,6 @@
 package md2html.mark;
 
-public abstract class TextModificator extends Root implements Node { 
+public abstract class TextModificator extends Root implements Node {
     public TextModificator() {
         super();
     }
@@ -9,7 +9,7 @@ public abstract class TextModificator extends Root implements Node {
         builder.append(markdownTag);
         super.toMarkdown(builder);
         builder.append(markdownTag);
-    } 
+    }
 
     protected void insertChildsHTML(StringBuilder builder, String openTag, String closeTag) {
         builder.append(openTag);

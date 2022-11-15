@@ -30,6 +30,6 @@ public abstract class Root implements MarkDownCompatable, HtmlCompatable {
     public void toHtml(StringBuilder builder) {
         for (Node element : childs) {
             element.toHtml(builder);
-        } 
+        }
     }
 }

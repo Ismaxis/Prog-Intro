@@ -1,6 +1,6 @@
 package md2html;
 
-public class TagsStorage { 
+public class TagsStorage {
     private static String[] tags;
     private static int maxTagLength;
 
@@ -35,7 +35,7 @@ public class TagsStorage {
 
     public static boolean isPartOfHeader(char ch) {
         return ch == Tag.Header.tagString.charAt(0);
-    }   
+    }
 
     public static boolean isEndOfHeader(char ch) {
         return ch == ' ';

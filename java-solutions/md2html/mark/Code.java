@@ -11,9 +11,9 @@ public class Code extends TextModificator {
     public void toMarkdown(StringBuilder builder) {
         super.insertChildsMD(builder, markdownTag);
     }
-    
+
     @Override
     public void toHtml(StringBuilder builder) {
-        super.insertChildsHTML(builder, htmlOpenTag, htmlCloseTag);         
-    }   
+        super.insertChildsHTML(builder, htmlOpenTag, htmlCloseTag);
+    }
 }

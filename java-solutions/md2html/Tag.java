@@ -10,12 +10,12 @@ public enum Tag {
     EmphasisStar("*"),
     Code("`"),
     CloseImgTag(")"),
-    
+
     Text,
     Header("#"),
     Paragraph;
 
-    private static final int amountOfMods = 9;
+    private static final int numberOfMods = 9;
 
     public final String tagString;
 
@@ -29,8 +29,8 @@ public enum Tag {
 
     public static String[] getTagsStrings() {
         Tag[] tags = values();
-        String[] values = new String[amountOfMods];
-        for (int i = 0; i < amountOfMods; i++) {
+        String[] values = new String[numberOfMods];
+        for (int i = 0; i < numberOfMods; i++) {
             values[i] = tags[i].tagString;
         }
         return values;
