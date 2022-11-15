@@ -34,7 +34,7 @@ public class TagsStorage {
     }
 
     public static boolean isPartOfHeader(char ch) {
-        return ch == Tag.Header.tagString.charAt(0);
+        return ch == Tag.HEADER.tagString.charAt(0);
     }
 
     public static boolean isEndOfHeader(char ch) {

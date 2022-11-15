@@ -31,7 +31,7 @@ public class TreeBuiler {
             int stackSize = stack.size();
             if (curTokenTag == Tag.Text) {
                 stack.add(new Text(((TextToken) curToken).text()));
-            } else if (curTokenTag == Tag.CloseImgTag) {
+            } else if (curTokenTag == Tag.CLOSE_IMG_TAG) {
                 int openIndex = openedTags[Tag.OpenImgTag.ordinal()];
                 int midIndex = openedTags[Tag.MidImgTag.ordinal()];
                 if (openIndex != -1 && midIndex != -1 && openIndex < midIndex) {
@@ -74,7 +74,7 @@ public class TreeBuiler {
                     stack.add(newTextMod);
                     continue mainloop;
                 }
-                if (curTokenTag == Tag.Header) {
+                if (curTokenTag == Tag.HEADER) {
                     stack.add(new Text(curToken.getMdTag()));
                 } else {
                     stack.add(curToken);

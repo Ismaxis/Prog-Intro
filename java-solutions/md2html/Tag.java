@@ -9,10 +9,10 @@ public enum Tag {
     EmphasisUnderLine("_"),
     EmphasisStar("*"),
     Code("`"),
-    CloseImgTag(")"),
+    CLOSE_IMG_TAG(")"),
 
     Text,
-    Header("#"),
+    HEADER("#"),
     Paragraph;
 
     private static final int numberOfMods = 9;

@@ -29,11 +29,11 @@ class SectionReader {
             return;
         }
 
-        while (curLine.length() == 0) {
+        while (curLine.isEmpty()) {
             curLine = reader.readLine();
         }
 
-        while (curLine.length() != 0) {
+        while (!curLine.isEmpty()) {
             section.append(curLine);
             section.append(System.lineSeparator());
             curLine = reader.readLine();
@@ -51,7 +51,7 @@ class SectionReader {
         return curSection();
     }
 
-    public boolean ready() {
+    public boolean hasNextSection() {
         return !sectionReaderClosed;
     }
 

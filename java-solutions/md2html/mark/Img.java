@@ -5,7 +5,7 @@ import md2html.Tag;
 public class Img extends TextModificator {
     private static final String mdOpenTag = Tag.OpenImgTag.tagString;
     private static final String mdMidTag = Tag.MidImgTag.tagString;
-    private static final String mdCloseTag = Tag.CloseImgTag.tagString;
+    private static final String mdCloseTag = Tag.CLOSE_IMG_TAG.tagString;
 
     private static final String htmlOpenTag = "<img";
     private static final String htmlCloseTag = ">";

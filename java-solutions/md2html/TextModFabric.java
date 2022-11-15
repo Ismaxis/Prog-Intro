@@ -4,7 +4,7 @@ import md2html.mark.*;
 import md2html.tokens.*;
 
 public abstract class TextModFabric {
-    public static TextModificator getNode(Tag type) {
+    public static TextModificator getNode(final Tag type) {
         if (type == Tag.EmphasisStar) {
             return new Emphasis(Tag.EmphasisStar);
         }
@@ -23,22 +23,19 @@ public abstract class TextModFabric {
         if (type == Tag.Code) {
             return new Code();
         }
-        if (type == Tag.CloseImgTag) {
+        if (type == Tag.CLOSE_IMG_TAG) {
             return new Img();
         }
 
         throw new EnumConstantNotPresentException(type.getClass(), type.name());
     }
 
-    public static TextModToken getTextModToken(Tag type) {
+    public static TextModToken getTextModToken(final Tag type) {
         if (type == Tag.EmphasisStar || type == Tag.EmphasisUnderLine) {
             return new EmphasisToken(type);
-        }
-        if (type == Tag.StrongStar || type == Tag.StrongUnderLine) {
+        } else if (type == Tag.StrongStar || type == Tag.StrongUnderLine) {
             return new StrongToken(type);
-        }
-        if (type == Tag.Strikeout) {
-            ;
+        } else if (type == Tag.Strikeout) {
             return new StrikeoutToken();
         }
         if (type == Tag.Code) {
@@ -50,10 +47,10 @@ public abstract class TextModFabric {
         if (type == Tag.MidImgTag) {
             return new MidImgToken();
         }
-        if (type == Tag.CloseImgTag) {
+        if (type == Tag.CLOSE_IMG_TAG) {
             return new CloseImgToken();
+        } else {
+            throw new EnumConstantNotPresentException(type.getClass(), type.name());
         }
-
-        throw new EnumConstantNotPresentException(type.getClass(), type.name());
     }
 }

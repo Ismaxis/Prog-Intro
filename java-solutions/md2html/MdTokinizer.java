@@ -4,8 +4,8 @@ import java.io.*;
 import md2html.tokens.*;
 
 public class MdTokinizer {
-    public static Token getNextToken(String section, int start) throws IOException {
-        char firstChar = section.charAt(start);
+    public static Token getNextToken(final String section, final int start) throws IOException {
+        final char firstChar = section.charAt(start);
         if (TagsStorage.isPartOfHeader(firstChar)) {
             return parseHeaderToken(section, start);
         } else if (TagsStorage.isPartOfTag(firstChar)) {
@@ -15,7 +15,7 @@ public class MdTokinizer {
         }
     }
 
-    private static Token parseHeaderToken(String section, int start) throws IOException {
+    private static Token parseHeaderToken(final String section, final int start) throws IOException {
         char curChar = section.charAt(start + 1);
         int length = 1;
         while (TagsStorage.isPartOfHeader(curChar)) {
@@ -30,20 +30,20 @@ public class MdTokinizer {
         }
     }
 
-    private static Token parseTextModToken(String section, int start) {
+    private static Token parseTextModToken(final String section, final int start) {
         return TextModFabric.getTextModToken(parseTextModType(section, start));
     }
 
-    private static Tag parseTextModType(String section, int start) {
+    private static Tag parseTextModType(final String section, final int start) {
         return TagsStorage.get(section, start);
     }
 
-    private static Token parseTextToken(String section, int start) {
-        int sectionLen = section.length();
+    private static Token parseTextToken(final String section, final int start) {
+        final int sectionLen = section.length();
         int i = start;
         boolean isShielded = false;
         for (; i < sectionLen; i++) {
-            char curChar = section.charAt(i);
+            final char curChar = section.charAt(i);
             if (!isShielded && TagsStorage.isPartOfTag(curChar)) {
                 if (parseTextModType(section, i) != null) {
                     break;

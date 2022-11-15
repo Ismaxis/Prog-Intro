@@ -4,11 +4,11 @@ import md2html.Tag;
 
 public class HeaderToken extends Token {
     public HeaderToken(int level) {
-        super(level, Tag.Header);
+        super(level, Tag.HEADER);
     }
 
     @Override
     public String getMdTag() {
-        return Tag.Header.tagString.repeat(super.length - 1) + " ";
+        return Tag.HEADER.tagString.repeat(super.length - 1) + " ";
     }
 }
