@@ -45,15 +45,15 @@ public class TreeBuiler {
 
                     String src = builder.toString();
                     builder.setLength(0);
-                    
+
                     for (int i = openIndex + 1; i < midIndex; i++) {
-                        getTextFromRemoved(stack.remove(openIndex + 1), openedTags, builder);  
+                        getTextFromRemoved(stack.remove(openIndex + 1), openedTags, builder);
                     }
-                    stack.remove(openIndex);                    
+                    stack.remove(openIndex);
 
                     String alt = builder.toString();
 
-                    ((Img) img).setProps(alt, src); 
+                    ((Img) img).setProps(alt, src);
                     stack.add(img);
                 } else {
                     stack.add(new Text((curToken.getMdTag())));
@@ -62,7 +62,7 @@ public class TreeBuiler {
                 Integer openedTag = openedTags[curTokenTag.ordinal()];
                 if (openedTag == -1) {
                     openedTags[curTokenTag.ordinal()] = stackSize;
-                } else if (curTokenTag == Tag.OpenImgTag || curTokenTag == Tag.MidImgTag){
+                } else if (curTokenTag == Tag.OpenImgTag || curTokenTag == Tag.MidImgTag) {
                     openedTags[curTokenTag.ordinal()] = stackSize;
                 } else {
                     TextModificator newTextMod = TextModFabric.getNode(curTokenTag);
@@ -78,7 +78,7 @@ public class TreeBuiler {
                     stack.add(new Text(curToken.getMdTag()));
                 } else {
                     stack.add(curToken);
-                } 
+                }
             }
         }
 
@@ -120,8 +120,7 @@ public class TreeBuiler {
     public void toHTML(StringBuilder builder) {
         for (Root root : listOfRoot) {
             root.toHtml(builder);
-            builder.append("\n");
+            builder.append(System.lineSeparator());
         }
     }
-}  
-
+}
