@@ -23,12 +23,6 @@ public class MdParser {
             }
 
             tree.addSection(sectionTokens);
-
-//            if (reader.ready()) {
-//                curSection = reader.nextSection();
-//            } else {
-//                break;
-//            }
         }
 
         final StringBuilder builder = new StringBuilder();

@@ -31,11 +31,7 @@ public class MdTokinizer {
     }
 
     private static Token parseTextModToken(final String section, final int start) {
-        return TextModFabric.getTextModToken(parseTextModType(section, start));
-    }
-
-    private static Tag parseTextModType(final String section, final int start) {
-        return TagsStorage.get(section, start);
+        return Tag.getTextModToken(parseTextModType(section, start));
     }
 
     private static Token parseTextToken(final String section, final int start) {
@@ -53,5 +49,9 @@ public class MdTokinizer {
         }
 
         return new TextToken(section.substring(start, i));
+    }
+
+    private static Tag parseTextModType(final String section, final int start) {
+        return TagsStorage.getTagByString(section, start);
     }
 }

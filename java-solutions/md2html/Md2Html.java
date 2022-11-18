@@ -12,7 +12,8 @@ public class Md2Html {
 
         String html;
         try {
-            BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(args[0]), StandardCharsets.UTF_8));
+            BufferedReader reader = new BufferedReader(
+                    new InputStreamReader(new FileInputStream(args[0]), StandardCharsets.UTF_8));
             try {
                 html = MdParser.parseMdToHTML(reader);
             } finally {
@@ -24,28 +25,16 @@ public class Md2Html {
         }
 
         try {
-            BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(args[1]), StandardCharsets.UTF_8));
+            BufferedWriter writer = new BufferedWriter(
+                    new OutputStreamWriter(new FileOutputStream(args[1]), StandardCharsets.UTF_8));
             try {
                 writer.write(html);
-            } catch (IOException e) {
-                System.err.println("Writing error: " + e.getMessage());
-                return;
             } finally {
-                try {
-                    writer.close();
-                } catch (IOException e) {
-                    System.err.println("Cannot close writer: " + e.getMessage());
-                    return;
-                }
+                writer.close();
             }
-        } catch (FileNotFoundException e) {
-            handleFNFE(args[1]);
+        } catch (final IOException e) {
+            System.err.println("Writing error: " + e.getMessage());
             return;
         }
-    }
-
-    private static void handleFNFE(String fileName) {
-        System.err.print("The file \"" + fileName + "\" does not exist, is a directory rather than a ");
-        System.err.println("regular file, or for some other reason cannot be opened for reading.");
     }
 }

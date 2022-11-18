@@ -3,7 +3,7 @@ package md2html.mark;
 import md2html.Tag;
 
 public class Code extends TextModificator {
-    private static final String markdownTag = Tag.Code.tagString;
+    private static final String markdownTag = Tag.CODE.tagString;
     private static final String htmlOpenTag = "<code>";
     private static final String htmlCloseTag = "</code>";
 

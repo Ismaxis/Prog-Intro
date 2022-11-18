@@ -9,9 +9,9 @@ public class EmphasisToken extends TextModToken {
 
     @Override
     public String getMdTag() {
-        if (super.type == Tag.EmphasisStar) {
+        if (super.type == Tag.EMPHASIS_STAR) {
             return "*";
-        } else if (super.type == Tag.EmphasisUnderLine) {
+        } else if (super.type == Tag.EMPHASIS_UNDER_LINE) {
             return "_";
         } else {
             return "";

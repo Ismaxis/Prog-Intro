@@ -10,8 +10,8 @@ class SectionReader {
 
     public SectionReader(BufferedReader reader) {
         this.reader = reader;
-        sectionReaderClosed = false;
-        section = new StringBuilder();
+        this.sectionReaderClosed = false;
+        this.section = new StringBuilder();
     }
 
     public String curSection() {

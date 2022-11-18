@@ -29,32 +29,13 @@ public class TreeBuiler {
         mainloop: for (Token curToken : tokens) {
             Tag curTokenTag = curToken.type();
             int stackSize = stack.size();
-            if (curTokenTag == Tag.Text) {
+            if (curTokenTag == Tag.TEXT) {
                 stack.add(new Text(((TextToken) curToken).text()));
             } else if (curTokenTag == Tag.CLOSE_IMG_TAG) {
-                int openIndex = openedTags[Tag.OpenImgTag.ordinal()];
-                int midIndex = openedTags[Tag.MidImgTag.ordinal()];
+                int openIndex = openedTags[Tag.OPEN_IMG_TAG.ordinal()];
+                int midIndex = openedTags[Tag.MID_IMG_TAG.ordinal()];
                 if (openIndex != -1 && midIndex != -1 && openIndex < midIndex) {
-                    TextModificator img = TextModFabric.getNode(curTokenTag);
-                    StringBuilder builder = new StringBuilder();
-
-                    for (int i = midIndex; i < stackSize - 1; i++) {
-                        getTextFromRemoved(stack.remove(midIndex + 1), openedTags, builder);
-                    }
-                    stack.remove(midIndex);
-
-                    String src = builder.toString();
-                    builder.setLength(0);
-
-                    for (int i = openIndex + 1; i < midIndex; i++) {
-                        getTextFromRemoved(stack.remove(openIndex + 1), openedTags, builder);
-                    }
-                    stack.remove(openIndex);
-
-                    String alt = builder.toString();
-
-                    ((Img) img).setProps(alt, src);
-                    stack.add(img);
+                    pushImageOnStack(stack, openedTags, curTokenTag, stackSize, openIndex, midIndex);
                 } else {
                     stack.add(new Text((curToken.getMdTag())));
                 }
@@ -62,16 +43,10 @@ public class TreeBuiler {
                 Integer openedTag = openedTags[curTokenTag.ordinal()];
                 if (openedTag == -1) {
                     openedTags[curTokenTag.ordinal()] = stackSize;
-                } else if (curTokenTag == Tag.OpenImgTag || curTokenTag == Tag.MidImgTag) {
+                } else if (curTokenTag == Tag.OPEN_IMG_TAG || curTokenTag == Tag.MID_IMG_TAG) {
                     openedTags[curTokenTag.ordinal()] = stackSize;
                 } else {
-                    TextModificator newTextMod = TextModFabric.getNode(curTokenTag);
-                    for (int j = openedTag; j < stackSize - 1; j++) {
-                        newTextMod.addChild(castRemovedToNode(openedTags, stack.remove(openedTag + 1)));
-                    }
-                    openedTags[curTokenTag.ordinal()] = -1;
-                    stack.remove(stack.size() - 1);
-                    stack.add(newTextMod);
+                    pushTextModOnStack(stack, openedTags, curTokenTag, stackSize, openedTag);
                     continue mainloop;
                 }
                 if (curTokenTag == Tag.HEADER) {
@@ -83,9 +58,45 @@ public class TreeBuiler {
         }
 
         for (StackEntry stackEntry : stack) {
-            addStackEntryAsChild(curRoot, stackEntry);
+            curRoot.addChild(castStackEntryToNode(openedTags, stackEntry));
         }
         listOfRoot.add(curRoot);
+    }
+
+    private void pushTextModOnStack(List<StackEntry> stack, int[] openedTags, Tag curTokenTag, int stackSize,
+            Integer openedTag) {
+        TextModificator newTextMod = Tag.getNode(curTokenTag);
+        for (int j = openedTag; j < stackSize - 1; j++) {
+            newTextMod.addChild(castStackEntryToNode(openedTags, stack.remove(openedTag + 1)));
+        }
+        openedTags[curTokenTag.ordinal()] = -1;
+        stack.remove(stack.size() - 1);
+        stack.add(newTextMod);
+    }
+
+    private void pushImageOnStack(List<StackEntry> stack, int[] openedTags, Tag curTokenTag, int stackSize,
+            int openIndex,
+            int midIndex) {
+        TextModificator img = Tag.getNode(curTokenTag);
+        StringBuilder builder = new StringBuilder();
+
+        betweenBracketsToString(stack, openedTags, midIndex, stackSize - 1, builder);
+        String src = builder.toString();
+        builder.setLength(0);
+
+        betweenBracketsToString(stack, openedTags, openIndex, midIndex - 1, builder);
+        String alt = builder.toString();
+
+        ((Img) img).setProps(alt, src);
+        stack.add(img);
+    }
+
+    private void betweenBracketsToString(List<StackEntry> stack, int[] openedTags, int from, int to,
+            StringBuilder builder) {
+        for (int i = from; i < to; i++) {
+            getTextFromRemoved(stack.remove(from + 1), openedTags, builder);
+        }
+        stack.remove(from);
     }
 
     private void getTextFromRemoved(StackEntry removed, int[] openedTags, StringBuilder s) {
@@ -99,21 +110,13 @@ public class TreeBuiler {
         }
     }
 
-    private void addStackEntryAsChild(Root curRoot, StackEntry stackEntry) {
+    private Node castStackEntryToNode(int[] openedTags, StackEntry stackEntry) {
         if (stackEntry instanceof Token) {
-            curRoot.addChild(new Text(((Token) stackEntry).getMdTag()));
-        } else {
-            curRoot.addChild((Node) stackEntry);
-        }
-    }
-
-    private Node castRemovedToNode(int[] openedTags, StackEntry removed) {
-        if (removed instanceof Token) {
-            Token removedToken = (Token) removed;
+            Token removedToken = (Token) stackEntry;
             openedTags[removedToken.type().ordinal()] = -1;
             return new Text(removedToken.getMdTag());
         } else {
-            return ((Node) removed);
+            return ((Node) stackEntry);
         }
     }
 

@@ -1,19 +1,23 @@
 package md2html;
 
+import java.util.Arrays;
+
 public class TagsStorage {
-    private static String[] tags;
+    private static Tag[] tags;
+
     private static int maxTagLength;
 
     static {
-        tags = Tag.getTagsStrings();
+        tags = Tag.getTextModTags();
+        Arrays.sort(tags, (Tag a, Tag b) -> b.tagString.length() - a.tagString.length());
 
-        maxTagLength = tags.length > 0 ? tags[0].length() : 0;
+        maxTagLength = tags.length > 0 ? tags[0].tagString.length() : 0;
     }
 
-    public static Tag get(String s, int start) {
-        for (int i = 0; i < tags.length; i++) {
-            if (s.startsWith(tags[i], start)) {
-                return Tag.values()[i];
+    public static Tag getTagByString(String s, int start) {
+        for (Tag tag : tags) {
+            if (s.startsWith(tag.tagString, start)) {
+                return tag;
             }
         }
 
@@ -25,8 +29,8 @@ public class TagsStorage {
     }
 
     public static boolean isPartOfTag(char ch) {
-        for (int i = 0; i < tags.length; i++) {
-            if (tags[i].charAt(0) == ch) {
+        for (Tag tag : tags) {
+            if (tag.tagString.charAt(0) == ch) {
                 return true;
             }
         }

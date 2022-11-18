@@ -4,7 +4,7 @@ import md2html.Tag;
 
 public class CodeToken extends TextModToken {
     public CodeToken() {
-        super(1, Tag.Code);
+        super(1, Tag.CODE);
     }
 
     @Override

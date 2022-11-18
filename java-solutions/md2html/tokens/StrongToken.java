@@ -9,9 +9,9 @@ public class StrongToken extends TextModToken {
 
     @Override
     public String getMdTag() {
-        if (super.type == Tag.StrongStar) {
+        if (super.type == Tag.STRONG_STAR) {
             return "**";
-        } else if (super.type == Tag.StrongUnderLine) {
+        } else if (super.type == Tag.STRONG_UNDER_LINE) {
             return "__";
         } else {
             return "";

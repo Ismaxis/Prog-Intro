@@ -3,8 +3,8 @@ package md2html.mark;
 import md2html.Tag;
 
 public class Img extends TextModificator {
-    private static final String mdOpenTag = Tag.OpenImgTag.tagString;
-    private static final String mdMidTag = Tag.MidImgTag.tagString;
+    private static final String mdOpenTag = Tag.OPEN_IMG_TAG.tagString;
+    private static final String mdMidTag = Tag.MID_IMG_TAG.tagString;
     private static final String mdCloseTag = Tag.CLOSE_IMG_TAG.tagString;
 
     private static final String htmlOpenTag = "<img";
