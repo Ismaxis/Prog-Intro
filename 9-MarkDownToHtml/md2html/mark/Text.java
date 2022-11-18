@@ -1,7 +1,7 @@
 package md2html.mark;
 
 import java.util.List;
-import md2html.Pair;
+import md2html.MPair;
 
 public class Text implements Node {
     private String text;
@@ -32,14 +32,14 @@ public class Text implements Node {
     }
 
     private String escapeHTML(String text) {
-        for (Pair<String, String> pair : htmlSpecialSymbols) {
+        for (MPair<String, String> pair : htmlSpecialSymbols) {
             text = text.replace(pair.first(), pair.second());
         }
         return text;
     }
 
-    private static List<Pair<String, String>> htmlSpecialSymbols = List.of(
-            new Pair<String, String>("&", "&amp;"),
-            new Pair<String, String>("<", "&lt;"),
-            new Pair<String, String>(">", "&gt;"));
+    private static List<MPair<String, String>> htmlSpecialSymbols = List.of(
+            new MPair<String, String>("&", "&amp;"),
+            new MPair<String, String>("<", "&lt;"),
+            new MPair<String, String>(">", "&gt;"));
 }

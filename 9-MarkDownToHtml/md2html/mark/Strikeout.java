@@ -3,7 +3,7 @@ package md2html.mark;
 import md2html.Tag;
 
 public class Strikeout extends TextModificator {
-    private static final String markdownTag = Tag.Strikeout.tagString;
+    private static final String markdownTag = Tag.STRIKEOUT.tagString;
     private static final String htmlOpenTag = "<s>";
     private static final String htmlCloseTag = "</s>";
 

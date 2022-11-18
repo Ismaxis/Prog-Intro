@@ -5,7 +5,7 @@ import md2html.Tag;
 public class MidImgToken extends TextModToken {
 
     public MidImgToken() {
-        super(2, Tag.MidImgTag);
+        super(2, Tag.MID_IMG_TAG);
     }
 
     @Override

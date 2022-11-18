@@ -7,31 +7,25 @@ import java.util.List;
 import md2html.tokens.*;
 
 public class MdParser {
-    public static String parseMdToHTML(BufferedReader givenReader) throws IOException {
-        SectionReader reader = new SectionReader(givenReader);
-        TreeBuiler tree = new TreeBuiler();
+    public static String parseMdToHTML(final BufferedReader givenReader) throws IOException {
+        final SectionReader reader = new SectionReader(givenReader);
+        final TreeBuiler tree = new TreeBuiler();
 
-        String curSection = reader.nextSection();
-        while (true) {
-            int sectionLen = curSection.length();
+        while (reader.hasNextSection()) {
+            final String section = reader.nextSection();
+            final int sectionLen = section.length();
             int alreadyRead = 0;
-            List<Token> sectionTokens = new ArrayList<>();
+            final List<Token> sectionTokens = new ArrayList<>();
             while (alreadyRead < sectionLen) {
-                Token nextToken = MdTokinizer.getNextToken(curSection, alreadyRead);
+                final Token nextToken = MdTokinizer.getNextToken(section, alreadyRead);
                 sectionTokens.add(nextToken);
                 alreadyRead += nextToken.length();
             }
 
             tree.addSection(sectionTokens);
-
-            if (reader.ready()) {
-                curSection = reader.nextSection();
-            } else {
-                break;
-            }
         }
 
-        StringBuilder builder = new StringBuilder();
+        final StringBuilder builder = new StringBuilder();
         tree.toHTML(builder);
 
         return builder.toString();

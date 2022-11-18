@@ -10,8 +10,8 @@ class SectionReader {
 
     public SectionReader(BufferedReader reader) {
         this.reader = reader;
-        sectionReaderClosed = false;
-        section = new StringBuilder();
+        this.sectionReaderClosed = false;
+        this.section = new StringBuilder();
     }
 
     public String curSection() {
@@ -29,11 +29,11 @@ class SectionReader {
             return;
         }
 
-        while (curLine.length() == 0) {
+        while (curLine.isEmpty()) {
             curLine = reader.readLine();
         }
 
-        while (curLine.length() != 0) {
+        while (!curLine.isEmpty()) {
             section.append(curLine);
             section.append(System.lineSeparator());
             curLine = reader.readLine();
@@ -51,7 +51,7 @@ class SectionReader {
         return curSection();
     }
 
-    public boolean ready() {
+    public boolean hasNextSection() {
         return !sectionReaderClosed;
     }
 

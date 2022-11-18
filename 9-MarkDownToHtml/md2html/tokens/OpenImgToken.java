@@ -5,7 +5,7 @@ import md2html.Tag;
 public class OpenImgToken extends TextModToken {
 
     public OpenImgToken() {
-        super(2, Tag.OpenImgTag);
+        super(2, Tag.OPEN_IMG_TAG);
     }
 
     @Override

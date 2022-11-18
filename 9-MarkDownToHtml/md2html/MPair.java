@@ -1,10 +1,10 @@
 package md2html;
 
-public class Pair<F, S> {
+public class MPair<F, S> {
     private F first;
     private S second;
 
-    public Pair(F first, S second) {
+    public MPair(F first, S second) {
         this.first = first;
         this.second = second;
     }
