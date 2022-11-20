@@ -2,7 +2,10 @@ package game;
 
 import java.util.Map;
 
-public class TicTacToePosition implements Position {
+public class MNKPosition implements Position {
+    private int m;
+    private int n;
+
     private static final Map<Cell, String> CELL_TO_STRING = Map.of(
             Cell.E, ".",
             Cell.X, "X",
@@ -11,7 +14,10 @@ public class TicTacToePosition implements Position {
     private final Cell[][] field;
     private Turn turn;
 
-    public TicTacToePosition(Cell[][] field, Turn turn) {
+    public MNKPosition(Cell[][] field, Turn turn, int m, int n) {
+        this.m = m;
+        this.n = n;
+
         this.field = field;
         this.turn = turn;
     }
@@ -23,8 +29,8 @@ public class TicTacToePosition implements Position {
 
     @Override
     public boolean isValid(final Move move) {
-        return 0 <= move.getRow() && move.getRow() < 3
-                && 0 <= move.getCol() && move.getCol() < 3
+        return 0 <= move.getRow() && move.getRow() < m
+                && 0 <= move.getCol() && move.getCol() < n
                 && field[move.getRow()][move.getCol()] == Cell.E
                 && turn.getCell() == move.getValue();
     }
@@ -36,8 +42,12 @@ public class TicTacToePosition implements Position {
 
     @Override
     public String toString() {
-        final StringBuilder sb = new StringBuilder(" 123").append(System.lineSeparator());
-        for (int r = 0; r < 3; r++) {
+        final StringBuilder sb = new StringBuilder(" ");
+        for (int c = 1; c <= n; c++) {
+            sb.append(c);
+        }
+        sb.append(System.lineSeparator());
+        for (int r = 0; r < m; r++) {
             sb.append(r + 1);
             for (Cell cell : field[r]) {
                 sb.append(CELL_TO_STRING.get(cell));

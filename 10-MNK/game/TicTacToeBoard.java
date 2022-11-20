@@ -1,25 +1,20 @@
 package game;
 
 import java.util.Arrays;
-import java.util.Map;
 
 public class TicTacToeBoard implements Board {
-    private static final Map<Cell, String> CELL_TO_STRING = Map.of(
-            Cell.E, ".",
-            Cell.X, "X",
-            Cell.O, "0");
-
     private final Cell[][] field;
-    private Cell turn;
-
+    private Turn turn;
     private final TicTacToePosition position;
+    private int turnsLeft;
 
     public TicTacToeBoard() {
         field = new Cell[3][3];
+        turnsLeft = 3 * 3;
         for (Cell[] row : field) {
             Arrays.fill(row, Cell.E);
         }
-        turn = Cell.X;
+        turn = new Turn(Cell.X);
         position = new TicTacToePosition(field, turn);
     }
 
@@ -34,6 +29,7 @@ public class TicTacToeBoard implements Board {
             return GameResult.LOOSE;
         }
 
+        turnsLeft--;
         field[move.getRow()][move.getCol()] = move.getValue();
         if (checkWin()) {
             return GameResult.WIN;
@@ -42,31 +38,23 @@ public class TicTacToeBoard implements Board {
         if (checkDraw()) {
             return GameResult.DRAW;
         }
-
-        turn = turn == Cell.X ? Cell.O : Cell.X;
+        turn.setCell(turn.getCell() == Cell.X ? Cell.O : Cell.X);
         return GameResult.UNKNOWN;
     }
 
     private boolean checkDraw() {
-        int count = 0;
-        for (int r = 0; r < 3; r++) {
-            for (int c = 0; c < 3; c++) {
-                if (field[r][c] == Cell.E) {
-                    count++;
-                }
-            }
-        }
-        if (count == 0) {
+        if (turnsLeft <= 0) {
             return true;
         }
         return false;
     }
 
     private boolean checkWin() {
+        Cell curCell = turn.getCell();
         for (int r = 0; r < 3; r++) {
             int count = 0;
             for (int c = 0; c < 3; c++) {
-                if (field[r][c] == turn) {
+                if (field[r][c] == curCell) {
                     count++;
                 }
             }
@@ -77,7 +65,7 @@ public class TicTacToeBoard implements Board {
         for (int c = 0; c < 3; c++) {
             int count = 0;
             for (int r = 0; r < 3; r++) {
-                if (field[r][c] == turn) {
+                if (field[r][c] == curCell) {
                     count++;
                 }
             }
@@ -85,21 +73,12 @@ public class TicTacToeBoard implements Board {
                 return true;
             }
         }
-        return field[0][0] == turn && field[1][1] == turn && field[2][2] == turn
-                || field[0][2] == turn && field[1][1] == turn && field[2][0] == turn;
+        return field[0][0] == curCell && field[1][1] == curCell && field[2][2] == curCell
+                || field[0][2] == curCell && field[1][1] == curCell && field[2][0] == curCell;
     }
 
     @Override
     public String toString() {
-        final StringBuilder sb = new StringBuilder(" 123").append(System.lineSeparator());
-        for (int r = 0; r < 3; r++) {
-            sb.append(r + 1);
-            for (Cell cell : field[r]) {
-                sb.append(CELL_TO_STRING.get(cell));
-            }
-            sb.append(System.lineSeparator());
-        }
-        sb.setLength(sb.length() - System.lineSeparator().length());
-        return sb.toString();
+        return position.toString();
     }
 }

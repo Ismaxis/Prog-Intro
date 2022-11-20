@@ -5,10 +5,10 @@ import java.util.Scanner;
 public class Main {
     public static void main(String[] args) {
         final int result = new TwoPlayerGame(
-                new TicTacToeBoard(),
+                new MNKBoard(9, 9, 9),
                 new RandomPlayer(),
-                new CheatingPlayer()
-        // new HumanPlayer(new Scanner(System.in))
+                new HumanPlayer(new Scanner(System.in))
+        // new CheatingPlayer()
         ).play(true);
         switch (result) {
             case 1:
@@ -25,3 +25,8 @@ public class Main {
         }
     }
 }
+
+// Random player should now about board size
+// Add user input for board size
+// Work on graphic view
+// Add human player error checking system
