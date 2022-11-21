@@ -51,10 +51,7 @@ public class MNKBoard implements Board {
     }
 
     private boolean checkDraw() {
-        if (turnsLeft <= 0) {
-            return true;
-        }
-        return false;
+        return turnsLeft <= 0;
     }
 
     private boolean checkWin(Move move) {

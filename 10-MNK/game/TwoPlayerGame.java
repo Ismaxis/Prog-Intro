@@ -1,26 +1,30 @@
 package game;
 
+import java.util.List;
+
 public class TwoPlayerGame {
     private final Board board;
-    private final Player player1;
-    private final Player player2;
+    private final List<Player> players;
+    // private final Player player1;
+    // private final Player player2;
 
-    public TwoPlayerGame(Board board, Player player1, Player player2) {
+    public TwoPlayerGame(Board board, List<Player> players) {
         this.board = board;
-        this.player1 = player1;
-        this.player2 = player2;
+        this.players = players;
+
+        // this.player1 = player1;
+        // this.player2 = player2;
     }
 
     public int play(boolean log) {
+        int turn = 0;
         while (true) {
-            final int result1 = playerMoves(player1, 1, log);
-            if (result1 != -1) {
-                return result1;
-            }
-
-            final int result2 = playerMoves(player2, 2, log);
-            if (result2 != -1) {
-                return result2;
+            final int result = playerMoves(players.get(turn), turn + 1, log);
+            turn = (turn + 1) % players.size();
+            if (result != -1) {
+                System.out.println("Final position");
+                System.out.println(board);
+                return result;
             }
         }
     }
@@ -42,7 +46,6 @@ public class TwoPlayerGame {
         final Move move = player.makeMove(board.getPosition());
         final GameResult result = board.makeMove(move);
         if (log) {
-            System.out.println();
             System.out.println("Player: " + no);
             System.out.println(move);
             System.out.println(board);

@@ -1,15 +1,36 @@
 package game;
 
+import java.util.List;
 import java.util.Scanner;
 
 public class Main {
     public static void main(String[] args) {
+
+        Scanner scn = new Scanner(System.in);
+        int m;
+        int n;
+        int k;
+        while (true) {
+            System.out.print("Input m, n and k: ");
+            try {
+                m = scn.nextInt();
+                n = scn.nextInt();
+                k = scn.nextInt();
+                break;
+            } catch (Exception e) {
+                System.out.println("Wrong input. Try again");
+            }
+        }
+
         final int result = new TwoPlayerGame(
-                new MNKBoard(9, 9, 9),
-                new RandomPlayer(),
-                new HumanPlayer(new Scanner(System.in))
+                new MNKBoard(m, n, k),
+                List.of(
+                        new RandomPlayer(m, n),
+                        new RandomPlayer(m, n))
+        // new HumanPlayer(scn))
         // new CheatingPlayer()
-        ).play(true);
+        ).play(false);
+        scn.close();
         switch (result) {
             case 1:
                 System.out.println("First player won");
@@ -25,8 +46,3 @@ public class Main {
         }
     }
 }
-
-// Random player should now about board size
-// Add user input for board size
-// Work on graphic view
-// Add human player error checking system
