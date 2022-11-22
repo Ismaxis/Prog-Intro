@@ -142,7 +142,7 @@ public class MNKBoard implements Board {
                 field[is[1]][is[0]] = Cell.Z;
             }
         }
-
+        turnsLeft = m * n - obstacles.length;
     }
 
     @Override
@@ -156,6 +156,5 @@ public class MNKBoard implements Board {
             Arrays.fill(row, Cell.E);
         }
         setObstaclesOnField();
-        turnsLeft = m * n;
     }
 }
