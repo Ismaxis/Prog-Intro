@@ -11,6 +11,7 @@ public class MNKBoard implements Board {
     private Turn turn;
     private final MNKPosition position;
     private int turnsLeft;
+    private int[][] obstacles;
 
     public MNKBoard(int m, int n, int k) {
         this.m = m;
@@ -131,13 +132,29 @@ public class MNKBoard implements Board {
     }
 
     public void addObstacles(int[][] obstacles) {
-        for (int[] is : obstacles) {
-            field[is[1]][is[0]] = Cell.Z;
+        this.obstacles = obstacles;
+    }
+
+    private void setObstaclesOnField() {
+        if (obstacles != null) {
+            for (int[] is : obstacles) {
+                field[is[1]][is[0]] = Cell.Z;
+            }
         }
+
     }
 
     @Override
     public String toString() {
         return position.toString();
+    }
+
+    @Override
+    public void clear() {
+        for (Cell[] row : field) {
+            Arrays.fill(row, Cell.E);
+        }
+        setObstaclesOnField();
+        turnsLeft = m * n;
     }
 }

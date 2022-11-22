@@ -1,5 +1,6 @@
 package game;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
@@ -19,11 +20,11 @@ public class Main {
                 break;
             } catch (Exception e) {
                 System.out.println("Wrong input. Try again");
+                scn.next();
             }
         }
 
         int countOfObstacles;
-        int[][] obstacles;
         while (true) {
             System.out.print("Enter count of obstacles: ");
             try {
@@ -35,48 +36,78 @@ public class Main {
                 }
             } catch (Exception e) {
                 System.out.println("Wrong input. Try again");
+                scn.next();
             }
         }
 
         MNKBoard board = new MNKBoard(m, n, k);
         if (countOfObstacles > 0) {
-            obstacles = new int[countOfObstacles][2];
-            System.out.println("Now enter coords of obstacles");
-            for (int i = 0; i < countOfObstacles; i++) {
-                try {
-                    System.out.format("Coords of %d\n", i + 1);
-                    obstacles[i][0] = getCoord(scn, "x", n);
-                    obstacles[i][1] = getCoord(scn, "y", n);
-                } catch (Exception e) {
-                    System.out.format("Wrong input. Enter coords for %d again\n", i + 1);
-                    i--;
-                }
-            }
-            board.addObstacles(obstacles);
+            board.addObstacles(getObstacles(scn, n, countOfObstacles));
         }
 
-        final int result = new TwoPlayerGame(
-                board,
-                List.of(
-                        new RandomPlayer(m, n),
-                        new HumanPlayer(scn))
-        // new HumanPlayer(scn))
-        // new CheatingPlayer()
-        ).play(false);
-        scn.close();
-        switch (result) {
-            case 1:
-                System.out.println("First player won");
-                break;
-            case 2:
-                System.out.println("Second player won");
-                break;
-            case 0:
-                System.out.println("Draw");
-                break;
-            default:
-                throw new AssertionError("Unknown result " + result);
+        int playersCount;
+        while (true) {
+            System.out.print("Enter count of players: ");
+            try {
+                playersCount = scn.nextInt();
+                if (playersCount <= 0) {
+                    System.out.println("Count must be greater than zero. Try again");
+                } else {
+                    break;
+                }
+            } catch (Exception e) {
+                System.out.println("Wrong input. Try again");
+                scn.next();
+            }
         }
+
+        List<Player> players = new ArrayList<>();
+
+        for (int i = 0; i < playersCount; i++) {
+            while (true) {
+                System.out.format("Enter type of player %d: [H|R|S]", i + 1);
+                try {
+                    String type = scn.next();
+                    if (type.startsWith("H")) {
+                        players.add(new HumanPlayer(scn));
+                    } else if (type.startsWith("R")) {
+                        players.add(new RandomPlayer(m, n));
+                    } else if (type.startsWith("S")) {
+                        players.add(new SequentialPlayer(m, n));
+                    } else {
+                        System.out.println("Wrong type: ");
+                        continue;
+                    }
+                    break;
+                } catch (Exception e) {
+                    System.out.println("Wrong input. Try again");
+                    scn.next();
+                }
+            }
+        }
+
+        new TournamentGame(
+                board, players)
+                .play(false);
+        scn.close();
+    }
+
+    private static int[][] getObstacles(Scanner scn, int n, int countOfObstacles) {
+        int[][] obstacles;
+        obstacles = new int[countOfObstacles][2];
+        System.out.println("Now enter coords of obstacles");
+        for (int i = 0; i < countOfObstacles; i++) {
+            try {
+                System.out.format("Coords of %d\n", i + 1);
+                obstacles[i][0] = getCoord(scn, "x", n);
+                obstacles[i][1] = getCoord(scn, "y", n);
+            } catch (Exception e) {
+                System.out.format("Wrong input. Enter coords for %d again\n", i + 1);
+                scn.next();
+                i--;
+            }
+        }
+        return obstacles;
     }
 
     public static int getCoord(Scanner scn, String coordName, int bound) {
@@ -87,6 +118,7 @@ public class Main {
                 return input;
             } else {
                 System.out.println("Coord out of bounce. Enter again");
+                scn.next();
             }
         }
     }
