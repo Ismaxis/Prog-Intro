@@ -133,6 +133,7 @@ public class MNKBoard implements Board {
 
     public void addObstacles(int[][] obstacles) {
         this.obstacles = obstacles;
+        setObstaclesOnField();
     }
 
     private void setObstaclesOnField() {
