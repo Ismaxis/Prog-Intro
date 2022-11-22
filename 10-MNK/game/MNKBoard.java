@@ -130,6 +130,12 @@ public class MNKBoard implements Board {
         return false;
     }
 
+    public void addObstacles(int[][] obstacles) {
+        for (int[] is : obstacles) {
+            field[is[1]][is[0]] = Cell.Z;
+        }
+    }
+
     @Override
     public String toString() {
         return position.toString();

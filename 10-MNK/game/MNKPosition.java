@@ -11,7 +11,8 @@ public class MNKPosition implements Position {
     private static final Map<Cell, String> CELL_TO_STRING = Map.of(
             Cell.E, ".",
             Cell.X, "X",
-            Cell.O, "0");
+            Cell.O, "0",
+            Cell.Z, "Z");
 
     private final Cell[][] field;
     private Turn turn;
@@ -37,6 +38,7 @@ public class MNKPosition implements Position {
         return 0 <= move.getRow() && move.getRow() < m
                 && 0 <= move.getCol() && move.getCol() < n
                 && field[move.getRow()][move.getCol()] == Cell.E
+                && field[move.getRow()][move.getCol()] != Cell.Z
                 && turn.getCell() == move.getValue();
     }
 

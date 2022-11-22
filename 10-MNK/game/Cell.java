@@ -1,5 +1,5 @@
 package game;
 
 public enum Cell {
-    E, X, O
+    E, X, O, Z
 }
