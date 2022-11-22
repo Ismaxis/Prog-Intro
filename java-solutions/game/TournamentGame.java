@@ -34,7 +34,7 @@ public class TournamentGame {
                 } else {
                     throw new AssertionError("Unknown startRound result " + result);
                 }
-                board.clear();
+                board.reset();
                 printScore();
             }
         }

@@ -151,7 +151,8 @@ public class MNKBoard implements Board {
     }
 
     @Override
-    public void clear() {
+    public void reset() {
+        turn.setCell(Cell.X);
         for (Cell[] row : field) {
             Arrays.fill(row, Cell.E);
         }

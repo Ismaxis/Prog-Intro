@@ -5,5 +5,5 @@ public interface Board {
 
     GameResult makeMove(Move move);
 
-    void clear();
+    void reset();
 }
