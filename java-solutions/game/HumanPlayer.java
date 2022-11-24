@@ -15,7 +15,7 @@ public class HumanPlayer implements Player {
         System.out.println("Current position");
         System.out.println(position);
         System.out.println("Enter you move for " + position.getTurn());
-
+		// :NOTE: нет проверки на некорректность ввода (например, 2 aaaaa -> проблема)
         Move move;
         while (true) {
             move = new Move(in.nextInt() - 1, in.nextInt() - 1, position.getTurn());
