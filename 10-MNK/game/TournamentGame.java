@@ -19,7 +19,7 @@ public class TournamentGame {
                 if (i == j) {
                     continue;
                 }
-                System.out.format("Roung between %d(X) %d(O)\n", i + 1, j + 1);
+                System.out.format("\nRound between %d(X) %d(O)\n", i + 1, j + 1);
                 int result = startRound(players.get(i), players.get(j), log);
                 if (result == 1) {
                     score[i] += 2;
