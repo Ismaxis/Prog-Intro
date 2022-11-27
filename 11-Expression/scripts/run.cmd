@@ -1,0 +1,1 @@
+javac -d ./out *.java && java -cp ./out Playground %1
