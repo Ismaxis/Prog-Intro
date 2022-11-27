@@ -19,3 +19,11 @@ java-solutions/markup/MarkupListTest.java
 java-solutions/markup/MarkupTester.java
 java-solutions/markup/package-info.java
 java-solutions/Runner.java
+
+# HW 11 tests ignore
+java-solutions/expression/common/
+java-solutions/expression/package-info.java
+java-solutions/expression/ToMiniString.java
+java-solutions/expression/Expression.java
+java-solutions/expression/ExpressionTest.java
+java-solutions/expression/ExpressionTester.java
