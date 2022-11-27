@@ -24,26 +24,8 @@ public class Main {
             }
         }
 
-        int countOfObstacles;
-        while (true) {
-            System.out.print("Enter count of obstacles: ");
-            try {
-                countOfObstacles = scn.nextInt();
-                if (countOfObstacles >= m * n) {
-                    System.out.println("To much obstacles. Try again");
-                } else {
-                    break;
-                }
-            } catch (Exception e) {
-                System.out.println("Wrong input. Try again");
-                scn.next();
-            }
-        }
-
         MNKBoard board = new MNKBoard(m, n, k);
-        if (countOfObstacles > 0) {
-            board.addObstacles(getObstacles(scn, n, countOfObstacles));
-        }
+        board.addObstacles(getObstacles(m, n));
 
         int playersCount;
         while (true) {
@@ -65,24 +47,20 @@ public class Main {
 
         for (int i = 0; i < playersCount; i++) {
             while (true) {
-                System.out.format("Enter type of player %d: [H|R|S]", i + 1);
-                try {
-                    String type = scn.next();
-                    if (type.startsWith("H")) {
-                        players.add(new HumanPlayer(scn));
-                    } else if (type.startsWith("R")) {
-                        players.add(new RandomPlayer(m, n));
-                    } else if (type.startsWith("S")) {
-                        players.add(new SequentialPlayer(m, n));
-                    } else {
-                        System.out.println("Wrong type: ");
-                        continue;
-                    }
-                    break;
-                } catch (Exception e) {
-                    System.out.println("Wrong input. Try again");
-                    scn.next();
+                System.out.format("Enter type of player %d: [Human|Random|Sequential]", i + 1);
+                String type = scn.next();
+                if (type.startsWith("H")) {
+                    players.add(new HumanPlayer(scn));
+                } else if (type.startsWith("R")) {
+                    players.add(new RandomPlayer(m, n));
+                } else if (type.startsWith("S")) {
+                    players.add(new SequentialPlayer(m, n));
+                } else {
+                    System.out.println("Unknown type. Try again");
+                    continue;
                 }
+                break;
+
             }
         }
 
@@ -92,20 +70,17 @@ public class Main {
         scn.close();
     }
 
-    private static int[][] getObstacles(Scanner scn, int n, int countOfObstacles) {
-        int[][] obstacles;
-        obstacles = new int[countOfObstacles][2];
-        System.out.println("Now enter coords of obstacles");
-        for (int i = 0; i < countOfObstacles; i++) {
-            try {
-                System.out.format("Coords of %d\n", i + 1);
-                obstacles[i][0] = getCoord(scn, "x", n);
-                obstacles[i][1] = getCoord(scn, "y", n);
-            } catch (Exception e) {
-                System.out.format("Wrong input. Enter coords for %d again\n", i + 1);
-                scn.next();
-                i--;
-            }
+    private static int[][] getObstacles(int m, int n) {
+        int crossSize = Math.min(m, n);
+        int[][] obstacles = new int[2 * crossSize][2];
+        int cnt = 0;
+        for (int i = 0; i < crossSize; i++) {
+            obstacles[cnt][0] = i;
+            obstacles[cnt][1] = i;
+            cnt++;
+            obstacles[cnt][0] = i;
+            obstacles[cnt][1] = crossSize - 1 - i;
+            cnt++;
         }
         return obstacles;
     }
@@ -114,7 +89,7 @@ public class Main {
         while (true) {
             System.out.print(coordName + ": ");
             int input = scn.nextInt();
-            if (0 < input && input < bound) {
+            if (0 < input && input <= bound) {
                 return input;
             } else {
                 System.out.println("Coord out of bounce. Enter again");

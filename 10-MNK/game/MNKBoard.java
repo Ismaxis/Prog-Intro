@@ -133,6 +133,7 @@ public class MNKBoard implements Board {
 
     public void addObstacles(int[][] obstacles) {
         this.obstacles = obstacles;
+        setObstaclesOnField();
     }
 
     private void setObstaclesOnField() {
@@ -141,7 +142,7 @@ public class MNKBoard implements Board {
                 field[is[1]][is[0]] = Cell.Z;
             }
         }
-
+        turnsLeft = m * n - obstacles.length;
     }
 
     @Override
@@ -150,11 +151,11 @@ public class MNKBoard implements Board {
     }
 
     @Override
-    public void clear() {
+    public void reset() {
+        turn.setCell(Cell.X);
         for (Cell[] row : field) {
             Arrays.fill(row, Cell.E);
         }
         setObstaclesOnField();
-        turnsLeft = m * n;
     }
 }
