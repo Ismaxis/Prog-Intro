@@ -1,15 +1,19 @@
 package expression;
 
 public class Const implements ExpressionToString {
-    private final int value;
+    private final Number value;
 
     public Const(int value) {
         this.value = value;
     }
 
+    public Const(double value) {
+        this.value = value;
+    }
+
     @Override
     public int evaluate(int x) {
-        return value;
+        return value.intValue();
     }
 
     @Override
@@ -31,7 +35,7 @@ public class Const implements ExpressionToString {
     public boolean equals(Object obj) {
         if (obj instanceof Const) {
             Const con = ((Const) obj);
-            return value == con.value;
+            return value.equals(con.value);
         }
 
         return false;
@@ -39,6 +43,16 @@ public class Const implements ExpressionToString {
 
     @Override
     public int hashCode() {
-        return value;
+        return value.hashCode();
+    }
+
+    @Override
+    public double evaluate(double x) {
+        return value.doubleValue();
+    }
+
+    @Override
+    public int evaluate(int x, int y, int z) {
+        return value.intValue();
     }
 }

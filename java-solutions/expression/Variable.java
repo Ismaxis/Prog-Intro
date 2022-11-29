@@ -41,4 +41,22 @@ public class Variable implements ExpressionToString {
     public int hashCode() {
         return name.hashCode();
     }
+
+    @Override
+    public double evaluate(double x) {
+        return x;
+    }
+
+    @Override
+    public int evaluate(int x, int y, int z) {
+        if (name.equals("x")) {
+            return x;
+        } else if (name.equals("y")) {
+            return y;
+        } else if (name.equals("z")) {
+            return z;
+        } else {
+            throw new RuntimeException("Only x, y and z supported in 3 vars mode");
+        }
+    }
 }
