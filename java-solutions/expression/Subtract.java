@@ -40,4 +40,15 @@ public class Subtract extends Operation {
     public int evaluate(int x, int y, int z) {
         return left.evaluate(x, y, z) - right.evaluate(x, y, z);
     }
+
+    @Override
+    int calc(int left, int right) {
+        return left - right;
+    }
+
+    @Override
+    double calc(double left, double right) {
+        return left - right;
+    }
+
 }

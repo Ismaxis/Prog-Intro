@@ -8,11 +8,6 @@ public class Divide extends Operation {
     }
 
     @Override
-    public int evaluate(int x) {
-        return left.evaluate(x) / right.evaluate(x);
-    }
-
-    @Override
     boolean needRightToShield() {
         return true;
     }
@@ -28,13 +23,13 @@ public class Divide extends Operation {
     }
 
     @Override
-    public double evaluate(double x) {
-        return left.evaluate(x) / right.evaluate(x);
+    int calc(int left, int right) {
+        return left / right;
     }
 
     @Override
-    public int evaluate(int x, int y, int z) {
-        return left.evaluate(x, y, z) / right.evaluate(x, y, z);
+    double calc(double left, double right) {
+        return left / right;
     }
 
 }

@@ -58,6 +58,25 @@ abstract public class Operation implements ExpressionToString {
 
     abstract boolean needRightToShield();
 
+    abstract int calc(int left, int right);
+
+    abstract double calc(double left, double right);
+
+    @Override
+    public int evaluate(int x) {
+        return calc(left.evaluate(x), right.evaluate(x));
+    }
+
+    @Override
+    public int evaluate(int x, int y, int z) {
+        return calc(left.evaluate(x, y, z), right.evaluate(x, y, z));
+    }
+
+    @Override
+    public double evaluate(double x) {
+        return calc(left.evaluate(x), right.evaluate(x));
+    }
+
     private void appendOp(StringBuilder sb) {
         sb.append(' ');
         sb.append(op);

@@ -27,3 +27,6 @@ java-solutions/expression/ToMiniString.java
 java-solutions/expression/Expression.java
 java-solutions/expression/ExpressionTest.java
 java-solutions/expression/ExpressionTester.java
+java-solutions/expression/DoubleExpression.java
+java-solutions/expression/TripleExpression.java
+
