@@ -1,5 +1,8 @@
+package wspp;
+
 import myscanner.MyScanner;
 import myscanner.PartOfWord;
+import wordstat.WordStatistics;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
@@ -30,12 +33,12 @@ public class WsppLastL {
             int lineNumber = 1, wordNumber = 1;
             while (scn.hasNextToken()) {
                 final String key = scn.nextToken().toLowerCase();
-    
+
                 if (lineNumber != scn.getLineNumber()) {
                     wordNumber = 1;
                     lineNumber = scn.getLineNumber();
                 }
-    
+
                 WordStatistics curWordStat;
                 curWordStat = map.get(key);
                 if (curWordStat == null) {
@@ -53,13 +56,12 @@ public class WsppLastL {
     public static void outputResult(final Map<String, WordStatistics> map, final String fileName) throws IOException {
         final BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(
                 new FileOutputStream(fileName),
-                StandardCharsets.UTF_8
-        ));
+                StandardCharsets.UTF_8));
         try {
             for (final Entry<String, WordStatistics> entry : map.entrySet()) {
                 writer.write(entry.getKey() + " " + entry.getValue());
-                writer.newLine();    
-            }   
+                writer.newLine();
+            }
         } finally {
             writer.close();
         }

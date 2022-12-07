@@ -1,6 +1,8 @@
+package wordstat;
+
 import java.util.Arrays;
 
-class IntList { 
+class IntList {
     private int[] storage;
     private int actualSize;
 
@@ -15,13 +17,13 @@ class IntList {
 
     public IntList(IntList that) {
         this.storage = Arrays.copyOf(that.storage, that.storage.length);
-        this.actualSize = that.actualSize; 
+        this.actualSize = that.actualSize;
     }
 
     public int size() {
         return actualSize;
     }
-    
+
     public void append(int value) {
         adjustLength();
         storage[actualSize++] = value;

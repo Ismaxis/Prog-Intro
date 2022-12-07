@@ -1,10 +1,12 @@
+package wordstat;
+
 import java.io.*;
 import java.util.LinkedHashMap;
 import java.util.Map.Entry;
 
-
 public class WordStatInput {
     static final int BUFFER_SIZE = 1024;
+
     public static void main(String[] args) {
         try {
             LinkedHashMap<String, Integer> hashMap = countWordsInFile(args[0]);
@@ -14,12 +16,13 @@ public class WordStatInput {
             System.out.println("Not enougth command line variables (2 expected): " + e.getMessage());
         } catch (FileNotFoundException e) {
             System.out.println("File not found: " + e.getMessage());
-        } catch (IOException e) {   
+        } catch (IOException e) {
             System.out.println("Input/Output error: " + e.getMessage());
         }
     }
 
-    public static LinkedHashMap<String, Integer> countWordsInFile(String fileName) throws FileNotFoundException, IOException {
+    public static LinkedHashMap<String, Integer> countWordsInFile(String fileName)
+            throws FileNotFoundException, IOException {
         LinkedHashMap<String, Integer> hashMap = new LinkedHashMap<>();
         BufferedReader reader = createReader(fileName);
         try {
@@ -37,18 +40,18 @@ public class WordStatInput {
         return hashMap;
     }
 
-    public static void outputResult(LinkedHashMap<String, Integer> hashMap, String fileName) throws FileNotFoundException, IOException {
-        BufferedWriter writer = createWriter(fileName); 
+    public static void outputResult(LinkedHashMap<String, Integer> hashMap, String fileName)
+            throws FileNotFoundException, IOException {
+        BufferedWriter writer = createWriter(fileName);
         try {
             for (Entry<String, Integer> entry : hashMap.entrySet()) {
                 writer.write(entry.getKey() + " " + entry.getValue());
-                writer.newLine();   
-            }   
+                writer.newLine();
+            }
         } finally {
             writer.close();
         }
     }
-
 
     public static String parseWords(LinkedHashMap<String, Integer> hashMap, String source) {
         String reminder = "";
@@ -76,15 +79,18 @@ public class WordStatInput {
         return Character.isLetter(ch) || Character.DASH_PUNCTUATION == Character.getType(ch) || ch == '\'';
     }
 
-    public static BufferedReader createReader(String fileName) throws FileNotFoundException, UnsupportedEncodingException {
+    public static BufferedReader createReader(String fileName)
+            throws FileNotFoundException, UnsupportedEncodingException {
         return new BufferedReader(
-            new InputStreamReader(
-                new FileInputStream(fileName), "UTF8"), BUFFER_SIZE); 
+                new InputStreamReader(
+                        new FileInputStream(fileName), "UTF8"),
+                BUFFER_SIZE);
     }
 
-    public static BufferedWriter createWriter(String fileName) throws FileNotFoundException, UnsupportedEncodingException {
+    public static BufferedWriter createWriter(String fileName)
+            throws FileNotFoundException, UnsupportedEncodingException {
         return new BufferedWriter(
                 new OutputStreamWriter(
-                    new FileOutputStream(fileName), "UTF8"));
+                        new FileOutputStream(fileName), "UTF8"));
     }
 }

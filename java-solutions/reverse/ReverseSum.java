@@ -1,3 +1,5 @@
+package reverse;
+
 import java.util.Arrays;
 
 import myscanner.MyScanner;
@@ -44,7 +46,7 @@ public class ReverseSum {
         int[] rowSums = calcRowSums(arr);
         int[] colSums = calcColSums(arr);
 
-        for (int i = 0; i < arr.length ; i++) {
+        for (int i = 0; i < arr.length; i++) {
             if (arr[i].length > 0) {
                 for (int j = 0; j < arr[i].length; ++j) {
                     System.out.print(rowSums[i] + colSums[j] - arr[i][j] + " ");
@@ -64,7 +66,7 @@ public class ReverseSum {
         }
         return rowArr;
     }
-    
+
     public static int[] calcColSums(int[][] arr) {
         int maxLength = getMaxArrLen(arr);
         int[] colSums = new int[maxLength];

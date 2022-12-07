@@ -18,7 +18,7 @@ java-solutions/markup/MarkupTest.java
 java-solutions/markup/MarkupListTest.java
 java-solutions/markup/MarkupTester.java
 java-solutions/markup/package-info.java
-java-solutions/Runner.java
+java-solutions/markup/Runner.java
 
 # HW 11 tests ignore
 java-solutions/expression/common/

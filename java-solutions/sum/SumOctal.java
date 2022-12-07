@@ -1,3 +1,5 @@
+package sum;
+
 public class SumOctal {
     public static void main(String[] args) {
         int sum = 0;
@@ -11,7 +13,7 @@ public class SumOctal {
                 // i - first space after number or end of str
                 if (i != start) {
                     if (Character.toLowerCase(string.charAt(i - 1)) == 'o') {
-                        sum += Integer.parseInt(string.substring(start, i - 1), 8);
+                        sum += Integer.parseUnsignedInt(string.substring(start, i - 1), 8);
                     } else {
                         sum += Integer.parseInt(string.substring(start, i));
                     }

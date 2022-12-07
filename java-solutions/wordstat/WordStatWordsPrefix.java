@@ -1,11 +1,13 @@
+package wordstat;
+
 import java.io.*;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.TreeSet;
 
-
 public class WordStatWordsPrefix {
     private static final int BUFFER_SIZE = 1024;
+
     public static void main(String[] args) {
         try {
             if (args.length >= 2) {
@@ -16,9 +18,9 @@ public class WordStatWordsPrefix {
             }
         } catch (FileNotFoundException e) {
             System.out.println("File not found: " + e.getMessage());
-        } catch (UnsupportedEncodingException e) {   
+        } catch (UnsupportedEncodingException e) {
             System.out.println("Unsupported encoding: " + e.getMessage());
-        } catch (IOException e) {   
+        } catch (IOException e) {
             System.out.println("Input/Output error: " + e.getMessage());
             e.printStackTrace();
         }
@@ -26,7 +28,8 @@ public class WordStatWordsPrefix {
 
     public static HashMap<String, Integer> countWordsInFile(String fileName) throws FileNotFoundException, IOException {
         HashMap<String, Integer> hashMap = new HashMap<>();
-        BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(fileName), "UTF8"), BUFFER_SIZE); 
+        BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(fileName), "UTF8"),
+                BUFFER_SIZE);
         try {
             char[] buffer = new char[BUFFER_SIZE];
             int read = reader.read(buffer);
@@ -42,14 +45,15 @@ public class WordStatWordsPrefix {
         return hashMap;
     }
 
-    public static void outputResult(Map<String, Integer> hashMap, String fileName) throws FileNotFoundException, IOException {
-        BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(fileName), "UTF8"));  
+    public static void outputResult(Map<String, Integer> hashMap, String fileName)
+            throws FileNotFoundException, IOException {
+        BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(fileName), "UTF8"));
         try {
             TreeSet<String> sortedSet = new TreeSet<>(hashMap.keySet());
             for (String prefics : sortedSet) {
                 writer.write(prefics + " " + hashMap.get(prefics));
-                writer.newLine();   
-            }   
+                writer.newLine();
+            }
         } finally {
             writer.close();
         }
@@ -80,15 +84,17 @@ public class WordStatWordsPrefix {
     public static boolean isPartOfWord(char ch) {
         return Character.isLetter(ch) || Character.DASH_PUNCTUATION == Character.getType(ch) || ch == '\'';
     }
-    
-    public static BufferedReader createReader(String fileName) throws FileNotFoundException, UnsupportedEncodingException {
-        return new BufferedReader(new InputStreamReader(new FileInputStream(fileName), "UTF8"), BUFFER_SIZE); 
+
+    public static BufferedReader createReader(String fileName)
+            throws FileNotFoundException, UnsupportedEncodingException {
+        return new BufferedReader(new InputStreamReader(new FileInputStream(fileName), "UTF8"), BUFFER_SIZE);
     }
-    
-    public static BufferedWriter createWriter(String fileName) throws FileNotFoundException, UnsupportedEncodingException {
+
+    public static BufferedWriter createWriter(String fileName)
+            throws FileNotFoundException, UnsupportedEncodingException {
         return new BufferedWriter(
                 new OutputStreamWriter(
-                    new FileOutputStream(fileName), "UTF8"));         
+                        new FileOutputStream(fileName), "UTF8"));
     }
 
     public static int min(int a, int b) {

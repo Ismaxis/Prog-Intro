@@ -1,8 +1,10 @@
+package wordstat;
+
 public class WordStatistics {
     private IntList occurences;
     private int amountOfOccurences;
     private int lastLineOccur;
-    
+
     public WordStatistics() {
         occurences = new IntList();
         lastLineOccur = 0;
@@ -37,4 +39,4 @@ public class WordStatistics {
         }
         return s.toString();
     }
-} 
+}

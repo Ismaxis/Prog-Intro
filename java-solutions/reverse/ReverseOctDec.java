@@ -1,10 +1,12 @@
+package reverse;
+
 import java.util.Arrays;
 
 import myscanner.MyScanner;
 import myscanner.WhiteSpace;
 
-public class Reverse {
-    public static void main(String[] args)  {
+public class ReverseOctDec {
+    public static void main(String[] args) {
         MyScanner in = new MyScanner(System.in, new WhiteSpace());
         int[][] arr = parseInput(in);
 
@@ -16,14 +18,13 @@ public class Reverse {
         MyScanner lineScanner;
         int amount = 0;
 
-        while (inputScanner.hasNextLine()) {    
+        while (inputScanner.hasNextLine()) {
             lineScanner = new MyScanner(inputScanner.nextLine(), inputScanner.getCompareMethodObj());
             if (amount >= resultArr.length) {
                 resultArr = Arrays.copyOf(resultArr, resultArr.length * 2);
             }
             resultArr[amount++] = parseLine(lineScanner);
         }
-
         resultArr = Arrays.copyOf(resultArr, amount);
         return resultArr;
     }
@@ -35,6 +36,7 @@ public class Reverse {
             if (amount >= lineArr.length) {
                 lineArr = Arrays.copyOf(lineArr, lineArr.length * 2);
             }
+
             lineArr[amount++] = lineScanner.nextInt();
         }
 
@@ -52,5 +54,5 @@ public class Reverse {
             }
             System.out.println();
         }
-    } 
+    }
 }
