@@ -1,4 +1,5 @@
 package myscanner;
+
 import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
@@ -14,7 +15,6 @@ public class MyBuffer {
     private int lookIndex;
     private int readIndex;
 
-
     public MyBuffer(InputStream stream) {
         reader = new InputStreamReader(stream, StandardCharsets.UTF_8);
         readInBuffer();
@@ -28,18 +28,27 @@ public class MyBuffer {
         if (start < 0 || start + len > buffer.length) {
             throw new ArrayIndexOutOfBoundsException();
         }
-        
+
         int offset = readIndex + start;
         readIndex += start + len;
         lookIndex = readIndex;
         return new String(buffer, offset, len);
     }
-    
+
     public char nextChar() {
+        ensureHasNextChar();
+        return buffer[lookIndex++];
+    }
+
+    public char peekChar() {
+        ensureHasNextChar();
+        return buffer[lookIndex];
+    }
+
+    private void ensureHasNextChar() {
         if (lookIndex >= buffer.length) {
             readInBuffer();
         }
-        return buffer[lookIndex++];
     }
 
     public boolean hasNextChar() {
@@ -49,8 +58,8 @@ public class MyBuffer {
         return !(lookIndex == buffer.length && streamEnded);
     }
 
-    public void resetLookIndex(int offsetFromRead) {
-        lookIndex = readIndex + offsetFromRead;
+    public void resetLookIndex(int offset) {
+        lookIndex = readIndex + offset;
     }
 
     private void readInBuffer() {
@@ -68,18 +77,18 @@ public class MyBuffer {
                     buffer = Arrays.copyOfRange(buffer, readIndex, buffer.length + DEFAULT_BUFFER_SIZE);
                 }
             }
-        
+
             int read = reader.read(buffer, lenOfReminder, buffer.length - lenOfReminder);
-            if(read < buffer.length - lenOfReminder) {
+            if (read < buffer.length - lenOfReminder) {
                 streamEnded = true;
                 reader.close();
-            } 
-            
+            }
+
             int amountOfValidData = (read < 0 ? 0 : read) + lenOfReminder;
             if (amountOfValidData != buffer.length) {
                 buffer = Arrays.copyOf(buffer, amountOfValidData);
             }
-            
+
             readIndex = 0;
             lookIndex = Math.max(0, lenOfReminder);
         } catch (Exception e) {

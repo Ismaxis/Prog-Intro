@@ -1,4 +1,5 @@
 package myscanner;
+
 import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.util.NoSuchElementException;
@@ -12,7 +13,7 @@ public class MyScanner {
     private int lenOfNextToken;
 
     private int lenOfNextLine;
-    
+
     private int lenOfLineSeparator;
 
     private int lineSepsMet;
@@ -32,7 +33,7 @@ public class MyScanner {
 
     public String nextLine() {
         ensureOpen();
-        
+
         if (!hasNextLine()) {
             throw new NoSuchElementException();
         }
@@ -52,7 +53,7 @@ public class MyScanner {
 
     private int findLenOfNextLine() {
         lenOfLineSeparator = 0;
-        int i = 0;  
+        int i = 0;
 
         while (buffer.hasNextChar()) {
             i++;
@@ -63,14 +64,15 @@ public class MyScanner {
                 break;
             }
         }
-            
+
         return i;
     }
 
     private int analyzeForLineSeparator(char curChar) {
         int length = 0;
         if (curChar == '\r') {
-            if (buffer.hasNextChar() && buffer.nextChar() == '\n') {
+            if (buffer.hasNextChar() && buffer.peekChar() == '\n') {
+                buffer.nextChar();
                 length = 2;
             } else {
                 length = 1;
@@ -114,7 +116,7 @@ public class MyScanner {
                     if (Character.toLowerCase(curChar) == 'o') {
                         continue;
                     }
-                } 
+                }
                 return false;
             }
         }
@@ -152,7 +154,7 @@ public class MyScanner {
     private int findLenOfNextToken() {
         buffer.resetLookIndex(startOfNextToken);
         int i = 0;
-        while(buffer.hasNextChar() && cmp.isPartOfToken(buffer.nextChar())) {
+        while (buffer.hasNextChar() && cmp.isPartOfToken(buffer.nextChar())) {
             i++;
         }
         return i;
@@ -162,7 +164,7 @@ public class MyScanner {
         int i = 0;
         while (buffer.hasNextChar()) {
             char curChar = buffer.nextChar();
-            if (!cmp.isPartOfToken(curChar)) {     
+            if (!cmp.isPartOfToken(curChar)) {
                 i++;
                 int length = analyzeForLineSeparator(curChar);
                 if (length > 0) {
@@ -176,7 +178,7 @@ public class MyScanner {
 
         return startOfNextToken + i;
     }
-    
+
     public int getLineNumber() {
         return lineSepsMet + 1;
     }

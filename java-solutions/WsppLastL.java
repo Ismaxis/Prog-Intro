@@ -1,11 +1,11 @@
-import myscanner.MyScanner;
-import myscanner.PartOfWord;
-
 import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Map.Entry;
+
+import myscanner.MyScanner;
+import myscanner.PartOfWord;
 
 public class WsppLastL {
     public static void main(final String[] args) {
@@ -18,8 +18,7 @@ public class WsppLastL {
         } catch (final FileNotFoundException e) {
             System.out.println("File not found: " + e.getMessage());
         } catch (final IOException e) {
-            // :NOTE: input/output
-            System.out.println("Input/Output error: " + e.getMessage());
+            System.out.println("Output error: " + e.getMessage());
         }
     }
 
