@@ -1,8 +1,5 @@
-package wspp;
-
 import myscanner.MyScanner;
 import myscanner.PartOfWord;
-import wordstat.WordStatistics;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;

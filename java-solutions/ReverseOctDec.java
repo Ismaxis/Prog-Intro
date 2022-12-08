@@ -1,5 +1,3 @@
-package reverse;
-
 import java.util.Arrays;
 
 import myscanner.MyScanner;

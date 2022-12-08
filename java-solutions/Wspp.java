@@ -1,5 +1,3 @@
-package wspp;
-
 import java.io.*;
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -7,7 +5,6 @@ import java.util.Map.Entry;
 
 import myscanner.MyScanner;
 import myscanner.PartOfWord;
-import wordstat.WordStatistics;
 
 public class Wspp {
     public static void main(String[] args) {

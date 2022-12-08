@@ -1,5 +1,3 @@
-package sum;
-
 public class SumOctal {
     public static void main(String[] args) {
         int sum = 0;

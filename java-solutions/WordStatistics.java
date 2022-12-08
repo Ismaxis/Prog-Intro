@@ -1,5 +1,3 @@
-package wordstat;
-
 public class WordStatistics {
     private IntList occurences;
     private int amountOfOccurences;

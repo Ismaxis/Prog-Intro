@@ -1,5 +1,3 @@
-package wordstat;
-
 import java.util.Arrays;
 
 class IntList {
