@@ -23,4 +23,10 @@ public class BaseParser {
     protected char pick() {
         return ch;
     }
+
+    protected void expect(char expected) {
+        if (!take(expected)) {
+            throw source.error("Expexted '" + expected + "' found '" + take() + "'");
+        }
+    }
 }

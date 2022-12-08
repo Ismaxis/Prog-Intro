@@ -19,16 +19,12 @@ public class ExpressionParser extends BaseParser implements TripleParser {
         final ExpressionToString left;
         if (take('(')) {
             left = parseExpression();
-            take();
-        } else if (Character.isDigit(pick())) {
-            left =  parseConst();
+            skipWhitespace();
+            expect(')');
         } else if (take('-')) {
-            final ExpressionToString f = parseExpression();
-            left = new Negate(f);
-        } else if (Character.isAlphabetic(pick())) {
-            left = parseVariable();
+            left = parseNegate();
         } else {
-            throw source.error("Operand expexted '" + take() + "' found");
+            left = parseSingle();
         }
 
 
@@ -49,6 +45,26 @@ public class ExpressionParser extends BaseParser implements TripleParser {
         }
     }
 
+    private ExpressionToString parseSingle() {
+        if (Character.isDigit(pick())) {
+            return parseConst();
+        } else if (Character.isAlphabetic(pick())) {
+            return parseVariable();
+        } else {
+            throw source.error("Operand expexted '" + take() + "' found");
+        }
+    }
+
+
+    private ExpressionToString parseNegate() {
+        final ExpressionToString child;
+        if (take('-')) {
+            child = parseExpression();
+        } else {
+            child = parseSingle();
+        }
+        return new Negate(child);
+    }
     private ExpressionToString parseVariable() {
         StringBuilder sb = new StringBuilder();
         sb.append(take());

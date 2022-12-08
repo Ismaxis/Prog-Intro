@@ -60,6 +60,8 @@ class ExpressionParserTest {
         final ExpressionToString given3 = new Negate(new Variable("x"));
         valid(given3);
 
+        final ExpressionToString given4 = new Add(new Negate(new Const(1)), new Const(0));
+        valid(given4);
     }
 
     @Test
