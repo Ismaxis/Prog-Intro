@@ -9,7 +9,8 @@ _*
 *.cmd
 
 # Intellij IDEA
-release-prog-intro.iml
+java-solutions/java-solutions.iml
+out/
 
 # lib
 java-solutions/lib
@@ -35,3 +36,9 @@ java-solutions/expression/ExpressionTester.java
 java-solutions/expression/DoubleExpression.java
 java-solutions/expression/TripleExpression.java
 
+# HW 12 
+# java-solutions/expression/parser/Operation
+# java-solutions/expression/parser/ParserTest
+# java-solutions/expression/parser/ParserTester
+# java-solutions/expression/parser/ParsetTestSet
+# java-solutions/expression/parser/

@@ -23,6 +23,8 @@ public final class ParserTest {
     }
 
     public static void main(final String... args) {
-        SELECTOR.main(args);
+//        SELECTOR.main(args);
+        String[] fake = {"hard", "Base"};
+        SELECTOR.main(fake);
     }
 }

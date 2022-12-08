@@ -1,18 +1,27 @@
 package expression;
 
 abstract public class Operation implements ExpressionToString {
-    protected final ExpressionToString left;
-    protected final ExpressionToString right;
+    protected ExpressionToString left;
+    protected ExpressionToString right;
     protected final int prior;
     protected final String op;
 
     protected Operation(ExpressionToString left, ExpressionToString right, int prior, String op) {
+        this(prior, op);
         this.left = left;
         this.right = right;
+    }
+    protected Operation(int prior, String op) {
         this.prior = prior;
         this.op = op;
     }
 
+    public void setLeft(ExpressionToString left) {
+        this.left = left;
+    }
+    public void setRight(ExpressionToString right) {
+        this.right = right;
+    }
     public int getPrior() {
         return prior;
     }

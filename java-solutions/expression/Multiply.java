@@ -2,9 +2,14 @@ package expression;
 
 public class Multiply extends Operation {
     private static final String op = "*";
+    private static final int prior = 2;
 
     public Multiply(ExpressionToString left, ExpressionToString right) {
-        super(left, right, 2, op);
+        super(left, right, prior, op);
+    }
+
+    public Multiply() {
+        super(prior, op);
     }
 
     @Override

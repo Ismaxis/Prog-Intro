@@ -3,8 +3,14 @@ package expression;
 public class Subtract extends Operation {
     private static final String op = "-";
 
+    private static final int prior = 1;
+
     public Subtract(ExpressionToString left, ExpressionToString right) {
-        super(left, right, 1, op);
+        super(left, right, prior, op);
+    }
+
+    public Subtract() {
+        super(prior, op);
     }
 
     @Override

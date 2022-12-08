@@ -1,0 +1,26 @@
+package expression.parser;
+
+public class BaseParser {
+    public static final char END = 0;
+    protected CharSource source;
+    private char ch;
+
+    protected char take() {
+        final char result = ch;
+        ch = source.hasNext() ? source.next() : END;
+        return result;
+    }
+
+    protected boolean take(char expected) {
+        if (ch == expected) {
+            take();
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    protected char pick() {
+        return ch;
+    }
+}

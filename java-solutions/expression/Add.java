@@ -8,6 +8,10 @@ public class Add extends Operation {
         super(left, right, prior, op);
     }
 
+    public Add() {
+        super(prior, op);
+    }
+
     @Override
     public int evaluate(int x) {
         return left.evaluate(x) + right.evaluate(x);

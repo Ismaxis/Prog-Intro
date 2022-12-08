@@ -2,9 +2,14 @@ package expression;
 
 public class Divide extends Operation {
     private static final String op = "/";
+    private static final int prior = 2;
 
     public Divide(ExpressionToString left, ExpressionToString right) {
-        super(left, right, 2, op);
+        super(left, right, prior, op);
+    }
+
+    public Divide() {
+        super(prior, op);
     }
 
     @Override
@@ -14,9 +19,8 @@ public class Divide extends Operation {
 
     @Override
     boolean needLeftToShield() {
-        if (left instanceof Operation) {
-            Operation oper = ((Operation) left);
-            return this.prior > oper.prior;
+        if (left instanceof Operation oper) {
+            return prior > oper.prior;
         }
 
         return false;
