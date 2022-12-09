@@ -2,9 +2,22 @@ package expression;
 
 public class Negate implements ExpressionToString {
     private final ExpressionToString child;
+    private final String openTag;
+    private final String closeTag;
+
+    public Negate(ExpressionToString child, boolean brackets) {
+        this.child = child;
+        if (brackets) {
+            this.openTag = "-(";
+            this.closeTag = ")";
+        } else {
+            this.openTag = "-";
+            this.closeTag = "";
+        }
+    }
 
     public Negate(ExpressionToString child) {
-        this.child = child;
+        this(child, false);
     }
 
     @Override
@@ -14,8 +27,9 @@ public class Negate implements ExpressionToString {
 
     @Override
     public void toString(StringBuilder sb) {
-        sb.append("-");
+        sb.append(openTag);
         child.toString(sb);
+        sb.append(closeTag);
     }
 
     @Override

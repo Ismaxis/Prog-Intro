@@ -47,6 +47,27 @@ class ExpressionParserTest {
                                 new Variable("y"),
                                 new Variable("z"))));
         valid(given2);
+
+//        final TripleExpression err1 = parser.parse("((((y + -4) / x) / y) + (x * ( x * (30 / y))))");
+        final TripleExpression err2 = parser.parse("-(0)");
+    }
+
+    @Test
+    public void testSequential() {
+        final TripleExpression addAndSub = parser.parse("(x + y) + (y + -x) - x");
+        int x = 102378;
+        int y = 95834;
+        int z = -190123;
+        Assertions.assertEquals(sumSubExpr(x, y, z), addAndSub.evaluate(x, y, z));
+
+        final TripleExpression multAndDiv = parser.parse("x * y / z");
+        Assertions.assertEquals(multDivExpr(x, y, z), multAndDiv.evaluate(x, y, z));
+    }
+    private static int sumSubExpr(int x, int y, int z) {
+        return 2 * y - x;
+    }
+    private static int multDivExpr(int x, int y, int z) {
+        return x*y/z;
     }
 
     @Test

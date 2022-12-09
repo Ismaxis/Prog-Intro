@@ -3,67 +3,71 @@ package expression.parser;
 import expression.*;
 
 public class ExpressionParser extends BaseParser implements TripleParser {
+    private boolean bracketsMet;
     @Override
     public TripleExpression parse(final String expression) {
         source = new StringCharSource(expression);
         take();
-
-        ExpressionToString parsed = parseExpression();
-        return parsed;
+        return expr();
     }
 
-    private ExpressionToString parseExpression() {
+    private ExpressionToString expr() {
+        ExpressionToString left = term();
 
-        // LEFT
+        while(true) {
+            skipWhitespace();
+            if (take('+')) {
+                left = new Add(left, term());
+            } else if (take('-')) {
+                left = new Subtract(left, term());
+            } else {
+                return left;
+            }
+        }
+    }
+
+    private ExpressionToString term() {
+        ExpressionToString left = prim();
+
+        while(true) {
+            skipWhitespace();
+            if (take('*')) {
+                left = new Multiply(left, prim());
+            } else if (take('/')) {
+                left = new Divide(left, prim());
+            } else {
+                return left;
+            }
+        }
+    }
+
+    private ExpressionToString prim() {
         skipWhitespace();
-        final ExpressionToString left;
         if (take('(')) {
-            left = parseExpression();
+            final ExpressionToString res = expr();
             skipWhitespace();
             expect(')');
+            bracketsMet = true;
+            return res;
         } else if (take('-')) {
-            left = parseNegate();
+            bracketsMet = false;
+            final ExpressionToString neg = new Negate(prim(), bracketsMet);
+            bracketsMet = false;
+            return neg;
         } else {
-            left = parseSingle();
-        }
-
-
-        // OP
-        skipWhitespace();
-        final Operation operation = parseOperation();
-        if (operation != null) {
-            // RIGHT
-            skipWhitespace();
-            final ExpressionToString right = parseExpression();
-
-            operation.setLeft(left);
-            operation.setRight(right);
-
-            return operation;
-        } else {
-            return left;
+            return parseSingle();
         }
     }
 
     private ExpressionToString parseSingle() {
+        skipWhitespace();
         if (Character.isDigit(pick())) {
             return parseConst();
         } else if (Character.isAlphabetic(pick())) {
             return parseVariable();
         } else {
-            throw source.error("Operand expexted '" + take() + "' found");
+            throw source.error("Variable or constant expexted '" + take() + "' found");
         }
-    }
-
-
-    private ExpressionToString parseNegate() {
-        final ExpressionToString child;
-        if (take('-')) {
-            child = parseExpression();
-        } else {
-            child = parseSingle();
-        }
-        return new Negate(child);
     }
     private ExpressionToString parseVariable() {
         StringBuilder sb = new StringBuilder();
