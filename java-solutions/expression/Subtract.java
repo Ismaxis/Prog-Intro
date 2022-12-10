@@ -1,6 +1,6 @@
 package expression;
 
-public class Subtract extends Operation {
+public class Subtract extends BinaryOperation {
     private static final String op = "-";
 
     private static final int prior = 1;
@@ -9,42 +9,26 @@ public class Subtract extends Operation {
         super(left, right, prior, op);
     }
 
-    public Subtract() {
-        super(prior, op);
-    }
-
     @Override
-    public int evaluate(int x) {
-        return left.evaluate(x) - right.evaluate(x);
-    }
-
-    @Override
-    public int getPrior() {
-        return prior;
-    }
-
-    @Override
-    boolean needRightToShield() {
-        if (right instanceof Operation) {
-            Operation oper = ((Operation) right);
-            return this.prior >= oper.prior;
+    protected boolean needRightToShield() {
+        if (right instanceof BinaryOperation binaryOperation) {
+            return prior >= binaryOperation.prior;
         }
         return false;
     }
 
     @Override
-    boolean needLeftToShield() {
+    protected boolean needLeftToShield() {
         return false;
     }
 
     @Override
-    int calc(int left, int right) {
+    protected int calc(int left, int right) {
         return left - right;
     }
 
     @Override
-    double calc(double left, double right) {
+    protected double calc(double left, double right) {
         return left - right;
     }
-
 }

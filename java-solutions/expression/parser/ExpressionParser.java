@@ -52,7 +52,7 @@ public class ExpressionParser extends BaseParser implements TripleParser {
             skipWhitespace();
             if (take('(')) {
                 final ExpressionToString neg = new Negate(parseExpression());
-                skipWhitespace();;
+                skipWhitespace();
                 expect(')');
                 return neg;
             } else if (Character.isDigit(pick()) || Character.isAlphabetic(pick())) {

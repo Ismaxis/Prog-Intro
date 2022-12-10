@@ -1,6 +1,6 @@
 package expression;
 
-public class Divide extends Operation {
+public class Divide extends BinaryOperation {
     private static final String op = "/";
     private static final int prior = 2;
 
@@ -8,32 +8,27 @@ public class Divide extends Operation {
         super(left, right, prior, op);
     }
 
-    public Divide() {
-        super(prior, op);
-    }
-
     @Override
-    boolean needRightToShield() {
+    protected boolean needRightToShield() {
         return true;
     }
 
     @Override
-    boolean needLeftToShield() {
-        if (left instanceof Operation oper) {
-            return prior > oper.prior;
+    protected boolean needLeftToShield() {
+        if (left instanceof BinaryOperation binaryOperation) {
+            return prior > binaryOperation.prior;
         }
 
         return false;
     }
 
     @Override
-    int calc(int left, int right) {
+    protected int calc(int left, int right) {
         return left / right;
     }
 
     @Override
-    double calc(double left, double right) {
+    protected double calc(double left, double right) {
         return left / right;
     }
-
 }
