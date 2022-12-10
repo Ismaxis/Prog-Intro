@@ -3,72 +3,80 @@ package expression.parser;
 import expression.*;
 
 public class ExpressionParser extends BaseParser implements TripleParser {
-    private boolean bracketsMet;
+
     @Override
     public TripleExpression parse(final String expression) {
         source = new StringCharSource(expression);
         take();
-        return expr();
+        return parseExpression();
     }
 
-    private ExpressionToString expr() {
-        ExpressionToString left = term();
+    private ExpressionToString parseExpression() {
+        ExpressionToString left = parseTerm();
 
         while(true) {
             skipWhitespace();
             if (take('+')) {
-                left = new Add(left, term());
+                left = new Add(left, parseTerm());
             } else if (take('-')) {
-                left = new Subtract(left, term());
+                left = new Subtract(left, parseTerm());
             } else {
                 return left;
             }
         }
     }
 
-    private ExpressionToString term() {
-        ExpressionToString left = prim();
+    private ExpressionToString parseTerm() {
+        ExpressionToString left = parseFactor();
 
         while(true) {
             skipWhitespace();
             if (take('*')) {
-                left = new Multiply(left, prim());
+                left = new Multiply(left, parseFactor());
             } else if (take('/')) {
-                left = new Divide(left, prim());
+                left = new Divide(left, parseFactor());
             } else {
                 return left;
             }
         }
     }
 
-    private ExpressionToString prim() {
+    private ExpressionToString parseFactor() {
         skipWhitespace();
         if (take('(')) {
-            final ExpressionToString res = expr();
+            final ExpressionToString res = parseExpression();
             skipWhitespace();
             expect(')');
-            bracketsMet = true;
             return res;
         } else if (take('-')) {
-            bracketsMet = false;
-            final ExpressionToString neg = new Negate(prim(), bracketsMet);
-            bracketsMet = false;
-            return neg;
+            skipWhitespace();
+            if (take('(')) {
+                final ExpressionToString neg = new Negate(parseExpression());
+                skipWhitespace();;
+                expect(')');
+                return neg;
+            } else if (Character.isDigit(pick()) || Character.isAlphabetic(pick())) {
+                return parsePrimitive(true);
+            } else {
+                return new Negate(parseFactor());
+            }
         } else {
-            return parseSingle();
+            return parsePrimitive(false);
         }
     }
 
-    private ExpressionToString parseSingle() {
+    private ExpressionToString parsePrimitive(boolean isNegative) {
         skipWhitespace();
         if (Character.isDigit(pick())) {
-            return parseConst();
+            return parseConst(isNegative);
         } else if (Character.isAlphabetic(pick())) {
-            return parseVariable();
+            final ExpressionToString variable = parseVariable();
+            return isNegative ? new Negate(variable) : variable;
         } else {
             throw source.error("Variable or constant expexted '" + take() + "' found");
         }
     }
+
     private ExpressionToString parseVariable() {
         StringBuilder sb = new StringBuilder();
         sb.append(take());
@@ -78,22 +86,8 @@ public class ExpressionParser extends BaseParser implements TripleParser {
         return new Variable(sb.toString());
     }
 
-    private Operation parseOperation() {
-        if (take('+')) {
-            return new Add();
-        } else if (take('-')) {
-            return new Subtract();
-        } else if (take('*')) {
-            return new Multiply();
-        } else if (take('/')) {
-            return new Divide();
-        } else {
-            return null;
-        }
-    }
-
-    private ExpressionToString parseConst() {
-        StringBuilder sb = new StringBuilder();
+    private ExpressionToString parseConst(boolean isNegative) {
+        StringBuilder sb = new StringBuilder(isNegative ? "-" : "");
         while (Character.isDigit(pick())) {
             sb.append(take());
         }

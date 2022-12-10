@@ -48,7 +48,7 @@ class ExpressionParserTest {
                                 new Variable("z"))));
         valid(given2);
 
-//        final TripleExpression err1 = parser.parse("((((y + -4) / x) / y) + (x * ( x * (30 / y))))");
+        final TripleExpression err1 = parser.parse("((((y + -4) / x) / y) + (x * ( x * (30 / y))))");
         final TripleExpression err2 = parser.parse("-(0)");
     }
 
@@ -83,13 +83,18 @@ class ExpressionParserTest {
 
         final ExpressionToString given4 = new Add(new Negate(new Const(1)), new Const(0));
         valid(given4);
+
+        final ExpressionToString given5 = new Negate(new Add(new Variable("x"), new Variable("x") ));
+        Assertions.assertEquals(given5, parser.parse(given5.toMiniString()));
     }
 
     @Test
     public void tempNegateTest() {
-        final ExpressionToString given1 = new Negate(new Const(2147483648L));
-        Assertions.assertEquals("-2147483648", given1.toMiniString());
-        Assertions.assertEquals("-2147483648", given1.toString());
+        final ExpressionToString negateOfConst = new Negate(new Const(2147483647));
+        final ExpressionToString negConst = new Const(-2147483647);
+        Assertions.assertEquals("-2147483647", negateOfConst.toMiniString());
+        Assertions.assertEquals("-(2147483647)", negateOfConst.toString());
+        Assertions.assertEquals("-2147483647", negConst.toString());
     }
 
     private void valid(ExpressionToString expected) {

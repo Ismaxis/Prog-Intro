@@ -2,27 +2,23 @@ package expression;
 
 public class Negate implements ExpressionToString {
     private final ExpressionToString child;
-    private final String openTag;
-    private final String closeTag;
-
-    public Negate(ExpressionToString child, boolean brackets) {
-        this.child = child;
-        if (brackets) {
-            this.openTag = "-(";
-            this.closeTag = ")";
-        } else {
-            this.openTag = "-";
-            this.closeTag = "";
-        }
-    }
-
+    private final static String miniOpenTag = "-";
+    private final static String openTag = "-(";
+    private final static String closeTag = ")";
     public Negate(ExpressionToString child) {
-        this(child, false);
+        this.child = child;
     }
 
     @Override
     public int evaluate(int x) {
         return -1 * child.evaluate(x);
+    }
+
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        toString(sb);
+        return sb.toString();
     }
 
     @Override
@@ -34,14 +30,14 @@ public class Negate implements ExpressionToString {
 
     @Override
     public void toMiniString(StringBuilder sb, boolean needToShielded) {
-        sb.append("-");
+        sb.append(miniOpenTag);
         child.toMiniString(sb, true);
     }
 
     @Override
-    public String toString() {
+    public String toMiniString() {
         StringBuilder sb = new StringBuilder();
-        toString(sb);
+        toMiniString(sb, false);
         return sb.toString();
     }
 
