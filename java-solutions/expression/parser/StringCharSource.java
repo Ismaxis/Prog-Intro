@@ -6,7 +6,6 @@ public class StringCharSource implements CharSource {
 
     public StringCharSource(String string) {
         this.string = string;
-//        System.err.println("source " + string); // TODO REMOVE
     }
 
     @Override

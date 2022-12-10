@@ -29,4 +29,10 @@ public class BaseParser {
             throw source.error("Expexted '" + expected + "' found '" + take() + "'");
         }
     }
+
+    protected void skipWhitespace() {
+        while (Character.isWhitespace(pick())) {
+            take();
+        }
+    }
 }

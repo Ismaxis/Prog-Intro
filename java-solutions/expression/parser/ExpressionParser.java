@@ -92,10 +92,4 @@ public class ExpressionParser extends BaseParser implements TripleParser {
         }
         return new Const(Integer.parseInt(sb.toString()));
     }
-
-    private void skipWhitespace() {
-        while (Character.isWhitespace(pick())) {
-            take();
-        }
-    }
 }
