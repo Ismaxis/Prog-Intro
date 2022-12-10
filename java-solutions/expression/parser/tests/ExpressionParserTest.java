@@ -7,6 +7,7 @@ import org.junit.jupiter.api.Test;
 
 class ExpressionParserTest {
     ExpressionParser parser = new ExpressionParser();
+
     @Test
     public void testConst() {
         Assertions.assertEquals(new Const(5), parser.parse("5"));
@@ -23,6 +24,7 @@ class ExpressionParserTest {
         Assertions.assertEquals(given, parser.parse("x    +  2"));
         Assertions.assertEquals(given, parser.parse("x\n+\n2"));
     }
+
     @Test
     public void testMultipleOperations() {
         final ExpressionToString given1 = new Multiply(
@@ -49,7 +51,6 @@ class ExpressionParserTest {
         valid(given2);
 
         final TripleExpression err1 = parser.parse("((((y + -4) / x) / y) + (x * ( x * (30 / y))))");
-        final TripleExpression err2 = parser.parse("-(0)");
     }
 
     @Test
@@ -63,11 +64,13 @@ class ExpressionParserTest {
         final TripleExpression multAndDiv = parser.parse("x * y / z");
         Assertions.assertEquals(multDivExpr(x, y, z), multAndDiv.evaluate(x, y, z));
     }
+
     private static int sumSubExpr(int x, int y, int z) {
         return 2 * y - x;
     }
+
     private static int multDivExpr(int x, int y, int z) {
-        return x*y/z;
+        return x * y / z;
     }
 
     @Test
@@ -84,15 +87,27 @@ class ExpressionParserTest {
         final ExpressionToString given4 = new Add(new Negate(new Const(1)), new Const(0));
         valid(given4);
 
-        final ExpressionToString given5 = new Negate(new Add(new Variable("x"), new Variable("x") ));
+        final ExpressionToString given5 = new Negate(new Add(new Variable("x"), new Variable("x")));
         Assertions.assertEquals(given5, parser.parse(given5.toMiniString()));
+
+        final String negZero = "-(0)";
+        Assertions.assertEquals(negZero, parser.parse(negZero).toString());
     }
 
     @Test
-    public void tempNegateTest() {
+    public void testNegateMini() {
+        final String mini1 = "- 0";
+        Assertions.assertEquals(mini1, parser.parse(mini1).toMiniString());
+
+        final ExpressionToString mini2 = new Negate(new Multiply(new Variable("x"), new Variable("y")));
+        Assertions.assertEquals(mini2.toMiniString(), parser.parse(mini2.toMiniString()).toMiniString());
+    }
+
+    @Test
+    public void testNegateConst() {
         final ExpressionToString negateOfConst = new Negate(new Const(2147483647));
         final ExpressionToString negConst = new Const(-2147483647);
-        Assertions.assertEquals("-2147483647", negateOfConst.toMiniString());
+        Assertions.assertEquals("- 2147483647", negateOfConst.toMiniString());
         Assertions.assertEquals("-(2147483647)", negateOfConst.toString());
         Assertions.assertEquals("-2147483647", negConst.toString());
     }

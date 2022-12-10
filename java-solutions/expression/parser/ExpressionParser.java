@@ -14,7 +14,7 @@ public class ExpressionParser extends BaseParser implements TripleParser {
     private ExpressionToString parseExpression() {
         ExpressionToString left = parseTerm();
 
-        while(true) {
+        while (true) {
             skipWhitespace();
             if (take('+')) {
                 left = new Add(left, parseTerm());
@@ -29,7 +29,7 @@ public class ExpressionParser extends BaseParser implements TripleParser {
     private ExpressionToString parseTerm() {
         ExpressionToString left = parseFactor();
 
-        while(true) {
+        while (true) {
             skipWhitespace();
             if (take('*')) {
                 left = new Multiply(left, parseFactor());
@@ -49,7 +49,6 @@ public class ExpressionParser extends BaseParser implements TripleParser {
             expect(')');
             return res;
         } else if (take('-')) {
-            skipWhitespace();
             if (take('(')) {
                 final ExpressionToString neg = new Negate(parseExpression());
                 skipWhitespace();
@@ -80,7 +79,7 @@ public class ExpressionParser extends BaseParser implements TripleParser {
     private ExpressionToString parseVariable() {
         StringBuilder sb = new StringBuilder();
         sb.append(take());
-        while(Character.isAlphabetic(pick())) {
+        while (Character.isAlphabetic(pick())) {
             sb.append(take());
         }
         return new Variable(sb.toString());
@@ -91,19 +90,11 @@ public class ExpressionParser extends BaseParser implements TripleParser {
         while (Character.isDigit(pick())) {
             sb.append(take());
         }
-
-        Number num;
-        try {
-            num = Integer.parseInt(sb.toString());
-            return new Const(num.intValue());
-        } catch (NumberFormatException e) {
-            num = Long.parseLong(sb.toString());
-            return new Const(num.longValue());
-        }
+        return new Const(Integer.parseInt(sb.toString()));
     }
 
     private void skipWhitespace() {
-        while(Character.isWhitespace(pick())) {
+        while (Character.isWhitespace(pick())) {
             take();
         }
     }

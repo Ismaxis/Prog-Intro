@@ -7,10 +7,6 @@ public class Const implements ExpressionToString {
         this.value = value;
     }
 
-    public Const(long value) {
-        this.value = value;
-    }
-
     public Const(double value) {
         this.value = value;
     }

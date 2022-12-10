@@ -10,6 +10,7 @@ abstract public class UnaryOperation extends Operation {
     }
 
     abstract protected int calc(int value);
+
     abstract protected double calc(double value);
 
     @Override
@@ -36,8 +37,13 @@ abstract public class UnaryOperation extends Operation {
 
     @Override
     public void toMiniString(StringBuilder sb, boolean needToShielded) {
-        sb.append(symbol);
-        child.toMiniString(sb, true);
+        boolean shieldNeeded = needChildToBeShielded();
+        sb.append(symbol).append(shieldNeeded ? "" : " ");
+        child.toMiniString(sb, shieldNeeded);
+    }
+
+    private boolean needChildToBeShielded() {
+        return child instanceof BinaryOperation;
     }
 
     @Override
@@ -50,6 +56,6 @@ abstract public class UnaryOperation extends Operation {
 
     @Override
     public int hashCode() {
-        return 67*(67*symbol.hashCode() + child.hashCode());
+        return 67 * (67 * symbol.hashCode() + child.hashCode());
     }
 }

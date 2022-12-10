@@ -21,13 +21,14 @@ public class ParserTestSet<E extends ToMiniString, C> {
     private static final int D = 5;
 
     private static final List<Integer> TEST_VALUES = new ArrayList<>();
+
     static {
         Functional.addRange(TEST_VALUES, D, D);
         Functional.addRange(TEST_VALUES, D, -D);
     }
 
-    public static final List<Integer> CONSTS = List.of(0, 1, -1, 4, -4, 10, -10, 30, -30, 100, -100, Integer.MAX_VALUE,
-            Integer.MIN_VALUE);
+    public static final List<Integer> CONSTS
+            = List.of(0, 1, -1, 4, -4, 10, -10, 30, -30, 100, -100, Integer.MAX_VALUE, Integer.MIN_VALUE);
 
     protected final ParserTester tester;
     protected final ParsedKind<E, C> kind;
@@ -107,24 +108,24 @@ public class ParserTestSet<E extends ToMiniString, C> {
 
         final TExpression expected = tester.renderer.render(Unit.INSTANCE, Expr.of(
                 expr.node(),
-                Functional.map(vars, (i, var) -> Pair.of(var.first(), args -> args.get(i)))));
+                Functional.map(vars, (i, var) -> Pair.of(var.first(), args -> args.get(i)))
+        ));
 
         check(expected, fullParsed, variables, tester.random().random(variables.size(), ExtendedRandom::nextInt), full);
         if (this.safe) {
-            check(expected, safeParsed, variables, tester.random().random(variables.size(), ExtendedRandom::nextInt),
-                    safe);
+            check(expected, safeParsed, variables, tester.random().random(variables.size(), ExtendedRandom::nextInt), safe);
         }
     }
 
     private static final String LOOKBEHIND = "(?<![a-zA-Z0-9<>*/+-])";
     private static final String LOOKAHEAD = "(?![a-zA-Z0-9<>*/])";
-    private static final Pattern SPACES = Pattern
-            .compile(LOOKBEHIND + " | " + LOOKAHEAD + "|" + LOOKAHEAD + LOOKBEHIND);
+    private static final Pattern SPACES = Pattern.compile(LOOKBEHIND + " | " + LOOKAHEAD + "|" + LOOKAHEAD + LOOKBEHIND);
 
     private String extraSpaces(final String expression) {
         return SPACES.matcher(expression).replaceAll(r -> tester.random().randomString(
                 ExtendedRandom.SPACES,
-                tester.random().nextInt(5)));
+                tester.random().nextInt(5)
+        ));
     }
 
     private static String removeSpaces(final String expression) {
@@ -166,7 +167,8 @@ public class ParserTestSet<E extends ToMiniString, C> {
             final E expression,
             final List<String> variables,
             final List<Integer> values,
-            final String unparsed) {
+            final String unparsed
+    ) {
         counter.test(() -> {
             final Either<Reason, Integer> answer = eval(expectedExpression, values);
             final String args = IntStream.range(0, variables.size())
