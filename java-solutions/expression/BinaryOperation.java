@@ -2,18 +2,17 @@ package expression;
 
 import java.util.Objects;
 
-abstract public class BinaryOperation extends Operation{
+abstract public class BinaryOperation extends Operation {
     protected final ExpressionToString left;
     protected final ExpressionToString right;
-    protected final int prior;
-    protected final String op;
+    protected final String symbol;
+    protected final BinaryOperationProperties props;
 
-    protected BinaryOperation(ExpressionToString left, ExpressionToString right, int prior, String op) {
+    protected BinaryOperation(ExpressionToString left, ExpressionToString right, String symbol, BinaryOperationProperties props) {
         this.left = left;
         this.right = right;
-
-        this.prior = prior;
-        this.op = op;
+        this.symbol = symbol;
+        this.props = props;
     }
 
     @Override
@@ -39,9 +38,20 @@ abstract public class BinaryOperation extends Operation{
         }
     }
 
-    abstract protected boolean needLeftToShield();
+    protected boolean needRightToShield() {
+        if (right instanceof BinaryOperation binaryOperation) {
+            return binaryOperation.props.priority < props.priority ||
+                    binaryOperation.props.priority == props.priority && !(this.props.isCommutative && binaryOperation.props.isAssociative);
+        }
+        return false;
+    }
 
-    abstract protected boolean needRightToShield();
+    protected boolean needLeftToShield() {
+        if (left instanceof BinaryOperation binaryOperation) {
+            return binaryOperation.props.priority < props.priority;
+        }
+        return false;
+    }
 
     abstract protected int calc(int left, int right);
 
@@ -64,7 +74,7 @@ abstract public class BinaryOperation extends Operation{
 
     private void appendOp(StringBuilder sb) {
         sb.append(' ');
-        sb.append(op);
+        sb.append(symbol);
         sb.append(' ');
     }
 

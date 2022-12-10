@@ -1,21 +1,13 @@
 package expression;
 
 public class Add extends BinaryOperation {
-    private static final String op = "+";
+    private static final String symbol = "+";
     private static final int prior = 1;
+    private static final BinaryOperationProperties props =
+            new BinaryOperationProperties(prior, true, true);
 
     public Add(ExpressionToString left, ExpressionToString right) {
-        super(left, right, prior, op);
-    }
-
-    @Override
-    protected boolean needRightToShield() {
-        return false;
-    }
-
-    @Override
-    protected boolean needLeftToShield() {
-        return false;
+        super(left, right, symbol, props);
     }
 
     @Override

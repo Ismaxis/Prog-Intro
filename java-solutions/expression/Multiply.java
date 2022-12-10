@@ -1,29 +1,14 @@
 package expression;
 
 public class Multiply extends BinaryOperation {
-    private static final String op = "*";
+    private static final String symbol = "*";
     private static final int prior = 2;
+    private static final BinaryOperationProperties props =
+            new BinaryOperationProperties(prior, true, true);
+
 
     public Multiply(ExpressionToString left, ExpressionToString right) {
-        super(left, right, prior, op);
-    }
-
-    @Override
-    protected boolean needRightToShield() {
-        if (right instanceof BinaryOperation binaryOperation) {
-            return prior > binaryOperation.prior || binaryOperation instanceof Divide;
-        }
-
-        return false;
-    }
-
-    @Override
-    protected boolean needLeftToShield() {
-        if (left instanceof BinaryOperation binaryOperation) {
-            return prior > binaryOperation.prior;
-        }
-
-        return false;
+        super(left, right, symbol, props);
     }
 
     @Override

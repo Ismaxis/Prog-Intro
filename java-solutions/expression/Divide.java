@@ -1,25 +1,13 @@
 package expression;
 
 public class Divide extends BinaryOperation {
-    private static final String op = "/";
+    private static final String symbol = "/";
     private static final int prior = 2;
+    private static final BinaryOperationProperties props =
+            new BinaryOperationProperties(prior, false, false);
 
     public Divide(ExpressionToString left, ExpressionToString right) {
-        super(left, right, prior, op);
-    }
-
-    @Override
-    protected boolean needRightToShield() {
-        return true;
-    }
-
-    @Override
-    protected boolean needLeftToShield() {
-        if (left instanceof BinaryOperation binaryOperation) {
-            return prior > binaryOperation.prior;
-        }
-
-        return false;
+        super(left, right, symbol, props);
     }
 
     @Override
