@@ -8,7 +8,26 @@ public class ExpressionParser extends BaseParser implements TripleParser {
     public TripleExpression parse(final String expression) {
         source = new StringCharSource(expression);
         take();
-        return parseExpression();
+        return parse0();
+    }
+
+    private ExpressionToString parse0() {
+        ExpressionToString left = parseExpression();
+
+        while (true) {
+            skipWhitespace();
+            if (take('m')) {
+                if (take("in")) {
+                    left = new Min(left, parseExpression());
+                } else if (take("ax")) {
+                    left = new Max(left, parseExpression());
+                } else {
+                    throw source.error("min or max expected '" + take() + take() + "' found");
+                }
+            } else {
+                return left;
+            }
+        }
     }
 
     private ExpressionToString parseExpression() {
@@ -44,13 +63,13 @@ public class ExpressionParser extends BaseParser implements TripleParser {
     private ExpressionToString parseFactor() {
         skipWhitespace();
         if (take('(')) {
-            final ExpressionToString res = parseExpression();
+            final ExpressionToString res = parse0();
             skipWhitespace();
             expect(')');
             return res;
         } else if (take('-')) {
             if (take('(')) {
-                final ExpressionToString neg = new Negate(parseExpression());
+                final ExpressionToString neg = new Negate(parse0());
                 skipWhitespace();
                 expect(')');
                 return neg;

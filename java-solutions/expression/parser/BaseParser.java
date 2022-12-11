@@ -20,6 +20,15 @@ public class BaseParser {
         }
     }
 
+    protected boolean take(String expected) {
+        for (int i = 0; i < expected.length(); i++) {
+            if (!take(expected.charAt(i))) {
+                return false;
+            }
+        }
+        return true;
+    }
+
     protected char pick() {
         return ch;
     }
@@ -27,6 +36,14 @@ public class BaseParser {
     protected void expect(char expected) {
         if (!take(expected)) {
             throw source.error("Expexted '" + expected + "' found '" + take() + "'");
+        }
+    }
+
+    protected void expect(String expected) {
+        for (int i = 0; i < expected.length(); i++) {
+            if (!take(expected.charAt(i))) {
+                throw source.error("Expexted '" + expected + "' found '" + take() + "'");
+            }
         }
     }
 

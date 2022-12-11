@@ -112,6 +112,17 @@ class ExpressionParserTest {
         Assertions.assertEquals("-2147483647", negConst.toString());
     }
 
+    @Test
+    public void testMinMax() {
+        final ExpressionToString min = new Min(new Variable("x"), new Const(3));
+        Assertions.assertEquals(3, min.evaluate(10));
+        valid(min);
+
+        final ExpressionToString max = new Max(new Variable("x"), new Const(-1000));
+        Assertions.assertEquals(10, max.evaluate(10));
+        valid(max);
+    }
+
     private void valid(ExpressionToString expected) {
         Assertions.assertEquals(expected, parser.parse(expected.toString()));
     }
