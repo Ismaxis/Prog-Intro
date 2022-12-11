@@ -43,7 +43,20 @@ abstract public class UnaryOperation extends Operation {
     }
 
     private boolean needChildToBeShielded() {
-        return child instanceof BinaryOperation;
+        if (child instanceof Operation operation) {
+            return getPriority() < operation.getPriority();
+        }
+        return false;
+    }
+
+    @Override
+    public int getPriority() {
+        return 0;
+    }
+
+    @Override
+    public boolean bracketsEqualPriority() {
+        return true;
     }
 
     @Override

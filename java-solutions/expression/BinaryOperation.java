@@ -8,47 +8,26 @@ abstract public class BinaryOperation extends Operation {
     protected final String symbol;
     protected final BinaryOperationProperties props;
 
-    protected BinaryOperation(ExpressionToString left, ExpressionToString right, String symbol, BinaryOperationProperties props) {
+    protected BinaryOperation(ExpressionToString left, ExpressionToString right,
+                              String symbol, BinaryOperationProperties props) {
         this.left = left;
         this.right = right;
         this.symbol = symbol;
         this.props = props;
     }
 
-    @Override
-    public void toString(StringBuilder sb) {
-        sb.append('(');
-        left.toString(sb);
-        appendOp(sb);
-        right.toString(sb);
-        sb.append(')');
-
-    }
-
-    @Override
-    public void toMiniString(StringBuilder sb, boolean needToShielded) {
-        if (needToShielded) {
-            sb.append('(');
-        }
-        left.toMiniString(sb, needLeftToShield());
-        appendOp(sb);
-        right.toMiniString(sb, needRightToShield());
-        if (needToShielded) {
-            sb.append(')');
-        }
-    }
-
     protected boolean needRightToShield() {
-        if (right instanceof BinaryOperation binaryOperation) {
-            return binaryOperation.props.priority < props.priority ||
-                    binaryOperation.props.priority == props.priority && !(this.props.isCommutative && binaryOperation.props.isAssociative);
+        if (right instanceof Operation operation) {
+            return operation.getPriority() < getPriority() ||
+                    operation.getPriority() == getPriority() &&
+                            !(operation.bracketsEqualPriority() && this.props.isCommutative);
         }
         return false;
     }
 
     protected boolean needLeftToShield() {
-        if (left instanceof BinaryOperation binaryOperation) {
-            return binaryOperation.props.priority < props.priority;
+        if (left instanceof Operation operation) {
+            return operation.getPriority() < getPriority();
         }
         return false;
     }
@@ -56,6 +35,11 @@ abstract public class BinaryOperation extends Operation {
     abstract protected int calc(int left, int right);
 
     abstract protected double calc(double left, double right);
+
+    @Override
+    public boolean bracketsEqualPriority() {
+        return props.isAssociative;
+    }
 
     @Override
     public int evaluate(int x) {
@@ -76,6 +60,33 @@ abstract public class BinaryOperation extends Operation {
         sb.append(' ');
         sb.append(symbol);
         sb.append(' ');
+    }
+
+    @Override
+    public int getPriority() {
+        return props.priority;
+    }
+
+    public void toString(StringBuilder sb) {
+        sb.append('(');
+        left.toString(sb);
+        appendOp(sb);
+        right.toString(sb);
+        sb.append(')');
+
+    }
+
+    @Override
+    public void toMiniString(StringBuilder sb, boolean needToShielded) {
+        if (needToShielded) {
+            sb.append('(');
+        }
+        left.toMiniString(sb, needLeftToShield());
+        appendOp(sb);
+        right.toMiniString(sb, needRightToShield());
+        if (needToShielded) {
+            sb.append(')');
+        }
     }
 
     @Override

@@ -9,11 +9,11 @@ public class Negate extends UnaryOperation {
 
     @Override
     protected int calc(int value) {
-        return -1 * value;
+        return -value;
     }
 
     @Override
     protected double calc(double value) {
-        return -1.0 * value;
+        return -value;
     }
 }
