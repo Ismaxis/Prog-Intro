@@ -78,6 +78,12 @@ public class ExpressionParser extends BaseParser implements TripleParser {
             } else {
                 return new Negate(parseFactor());
             }
+        } else if (take('l')) {
+            expect('0');
+            return new LZeros(parse0());
+        } else if (take('t')) {
+            expect('0');
+            return new TZeros(parse0());
         } else {
             return parsePrimitive(false);
         }

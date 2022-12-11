@@ -114,13 +114,46 @@ class ExpressionParserTest {
 
     @Test
     public void testMinMax() {
+        int x = -3966773;
+
         final ExpressionToString min = new Min(new Variable("x"), new Const(3));
-        Assertions.assertEquals(3, min.evaluate(10));
+        Assertions.assertEquals(Math.min(x, 3), min.evaluate(x));
         valid(min);
 
         final ExpressionToString max = new Max(new Variable("x"), new Const(-1000));
-        Assertions.assertEquals(10, max.evaluate(10));
+        Assertions.assertEquals(Math.max(x, -1000), max.evaluate(x));
         valid(max);
+
+        final ExpressionToString combination = new Max(
+                new Add(new Const(10), new Max(new Const(0), new Variable("x"))),
+                new Const(-1000));
+        Assertions.assertEquals(combinationEval(x), combination.evaluate(x));
+        valid(combination);
+    }
+
+    private int combinationEval(int x) {
+        return Math.max(10 + Math.max(0, x), -1000);
+    }
+
+    @Test
+    public void testZeros() {
+        final ExpressionToString t = new TZeros(new Variable("x"));
+        Assertions.assertEquals(3, t.evaluate(-8814648));
+        Assertions.assertEquals(6, t.evaluate(123456));
+        valid(t);
+
+        final ExpressionToString l = new LZeros(new Variable("x"));
+        Assertions.assertEquals(0, l.evaluate(-8814648));
+        Assertions.assertEquals(15, l.evaluate(123456));
+        valid(l);
+
+        int x = 32768;
+        final ExpressionToString zerosCombination1 = new LZeros(new TZeros(new Variable("x")));
+        Assertions.assertEquals(28, zerosCombination1.evaluate(x));
+        valid(zerosCombination1);
+        final ExpressionToString zerosCombination2 = new TZeros(new LZeros(new Variable("x")));
+        Assertions.assertEquals(4, zerosCombination2.evaluate(x));
+        valid(zerosCombination2);
     }
 
     private void valid(ExpressionToString expected) {
