@@ -1,8 +1,21 @@
 package expression;
 
 abstract public class Operation implements ExpressionToString {
+    protected final String symbol;
+    protected final int priority;
 
-    abstract public int getPriority();
+    protected Operation(String symbol, int priority) {
+        this.symbol = symbol;
+        this.priority = priority;
+    }
+
+    public int getPriority() {
+        return priority;
+    }
+
+    public String getSymbol() {
+        return symbol;
+    }
 
     abstract public boolean bracketsEqualPriority();
 

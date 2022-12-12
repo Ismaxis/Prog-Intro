@@ -5,14 +5,13 @@ import java.util.Objects;
 abstract public class BinaryOperation extends Operation {
     protected final ExpressionToString left;
     protected final ExpressionToString right;
-    protected final String symbol;
     protected final BinaryOperationProperties props;
 
     protected BinaryOperation(ExpressionToString left, ExpressionToString right,
-                              String symbol, BinaryOperationProperties props) {
+                              String symbol, int priority, BinaryOperationProperties props) {
+        super(symbol, priority);
         this.left = left;
         this.right = right;
-        this.symbol = symbol;
         this.props = props;
     }
 
@@ -20,7 +19,7 @@ abstract public class BinaryOperation extends Operation {
         if (right instanceof Operation operation) {
             return operation.getPriority() < getPriority() ||
                     operation.getPriority() == getPriority() &&
-                            !(operation.bracketsEqualPriority() && this.props.isCommutative);
+                            (operation.bracketsEqualPriority() || !this.props.isCommutative);
         }
         return false;
     }
@@ -38,7 +37,7 @@ abstract public class BinaryOperation extends Operation {
 
     @Override
     public boolean bracketsEqualPriority() {
-        return props.isAssociative;
+        return !props.isAssociative;
     }
 
     @Override
@@ -60,11 +59,6 @@ abstract public class BinaryOperation extends Operation {
         sb.append(' ');
         sb.append(symbol);
         sb.append(' ');
-    }
-
-    @Override
-    public int getPriority() {
-        return props.priority;
     }
 
     public void toString(StringBuilder sb) {

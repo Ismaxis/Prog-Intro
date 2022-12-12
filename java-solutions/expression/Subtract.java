@@ -4,10 +4,10 @@ public class Subtract extends BinaryOperation {
     private static final String symbol = "-";
     private static final int prior = 1;
     private static final BinaryOperationProperties props =
-            new BinaryOperationProperties(prior, false, true);
+            new BinaryOperationProperties(false, true);
 
     public Subtract(ExpressionToString left, ExpressionToString right) {
-        super(left, right, symbol, props);
+        super(left, right, symbol, prior, props);
     }
 
     @Override
