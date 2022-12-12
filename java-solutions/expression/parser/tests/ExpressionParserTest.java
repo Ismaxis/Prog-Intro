@@ -2,6 +2,7 @@ package expression.parser.tests;
 
 import expression.*;
 import expression.parser.ExpressionParser;
+import expression.parser.TripleParser;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
@@ -110,6 +111,46 @@ class ExpressionParserTest {
         Assertions.assertEquals("- 2147483647", negateOfConst.toMiniString());
         Assertions.assertEquals("-(2147483647)", negateOfConst.toString());
         Assertions.assertEquals("-2147483647", negConst.toString());
+    }
+
+    @Test
+    public void testMinMax() {
+        final ExpressionToString min = new Min(new Variable("x"), new Const(3));
+        Assertions.assertEquals(3, min.evaluate(10));
+        valid(min);
+
+        final ExpressionToString max = new Max(new Variable("x"), new Const(-1000));
+        Assertions.assertEquals(10, max.evaluate(10));
+        valid(max);
+
+        final ExpressionToString complex = new Add(
+                new Min(
+                        new Add(
+                                new Variable("x"),
+                                new Const(2)),
+                        new Max(
+                                new Variable("x"),
+                                new Const(4))
+                ),
+                new Max(
+                        new Const(5),
+                        new Divide(
+                                new Variable("y"),
+                                new Variable("z"))));
+
+        valid(complex);
+        TripleExpression parsedComplex = parser.parse(complex.toString());
+        TripleExpression parsedComplexMini = parser.parse(complex.toMiniString());
+        System.out.printf("input:  %s\noutput: %s\n\n", complex.toString(), parsedComplex.toString());
+        System.out.printf("input:  %s\noutput: %s\n\n", complex.toString(), parsedComplex.toMiniString());
+        System.out.printf("input:  %s\noutput: %s\n\n", complex.toMiniString(), parsedComplexMini.toString());
+        System.out.printf("input:  %s\noutput: %s\n\n", complex.toMiniString(), parsedComplexMini.toMiniString());
+
+        int x = 0;
+        int y = -1231;
+        int z = -2;
+        Assertions.assertEquals(complex.evaluate(x, y, z), parsedComplex.evaluate(x, y, z));
+        Assertions.assertEquals(complex.evaluate(x, y, z), parsedComplexMini.evaluate(x, y, z));
     }
 
     private void valid(ExpressionToString expected) {

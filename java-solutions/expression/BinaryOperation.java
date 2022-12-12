@@ -20,7 +20,7 @@ abstract public class BinaryOperation extends Operation {
         if (right instanceof Operation operation) {
             return operation.getPriority() < getPriority() ||
                     operation.getPriority() == getPriority() &&
-                            !(operation.bracketsEqualPriority() && this.props.isCommutative);
+                            (operation.bracketsEqualPriority() || !this.props.isCommutative);
         }
         return false;
     }
@@ -32,7 +32,7 @@ abstract public class BinaryOperation extends Operation {
         return false;
     }
 
-    public BinaryOperation copy(ExpressionToString left, ExpressionToString right) {
+    public BinaryOperation createInstance(ExpressionToString left, ExpressionToString right) {
         try {
             Constructor<?> ctor = this.getClass().getConstructor(
                     ExpressionToString.class, ExpressionToString.class);
@@ -48,7 +48,7 @@ abstract public class BinaryOperation extends Operation {
 
     @Override
     public boolean bracketsEqualPriority() {
-        return props.isAssociative;
+        return !props.isAssociative;
     }
 
     @Override

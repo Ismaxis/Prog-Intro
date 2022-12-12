@@ -29,7 +29,7 @@ public class ExpressionParser extends BaseParser implements TripleParser {
 
             for (BinaryOperation operation : operations) {
                 if (take(operation.getSymbol())) {
-                    left = operation.copy(left, parsePriority(priority + 1));
+                    left = operation.createInstance(left, parsePriority(priority + 1));
                     continue main;
                 }
             }

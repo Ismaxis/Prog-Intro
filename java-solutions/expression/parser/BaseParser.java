@@ -4,7 +4,6 @@ public class BaseParser {
     public static final char END = 0;
     protected CharSource source;
     private char ch;
-    private char markedCh;
 
     protected char take() {
         final char result = ch;
@@ -21,12 +20,12 @@ public class BaseParser {
         }
     }
 
-    protected boolean take(String s) {
+    protected boolean take(String expected) {
         source.mark();
-        markedCh = ch;
+        char markedCh = ch;
 
-        for (int i = 0; i < s.length(); i++) {
-            if (!take(s.charAt(i))) {
+        for (int i = 0; i < expected.length(); i++) {
+            if (!take(expected.charAt(i))) {
                 source.reset();
                 ch = markedCh;
                 return false;
