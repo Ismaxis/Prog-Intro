@@ -4,11 +4,10 @@ public class Multiply extends BinaryOperation {
     private static final String symbol = "*";
     private static final int prior = 2;
     private static final BinaryOperationProperties props =
-            new BinaryOperationProperties(prior, true, true);
-
+            new BinaryOperationProperties(true, true);
 
     public Multiply(ExpressionToString left, ExpressionToString right) {
-        super(left, right, symbol, props);
+        super(left, right, symbol, prior, props);
     }
 
     @Override

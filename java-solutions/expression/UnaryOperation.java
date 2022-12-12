@@ -2,11 +2,10 @@ package expression;
 
 abstract public class UnaryOperation extends Operation {
     protected final ExpressionToString child;
-    private final String symbol;
 
     protected UnaryOperation(ExpressionToString child, String symbol) {
+        super(symbol, 0);
         this.child = child;
-        this.symbol = symbol;
     }
 
     abstract protected int calc(int value);
@@ -47,11 +46,6 @@ abstract public class UnaryOperation extends Operation {
             return getPriority() < operation.getPriority();
         }
         return false;
-    }
-
-    @Override
-    public int getPriority() {
-        return 0;
     }
 
     @Override
