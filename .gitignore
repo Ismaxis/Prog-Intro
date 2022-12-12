@@ -40,7 +40,7 @@ java-solutions/expression/TripleExpression.java
 java-solutions/expression/parser/Operations.java
 java-solutions/expression/parser/ParserTest.java
 java-solutions/expression/parser/ParserTester.java
-java-solutions/expression/parser/ParsetTestSet.java
+java-solutions/expression/parser/ParserTestSet.java
 java-solutions/expression/parser/TripleParser.java
 
 java-solutions/expression/parser/tests/
