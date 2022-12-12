@@ -8,7 +8,29 @@ public class ExpressionParser extends BaseParser implements TripleParser {
     public TripleExpression parse(final String expression) {
         source = new StringCharSource(expression);
         take();
-        return parseExpression();
+        return parsePriority(1);
+    }
+
+    private ExpressionToString parsePriority(int priority) {
+        if (priority == 3) {
+            return parseFactor();
+        }
+        ExpressionToString left = parsePriority(priority + 1);
+
+        BinaryOperation[] operations = BinaryOperationStorage.getClassesWithPriority(priority);
+
+        main:
+        while (true) {
+            skipWhitespace();
+
+            for (BinaryOperation operation : operations) {
+                if (take(operation.getSymbol())) {
+                    left = operation.copy(left, parsePriority(priority + 1));
+                    continue main;
+                }
+            }
+            return left;
+        }
     }
 
     private ExpressionToString parseExpression() {
@@ -44,13 +66,13 @@ public class ExpressionParser extends BaseParser implements TripleParser {
     private ExpressionToString parseFactor() {
         skipWhitespace();
         if (take('(')) {
-            final ExpressionToString res = parseExpression();
+            final ExpressionToString res = parsePriority(1);
             skipWhitespace();
             expect(')');
             return res;
         } else if (take('-')) {
             if (take('(')) {
-                final ExpressionToString neg = new Negate(parseExpression());
+                final ExpressionToString neg = new Negate(parsePriority(1));
                 skipWhitespace();
                 expect(')');
                 return neg;

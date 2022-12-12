@@ -1,5 +1,6 @@
 package expression;
 
+import java.lang.reflect.Constructor;
 import java.util.Objects;
 
 abstract public class BinaryOperation extends Operation {
@@ -29,6 +30,16 @@ abstract public class BinaryOperation extends Operation {
             return operation.getPriority() < getPriority();
         }
         return false;
+    }
+
+    public BinaryOperation copy(ExpressionToString left, ExpressionToString right) {
+        try {
+            Constructor<?> ctor = this.getClass().getConstructor(
+                    ExpressionToString.class, ExpressionToString.class);
+            return (BinaryOperation) ctor.newInstance(left, right);
+        } catch (Exception e) {
+            throw new RuntimeException("Class not found");
+        }
     }
 
     abstract protected int calc(int left, int right);
