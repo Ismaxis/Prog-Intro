@@ -156,6 +156,46 @@ class ExpressionParserTest {
         valid(zerosCombination2);
     }
 
+    @Test
+    public void testMinMaxHard() {
+        final ExpressionToString min = new Min(new Variable("x"), new Const(3));
+        Assertions.assertEquals(3, min.evaluate(10));
+        valid(min);
+
+        final ExpressionToString max = new Max(new Variable("x"), new Const(-1000));
+        Assertions.assertEquals(10, max.evaluate(10));
+        valid(max);
+
+        final ExpressionToString complex = new Add(
+                new Min(
+                        new Add(
+                                new Variable("x"),
+                                new Const(2)),
+                        new Max(
+                                new Variable("x"),
+                                new Const(4))
+                ),
+                new Max(
+                        new Const(5),
+                        new Divide(
+                                new Variable("y"),
+                                new Variable("z"))));
+
+        valid(complex);
+        TripleExpression parsedComplex = parser.parse(complex.toString());
+        TripleExpression parsedComplexMini = parser.parse(complex.toMiniString());
+        System.out.printf("%s\n%s\n\n", complex.toString(), parsedComplex.toString());
+        System.out.printf("%s\n%s\n\n", complex.toMiniString(), parsedComplex.toMiniString());
+        System.out.printf("%s\n%s\n\n", complex.toString(), parsedComplexMini.toString());
+        System.out.printf("%s\n%s\n\n", complex.toMiniString(), parsedComplexMini.toMiniString());
+
+        int x = 0;
+        int y = -1231;
+        int z = -2;
+        Assertions.assertEquals(complex.evaluate(x, y, z), parsedComplex.evaluate(x, y, z));
+        Assertions.assertEquals(complex.evaluate(x, y, z), parsedComplexMini.evaluate(x, y, z));
+    }
+
     private void valid(ExpressionToString expected) {
         Assertions.assertEquals(expected, parser.parse(expected.toString()));
     }

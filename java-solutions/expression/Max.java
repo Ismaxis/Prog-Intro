@@ -17,4 +17,9 @@ public class Max extends BinaryOperation {
     protected double calc(double left, double right) {
         return Math.max(left, right);
     }
+
+    @Override
+    public boolean bracketsEqualPriority() {
+        return true;
+    }
 }

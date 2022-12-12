@@ -17,4 +17,9 @@ public class Min extends BinaryOperation {
     protected double calc(double left, double right) {
         return Math.min(left, right);
     }
+
+    @Override
+    public boolean bracketsEqualPriority() {
+        return true;
+    }
 }

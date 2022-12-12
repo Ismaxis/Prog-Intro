@@ -1,6 +1,11 @@
 package expression;
 
-abstract public class Operation implements ExpressionToString  {
+abstract public class Operation implements ExpressionToString {
+
+    abstract public int getPriority();
+
+    abstract public boolean bracketsEqualPriority();
+
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
