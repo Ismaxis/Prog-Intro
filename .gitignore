@@ -8,10 +8,16 @@ _*
 *.class
 *.cmd
 
-java-solutions/tests/
-java-solutions/out/
-java-solutions/base/
-java-solutions/for-prog-intro/
+# Intellij IDEA
+java-solutions/java-solutions.iml
+out/
+
+# lib
+java-solutions/lib
+
+java-solutions/tests
+java-solutions/out
+java-solutions/base
 
 # HW7 tests ignore 
 java-solutions/markup/MarkupTest.java
@@ -30,3 +36,11 @@ java-solutions/expression/ExpressionTester.java
 java-solutions/expression/DoubleExpression.java
 java-solutions/expression/TripleExpression.java
 
+# HW 12 
+java-solutions/expression/parser/Operations.java
+java-solutions/expression/parser/ParserTest.java
+java-solutions/expression/parser/ParserTester.java
+java-solutions/expression/parser/ParserTestSet.java
+java-solutions/expression/parser/TripleParser.java
+
+java-solutions/expression/parser/tests/

@@ -1,35 +1,22 @@
 package expression;
 
-public class Add extends Operation {
-    private static final String op = "+";
+public class Add extends BinaryOperation {
+    private static final String symbol = "+";
     private static final int prior = 1;
+    private static final BinaryOperationProperties props =
+            new BinaryOperationProperties(true, true);
 
     public Add(ExpressionToString left, ExpressionToString right) {
-        super(left, right, prior, op);
+        super(left, right, symbol, prior, props);
     }
 
     @Override
-    public int evaluate(int x) {
-        return left.evaluate(x) + right.evaluate(x);
-    }
-
-    @Override
-    boolean needRightToShield() {
-        return false;
-    }
-
-    @Override
-    boolean needLeftToShield() {
-        return false;
-    }
-
-    @Override
-    int calc(int left, int right) {
+    protected int calc(int left, int right) {
         return left + right;
     }
 
     @Override
-    double calc(double left, double right) {
+    protected double calc(double left, double right) {
         return left + right;
     }
 

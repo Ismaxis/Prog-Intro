@@ -28,13 +28,12 @@ public class Const implements ExpressionToString {
 
     @Override
     public String toString() {
-        return String.valueOf(value);
+        return value.toString();
     }
 
     @Override
     public boolean equals(Object obj) {
-        if (obj instanceof Const) {
-            Const con = ((Const) obj);
+        if (obj instanceof Const con) {
             return value.equals(con.value);
         }
 

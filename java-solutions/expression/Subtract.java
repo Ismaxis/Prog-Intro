@@ -1,44 +1,22 @@
 package expression;
 
-public class Subtract extends Operation {
-    private static final String op = "-";
+public class Subtract extends BinaryOperation {
+    private static final String symbol = "-";
+    private static final int prior = 1;
+    private static final BinaryOperationProperties props =
+            new BinaryOperationProperties(false, true);
 
     public Subtract(ExpressionToString left, ExpressionToString right) {
-        super(left, right, 1, op);
+        super(left, right, symbol, prior, props);
     }
 
     @Override
-    public int evaluate(int x) {
-        return left.evaluate(x) - right.evaluate(x);
-    }
-
-    @Override
-    public int getPrior() {
-        return prior;
-    }
-
-    @Override
-    boolean needRightToShield() {
-        if (right instanceof Operation) {
-            Operation oper = ((Operation) right);
-            return this.prior >= oper.prior;
-        }
-        return false;
-    }
-
-    @Override
-    boolean needLeftToShield() {
-        return false;
-    }
-
-    @Override
-    int calc(int left, int right) {
+    protected int calc(int left, int right) {
         return left - right;
     }
 
     @Override
-    double calc(double left, double right) {
+    protected double calc(double left, double right) {
         return left - right;
     }
-
 }
