@@ -2,7 +2,7 @@ package expression;
 
 public class Multiply extends BinaryOperation {
     private static final String symbol = "*";
-    private static final int prior = 2;
+    private static final int prior = BinaryOperationStorage.getPriority(Multiply.class);
     private static final BinaryOperationProperties props =
             new BinaryOperationProperties(true, true);
 

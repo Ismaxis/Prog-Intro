@@ -2,7 +2,7 @@ package expression;
 
 public class Subtract extends BinaryOperation {
     private static final String symbol = "-";
-    private static final int prior = 1;
+    private static final int prior = BinaryOperationStorage.getPriority(Subtract.class);
     private static final BinaryOperationProperties props =
             new BinaryOperationProperties(false, true);
 

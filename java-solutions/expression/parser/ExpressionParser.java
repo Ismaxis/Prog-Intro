@@ -8,11 +8,15 @@ public class ExpressionParser extends BaseParser implements TripleParser {
     public TripleExpression parse(final String expression) {
         source = new StringCharSource(expression);
         take();
-        return parsePriority(1);
+        return parseTopLevel();
+    }
+
+    private ExpressionToString parseTopLevel() {
+        return parsePriority(BinaryOperationStorage.minPriority);
     }
 
     private ExpressionToString parsePriority(int priority) {
-        if (priority == 3) {
+        if (priority > BinaryOperationStorage.maxPriority) {
             return parseFactor();
         }
         ExpressionToString left = parsePriority(priority + 1);
@@ -33,46 +37,16 @@ public class ExpressionParser extends BaseParser implements TripleParser {
         }
     }
 
-    private ExpressionToString parseExpression() {
-        ExpressionToString left = parseTerm();
-
-        while (true) {
-            skipWhitespace();
-            if (take('+')) {
-                left = new Add(left, parseTerm());
-            } else if (take('-')) {
-                left = new Subtract(left, parseTerm());
-            } else {
-                return left;
-            }
-        }
-    }
-
-    private ExpressionToString parseTerm() {
-        ExpressionToString left = parseFactor();
-
-        while (true) {
-            skipWhitespace();
-            if (take('*')) {
-                left = new Multiply(left, parseFactor());
-            } else if (take('/')) {
-                left = new Divide(left, parseFactor());
-            } else {
-                return left;
-            }
-        }
-    }
-
     private ExpressionToString parseFactor() {
         skipWhitespace();
         if (take('(')) {
-            final ExpressionToString res = parsePriority(1);
+            final ExpressionToString res = parseTopLevel();
             skipWhitespace();
             expect(')');
             return res;
         } else if (take('-')) {
             if (take('(')) {
-                final ExpressionToString neg = new Negate(parsePriority(1));
+                final ExpressionToString neg = new Negate(parseTopLevel());
                 skipWhitespace();
                 expect(')');
                 return neg;
