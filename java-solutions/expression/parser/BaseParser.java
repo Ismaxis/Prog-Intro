@@ -1,7 +1,7 @@
 package expression.parser;
 
-public class BaseParser {
-    public static final char END = 0;
+public class BaseParser { // :NOTE: почему он не абсрактный?
+    public static final char END = 0; // :NOTE: почему не паблик
     protected CharSource source;
     private char ch;
 

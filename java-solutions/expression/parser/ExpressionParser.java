@@ -94,7 +94,7 @@ public class ExpressionParser extends BaseParser implements TripleParser {
     private ExpressionToString parsePrimitive(boolean isNegative) {
         skipWhitespace();
         if (Character.isDigit(pick())) {
-            return parseConst(isNegative);
+            return parseConst(isNegative); // :NOTE: переменная начинается с цифры?
         } else if (Character.isAlphabetic(pick())) {
             final ExpressionToString variable = parseVariable();
             return isNegative ? new Negate(variable) : variable;
