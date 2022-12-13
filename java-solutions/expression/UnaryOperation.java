@@ -4,7 +4,7 @@ abstract public class UnaryOperation extends Operation {
     protected final ExpressionToString child;
 
     protected UnaryOperation(ExpressionToString child, String symbol) {
-        super(symbol, 0);
+        super(symbol, -1);
         this.child = child;
     }
 

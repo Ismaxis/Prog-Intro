@@ -20,6 +20,21 @@ public class BaseParser {
         }
     }
 
+    protected boolean take(String s) {
+        source.mark();
+        char markedCh = ch;
+
+        for (int i = 0; i < s.length(); i++) {
+            if (!take(s.charAt(i))) {
+                source.reset();
+                ch = markedCh;
+                return false;
+            }
+        }
+
+        return true;
+    }
+
     protected char pick() {
         return ch;
     }

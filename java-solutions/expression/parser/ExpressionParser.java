@@ -8,7 +8,26 @@ public class ExpressionParser extends BaseParser implements TripleParser {
     public TripleExpression parse(final String expression) {
         source = new StringCharSource(expression);
         take();
-        return parseExpression();
+        return parseTopLevel();
+    }
+
+    private ExpressionToString parseTopLevel() {
+        return parse0();
+    }
+
+    private ExpressionToString parse0() {
+        ExpressionToString left = parseExpression();
+
+        while (true) {
+            skipWhitespace();
+            if (take("set")) {
+                left = new Set(left, parseExpression());
+            } else if (take("clear")) {
+                left = new Clear(left, parseExpression());
+            } else {
+                return left;
+            }
+        }
     }
 
     private ExpressionToString parseExpression() {
@@ -44,13 +63,13 @@ public class ExpressionParser extends BaseParser implements TripleParser {
     private ExpressionToString parseFactor() {
         skipWhitespace();
         if (take('(')) {
-            final ExpressionToString res = parseExpression();
+            final ExpressionToString res = parseTopLevel();
             skipWhitespace();
             expect(')');
             return res;
         } else if (take('-')) {
             if (take('(')) {
-                final ExpressionToString neg = new Negate(parseExpression());
+                final ExpressionToString neg = new Negate(parseTopLevel());
                 skipWhitespace();
                 expect(')');
                 return neg;

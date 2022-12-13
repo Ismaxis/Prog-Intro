@@ -3,6 +3,7 @@ package expression.parser;
 public class StringCharSource implements CharSource {
     private final String string;
     private int pos;
+    private int mark;
 
     public StringCharSource(String string) {
         this.string = string;
@@ -21,5 +22,15 @@ public class StringCharSource implements CharSource {
     @Override
     public IllegalArgumentException error(String message) {
         return new IllegalArgumentException(pos + ": " + message);
+    }
+
+    @Override
+    public void mark() {
+        mark = pos;
+    }
+
+    @Override
+    public void reset() {
+        pos = mark;
     }
 }
