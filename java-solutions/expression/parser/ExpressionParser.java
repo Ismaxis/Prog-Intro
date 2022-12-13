@@ -12,10 +12,10 @@ public class ExpressionParser extends BaseParser implements TripleParser {
     }
 
     private ExpressionToString parseTopLevel() {
-        return parse0();
+        return parseBitOps();
     }
 
-    private ExpressionToString parse0() {
+    private ExpressionToString parseBitOps() {
         ExpressionToString left = parseExpression();
 
         while (true) {
@@ -68,18 +68,26 @@ public class ExpressionParser extends BaseParser implements TripleParser {
             expect(')');
             return res;
         } else if (take('-')) {
-            if (take('(')) {
-                final ExpressionToString neg = new Negate(parseTopLevel());
-                skipWhitespace();
-                expect(')');
-                return neg;
-            } else if (Character.isDigit(pick()) || Character.isAlphabetic(pick())) {
+            if (Character.isDigit(pick()) || Character.isAlphabetic(pick())) {
                 return parsePrimitive(true);
             } else {
-                return new Negate(parseFactor());
+                return parseBrackets(Negate.class);
             }
+        } else if (take("count")) {
+            return parseBrackets(Count.class);
         } else {
             return parsePrimitive(false);
+        }
+    }
+
+    private ExpressionToString parseBrackets(Class<?> cl) {
+        if (take('(')) {
+            final ExpressionToString neg = UnaryOperation.createInstance(cl, parseTopLevel());
+            skipWhitespace();
+            expect(')');
+            return neg;
+        } else {
+            return UnaryOperation.createInstance(cl, parseFactor());
         }
     }
 

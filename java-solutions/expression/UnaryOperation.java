@@ -65,4 +65,14 @@ abstract public class UnaryOperation extends Operation {
     public int hashCode() {
         return 67 * (67 * symbol.hashCode() + child.hashCode());
     }
+
+    public static UnaryOperation createInstance(Class<?> cl, ExpressionToString child) {
+        if (cl == Negate.class) {
+            return new Negate(child);
+        } else if (cl == Count.class) {
+            return new Count(child);
+        } else {
+            throw new RuntimeException(cl.getName() + " cannot be created witch UnaryoOperation.createInstance");
+        }
+    }
 }
