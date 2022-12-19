@@ -41,8 +41,12 @@ public class BaseParser { // :NOTE: почему он не абсрактный?
 
     protected void expect(char expected) {
         if (!take(expected)) {
-            throw source.error("Expexted '" + expected + "' found '" + take() + "'");
+            throw source.error(String.format("Expected: '%s', Found: '%s'", displayIfEnd(expected), displayIfEnd(take())));
         }
+    }
+
+    private Object displayIfEnd(char ch) {
+        return (ch == END) ? "END" : ch;
     }
 
     protected void skipWhitespace() {

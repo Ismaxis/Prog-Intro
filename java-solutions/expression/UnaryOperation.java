@@ -1,5 +1,7 @@
 package expression;
 
+import expression.exceptions.CheckedNegate;
+
 abstract public class UnaryOperation extends Operation {
     protected final ExpressionToString child;
 
@@ -71,8 +73,10 @@ abstract public class UnaryOperation extends Operation {
             return new Negate(child);
         } else if (cl == Count.class) {
             return new Count(child);
+        } else if (cl == CheckedNegate.class) {
+            return new CheckedNegate(child);
         } else {
-            throw new RuntimeException(cl.getName() + " cannot be created witch UnaryoOperation.createInstance");
+            throw new RuntimeException(cl.getName() + " cannot be created with UnaryOperation.createInstance");
         }
     }
 }
