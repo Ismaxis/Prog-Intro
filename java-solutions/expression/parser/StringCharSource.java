@@ -25,6 +25,11 @@ public class StringCharSource implements CharSource {
     }
 
     @Override
+    public int getPos() {
+        return pos;
+    }
+
+    @Override
     public void mark() {
         mark = pos;
     }

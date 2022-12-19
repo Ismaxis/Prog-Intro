@@ -7,6 +7,8 @@ public interface CharSource {
 
     IllegalArgumentException error(String message);
 
+    int getPos();
+
     void mark();
 
     void reset();

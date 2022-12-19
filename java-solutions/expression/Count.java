@@ -1,5 +1,7 @@
 package expression;
 
+import java.lang.invoke.WrongMethodTypeException;
+
 public class Count extends UnaryOperation {
     private final static String symbol = "count";
 
@@ -20,7 +22,6 @@ public class Count extends UnaryOperation {
 
     @Override
     protected double calc(double value) {
-        throw new RuntimeException("Double count");
+        throw new WrongMethodTypeException("Can't perform COUNT operation on double value");
     }
-
 }

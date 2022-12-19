@@ -1,5 +1,7 @@
 package expression;
 
+import java.lang.invoke.WrongMethodTypeException;
+
 public class Clear extends BinaryOperation {
     private static final String symbol = "clear";
     private static final int prior = 0;
@@ -16,8 +18,7 @@ public class Clear extends BinaryOperation {
 
     @Override
     protected double calc(double left, double right) {
-        throw new RuntimeException("double clear");
-        // return left & ~(1 << right);
+        throw new WrongMethodTypeException("Can't perform CLEAR operation on double value");
     }
 
 }

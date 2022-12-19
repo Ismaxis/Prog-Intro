@@ -11,8 +11,14 @@ public class ExpressionParser extends BaseParser implements TripleParser {
         source = new StringCharSource(expression);
         take();
         var res = parseTopLevel();
-        expect(END);
+        expectEnd();
         return res;
+    }
+
+    private void expectEnd() {
+        if (!take(END)) {
+            throw new PrematureEndExceptions(source.getPos(), pick());
+        }
     }
 
     private ExpressionToString parseTopLevel() {
@@ -54,7 +60,7 @@ public class ExpressionParser extends BaseParser implements TripleParser {
         if (take('(')) {
             final ExpressionToString res = parseTopLevel();
             skipWhitespace();
-            expect(')');
+            expectCloseBracket();
             return res;
         } else if (take('-')) {
             if (Character.isDigit(pick()) || Character.isAlphabetic(pick())) {
@@ -69,11 +75,17 @@ public class ExpressionParser extends BaseParser implements TripleParser {
         }
     }
 
+    private void expectCloseBracket() {
+        if (!take(')')) {
+            throw new CloseBracketsException(source.getPos(), pick());
+        }
+    }
+
     private ExpressionToString parseBrackets(Class<?> cl) {
         if (take('(')) {
             final ExpressionToString neg = UnaryOperation.createInstance(cl, parseTopLevel());
             skipWhitespace();
-            expect(')');
+            expectCloseBracket();
             return neg;
         } else {
             return UnaryOperation.createInstance(cl, parseFactor());
@@ -81,15 +93,32 @@ public class ExpressionParser extends BaseParser implements TripleParser {
     }
 
     private ExpressionToString parsePrimitive(boolean isNegative) {
+        ExpressionToString primitive;
         skipWhitespace();
         if (Character.isDigit(pick())) {
-            return parseConst(isNegative);
+            primitive = parseConst(isNegative);
         } else if (isVariableStart(pick())) {
             final ExpressionToString variable = parseVariable();
-            return isNegative ? new CheckedNegate(variable) : variable;
+            primitive = isNegative ? new CheckedNegate(variable) : variable;
         } else {
-            throw source.error("Expected: 'Variable or constant', Found: '" + take() + "'");
+            throw primitiveStartParseError(pick());
         }
+        validEndOfPrimitive();
+        return primitive;
+    }
+
+    private void validEndOfPrimitive() {
+        if (!validEndOfPrimitive(pick())) {
+            throw primitiveEndParseError(pick());
+        }
+    }
+
+    private PrimitiveParseException primitiveStartParseError(char found) {
+        return new PrimitiveParseException(source.getPos(), "Start of Variable or Const", found);
+    }
+
+    private PrimitiveParseException primitiveEndParseError(char found) {
+        return new PrimitiveParseException(source.getPos(), "Whitespace or END", found);
     }
 
     private ExpressionToString parseVariable() {
@@ -97,9 +126,6 @@ public class ExpressionParser extends BaseParser implements TripleParser {
         sb.append(take());
         while (isVariablePart(pick())) {
             sb.append(take());
-        }
-        if (Character.isAlphabetic(pick()) && pick() != END) {
-            throw source.error("Variable name error. Expected: 'Whitespace or END', Found: '" + pick() + "'");
         }
         return new Variable(sb.toString());
     }
@@ -110,6 +136,14 @@ public class ExpressionParser extends BaseParser implements TripleParser {
 
     private static boolean isVariablePart(char ch) {
         return false;
+    }
+
+    private static boolean validEndOfPrimitive(char ch) {
+        return Character.isWhitespace(ch) || isOperationSymbol(ch) || (ch == END) || (ch == ')');
+    }
+
+    private static boolean isOperationSymbol(char ch) {
+        return (ch == '+') || (ch == '-') || (ch == '*') || (ch == '/');
     }
 
     private ExpressionToString parseConst(boolean isNegative) {

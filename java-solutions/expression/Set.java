@@ -1,5 +1,7 @@
 package expression;
 
+import java.lang.invoke.WrongMethodTypeException;
+
 public class Set extends BinaryOperation {
     private static final String symbol = "set";
     private static final int prior = 0;
@@ -16,7 +18,7 @@ public class Set extends BinaryOperation {
 
     @Override
     protected double calc(double left, double right) {
-        throw new RuntimeException("double set");
+        throw new WrongMethodTypeException("Can't perform SET operation on double value");
     }
 
 }
