@@ -38,9 +38,13 @@ java-solutions/expression/TripleExpression.java
 
 # HW 12 
 java-solutions/expression/parser/Operations.java
-java-solutions/expression/parser/ParserTest.java
-java-solutions/expression/parser/ParserTester.java
-java-solutions/expression/parser/ParserTestSet.java
+java-solutions/expression/parser/Parser*.java
 java-solutions/expression/parser/TripleParser.java
 
 java-solutions/expression/parser/tests/
+
+# HW 13
+java-solutions/expression/exceptions/Exceptions*.java
+java-solutions/expression/exceptions/TripleParser.java
+
+java-solutions/expression/exceptions/tests/
