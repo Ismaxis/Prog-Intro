@@ -14,7 +14,7 @@ public class CheckedMultiply extends Multiply {
         if (((Math.abs(left) | Math.abs(right)) >>> 15 != 0)) {
             if (((right != 0) && (r / right != left)) ||
                     (left == Integer.MIN_VALUE && right == -1)) {
-                throw new ArithmeticException("Overflow " + left + " * " + right);
+                throw new IntOverflowException(symbol, left, right);
             }
         }
         return r;

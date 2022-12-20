@@ -1,7 +1,7 @@
 package expression;
 
 public class Add extends BinaryOperation {
-    private static final String symbol = "+";
+    protected static final String symbol = "+";
     private static final int prior = 1;
     private static final BinaryOperationProperties props =
             new BinaryOperationProperties(true, true);

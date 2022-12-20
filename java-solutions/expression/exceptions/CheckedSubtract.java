@@ -12,7 +12,7 @@ public class CheckedSubtract extends Subtract {
     protected int calc(int left, int right) {
         int result = left - right;
         if (((left & ~right & ~result) | (~left & right & result)) < 0) {
-            throw new ArithmeticException("Overflow '" + left + " - " + right);
+            throw new IntOverflowException(symbol, left, right);
         }
         return result;
     }

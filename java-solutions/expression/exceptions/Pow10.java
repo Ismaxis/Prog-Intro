@@ -4,7 +4,7 @@ import expression.ExpressionToString;
 import expression.UnaryOperation;
 
 public class Pow10 extends UnaryOperation {
-    private static final String symbol = "pow10";
+    public static final String symbol = "pow10";
 
     public Pow10(ExpressionToString child) {
         super(child, symbol);
@@ -13,9 +13,9 @@ public class Pow10 extends UnaryOperation {
     @Override
     protected int calc(int value) {
         if (value < 0) {
-            throw new ArithmeticException("INT Argument should be positive: Pow10(" + value + ")");
+            throw new NegativeArgumentException(symbol, value);
         } else if (value > 9) {
-            throw new ArithmeticException("Overflow '10^" + value + "'");
+            throw new IntOverflowException(symbol, value);
         }
 
         int pow = 1;

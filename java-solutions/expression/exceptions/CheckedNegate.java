@@ -12,7 +12,7 @@ public class CheckedNegate extends Negate {
     @Override
     protected int calc(int value) {
         if (value == Integer.MIN_VALUE) {
-            throw new ArithmeticException("Overflow negate(" + value + ")");
+            throw new IntOverflowException(symbol, value);
         }
         return super.calc(value);
     }

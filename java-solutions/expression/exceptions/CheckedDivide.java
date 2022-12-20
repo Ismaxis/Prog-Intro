@@ -2,8 +2,6 @@ package expression.exceptions;
 
 import expression.Divide;
 import expression.ExpressionToString;
-import expression.TripleExpression;
-import expression.Variable;
 
 public class CheckedDivide extends Divide {
     public CheckedDivide(ExpressionToString left, ExpressionToString right) {
@@ -12,8 +10,11 @@ public class CheckedDivide extends Divide {
 
     @Override
     protected int calc(int left, int right) {
+        if (right == 0) {
+            throw new DivisionByZeroException("'" + left + " / " + right + "'");
+        }
         if (left == Integer.MIN_VALUE && right == -1) {
-            throw new ArithmeticException("Overflow " + left + " / " + right);
+            throw new IntOverflowException(symbol, left, right);
         }
         return super.calc(left, right);
     }

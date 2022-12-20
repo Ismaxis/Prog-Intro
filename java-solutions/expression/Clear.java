@@ -3,7 +3,7 @@ package expression;
 import expression.exceptions.WrongOperationTypeException;
 
 public class Clear extends BinaryOperation {
-    private static final String symbol = "clear";
+    public static final String symbol = "clear";
     private static final int prior = 0;
     private static final BinaryOperationProperties props = new BinaryOperationProperties(false, true);
 

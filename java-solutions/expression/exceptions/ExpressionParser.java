@@ -17,7 +17,7 @@ public class ExpressionParser extends BaseParser implements TripleParser {
 
     private void expectEnd() {
         if (!take(END)) {
-            throw new PrematureEndExceptions(source.getPos(), pick());
+            throw new UnexpectedCharacterException(source.getPos(), "END", pick());
         }
     }
 
@@ -30,11 +30,11 @@ public class ExpressionParser extends BaseParser implements TripleParser {
 
         while (true) {
             skipWhitespace();
-            if (take("set")) {
-                checkForValidEndOfComplexOperand("set");
+            if (take(Set.symbol)) {
+                expectEndOfComplexOperand(Set.symbol);
                 left = new Set(left, parseExpression());
-            } else if (take("clear")) {
-                checkForValidEndOfComplexOperand("clear");
+            } else if (take(Clear.symbol)) {
+                expectEndOfComplexOperand(Clear.symbol);
                 left = new Clear(left, parseExpression());
             } else {
                 return left;
@@ -85,29 +85,26 @@ public class ExpressionParser extends BaseParser implements TripleParser {
             } else {
                 return parseBrackets(CheckedNegate.class);
             }
-        } else if (take("count")) {
-            checkForValidEndOfComplexOperand("count");
-            ExpressionToString count = parseBrackets(Count.class);
-            return count;
-        } else if (take("pow10")) {
-            checkForValidEndOfComplexOperand("pow10");
-            ExpressionToString count = parseBrackets(Pow10.class);
-            return count;
-        } else if (take("log10")) {
-            checkForValidEndOfComplexOperand("log10");
-            ExpressionToString count = parseBrackets(Log10.class);
-            return count;
+        } else if (take(Count.symbol)) {
+            expectEndOfComplexOperand(Count.symbol);
+            return parseBrackets(Count.class);
+        } else if (take(Pow10.symbol)) {
+            expectEndOfComplexOperand(Pow10.symbol);
+            return parseBrackets(Pow10.class);
+        } else if (take(Log10.symbol)) {
+            expectEndOfComplexOperand(Log10.symbol);
+            return parseBrackets(Log10.class);
         } else {
             return parsePrimitive(false);
         }
     }
 
-    private void checkForValidEndOfComplexOperand(String expected) {
+    private void expectEndOfComplexOperand(String expected) {
         if (take(END)) {
             throw primitiveStartParseError(END);
         }
         if (!isValidEndOfComplexOperand(pick())) {
-            throw new UnknownOperandFoundException(source.getPos(), expected + pick());
+            throw new UnknownOperandException(source.getPos(), expected + pick());
         }
     }
 
@@ -139,22 +136,26 @@ public class ExpressionParser extends BaseParser implements TripleParser {
         } else {
             throw primitiveStartParseError(pick());
         }
-        checkForValidEndOfPrimitive();
+        expectEndOfPrimitive();
         return primitive;
     }
 
-    private void checkForValidEndOfPrimitive() {
+    private void expectEndOfPrimitive() {
         if (!isValidEndOfPrimitive(pick())) {
             throw primitiveEndParseError(pick());
         }
     }
 
-    private PrimitiveParseException primitiveStartParseError(char found) {
-        return new PrimitiveParseException(source.getPos(), "Start of Variable or Const", found);
+    private ParserException primitiveStartParseError(char found) {
+        if (found == END) {
+            return new PrematureEndExceptions(source.getPos(), "Variable or Const");
+        } else {
+            return new PrimitiveExpectedException(source.getPos(), found);
+        }
     }
 
-    private PrimitiveParseException primitiveEndParseError(char found) {
-        return new PrimitiveParseException(source.getPos(), "Whitespace or END", found);
+    private UnexpectedCharacterException primitiveEndParseError(char found) {
+        return new UnexpectedCharacterException(source.getPos(), "Whitespace or END", found);
     }
 
     private ExpressionToString parseVariable() {
@@ -191,6 +192,14 @@ public class ExpressionParser extends BaseParser implements TripleParser {
         while (Character.isDigit(pick())) {
             sb.append(take());
         }
-        return new Const(Integer.parseInt(sb.toString()));
+
+        Const aConst;
+        try {
+            aConst = new Const(Integer.parseInt(sb.toString()));
+        } catch (NumberFormatException e) {
+            throw new ParseConstException(sb.toString(), "INT");
+        }
+
+        return aConst;
     }
 }

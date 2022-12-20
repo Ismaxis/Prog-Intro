@@ -13,10 +13,6 @@ abstract public class Operation implements ExpressionToString {
         return priority;
     }
 
-    public String getSymbol() {
-        return symbol;
-    }
-
     abstract public boolean bracketsEqualPriority();
 
     @Override

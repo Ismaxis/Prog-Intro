@@ -4,7 +4,7 @@ import expression.ExpressionToString;
 import expression.UnaryOperation;
 
 public class Log10 extends UnaryOperation {
-    private static final String symbol = "log10";
+    public static final String symbol = "log10";
 
     public Log10(ExpressionToString child) {
         super(child, symbol);
@@ -13,7 +13,7 @@ public class Log10 extends UnaryOperation {
     @Override
     protected int calc(int value) {
         if (value <= 0) {
-            throw new ArithmeticException("Argument should be positive: Log10(" + value + ")");
+            throw new NegativeArgumentException(symbol, value);
         }
 
         int log = 0;

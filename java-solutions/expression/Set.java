@@ -3,7 +3,7 @@ package expression;
 import expression.exceptions.WrongOperationTypeException;
 
 public class Set extends BinaryOperation {
-    private static final String symbol = "set";
+    public static final String symbol = "set";
     private static final int prior = 0;
     private static final BinaryOperationProperties props = new BinaryOperationProperties(false, true);
 
@@ -20,5 +20,4 @@ public class Set extends BinaryOperation {
     protected double calc(double left, double right) {
         throw new WrongOperationTypeException("Can't perform SET operation on double value");
     }
-
 }

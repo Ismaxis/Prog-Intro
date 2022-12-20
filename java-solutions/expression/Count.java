@@ -3,7 +3,7 @@ package expression;
 import expression.exceptions.WrongOperationTypeException;
 
 public class Count extends UnaryOperation {
-    private final static String symbol = "count";
+    public final static String symbol = "count";
 
     public Count(ExpressionToString child) {
         super(child, symbol);
