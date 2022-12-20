@@ -18,39 +18,5 @@ public class CheckedMultiply extends Multiply {
             }
         }
         return r;
-
-//        if (left != 0 && right != 0) {
-//            if (right > Integer.MAX_VALUE / left) {
-//                throw new ArithmeticException("Overflow " + left + " * " + right);
-//            } else if (right < Integer.MIN_VALUE / left) {
-//                throw new ArithmeticException("Overflow " + left + " * " + right);
-//            }
-//        }
-//        return super.calc(left, right);
-
-//        if (left == 0 || right == 0) {
-//            return 0;
-//        }
-//        if ((left ^ right) >= 0) {
-//            if (right > 0) {
-//                if (left > Integer.MAX_VALUE / right) {
-//                    throw new ArithmeticException("Overflow " + left + " * " + right);
-//                }
-//            } else {
-//                if (left < Integer.MAX_VALUE / right) {
-//                    throw new ArithmeticException("Overflow " + left + " * " + right);
-//                }
-//            }
-//        } else {
-//            if (right > 0) {
-//                if (left < Integer.MIN_VALUE / right) {
-//                    throw new ArithmeticException("Overflow " + left + " * " + right);
-//                }
-//            } else {
-//                if (right > Integer.MIN_VALUE / left) {
-//                    throw new ArithmeticException("Overflow " + left + " * " + right);
-//                }
-//            }
-//        }
     }
 }

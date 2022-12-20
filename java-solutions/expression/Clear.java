@@ -1,6 +1,6 @@
 package expression;
 
-import java.lang.invoke.WrongMethodTypeException;
+import expression.exceptions.WrongOperationTypeException;
 
 public class Clear extends BinaryOperation {
     private static final String symbol = "clear";
@@ -18,7 +18,7 @@ public class Clear extends BinaryOperation {
 
     @Override
     protected double calc(double left, double right) {
-        throw new WrongMethodTypeException("Can't perform CLEAR operation on double value");
+        throw new WrongOperationTypeException("Can't perform CLEAR operation on double value");
     }
 
 }

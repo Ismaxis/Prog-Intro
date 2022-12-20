@@ -10,6 +10,7 @@ public class ExpressionParser extends BaseParser implements TripleParser {
     public TripleExpression parse(final String expression) {
         source = new StringCharSource(expression);
         take();
+        // System.err.println(source.getString());
         var res = parseTopLevel();
         expectEnd();
         return res;
@@ -22,7 +23,24 @@ public class ExpressionParser extends BaseParser implements TripleParser {
     }
 
     private ExpressionToString parseTopLevel() {
-        return parseExpression();
+        return parseBitOps();
+    }
+
+    private ExpressionToString parseBitOps() {
+        ExpressionToString left = parseExpression();
+
+        while (true) {
+            skipWhitespace();
+            if (take("set")) {
+                checkForValidEndOfComplexOperand("setx error '" + pick() + "' for string '" + source.getString() + "'");
+                left = new Set(left, parseExpression());
+            } else if (take("clear")) {
+                checkForValidEndOfComplexOperand("clearx error" + pick());
+                left = new Clear(left, parseExpression());
+            } else {
+                return left;
+            }
+        }
     }
 
     private ExpressionToString parseExpression() {
@@ -69,9 +87,28 @@ public class ExpressionParser extends BaseParser implements TripleParser {
                 return parseBrackets(CheckedNegate.class);
             }
         } else if (take("count")) {
-            return parseBrackets(Count.class);
+            checkForValidEndOfComplexOperand("count");
+            ExpressionToString count = parseBrackets(Count.class);
+            return count;
+        } else if (take("pow10")) {
+            checkForValidEndOfComplexOperand("pow10");
+            ExpressionToString count = parseBrackets(Pow10.class);
+            return count;
+        } else if (take("log10")) {
+            checkForValidEndOfComplexOperand("log10");
+            ExpressionToString count = parseBrackets(Log10.class);
+            return count;
         } else {
             return parsePrimitive(false);
+        }
+    }
+
+    private void checkForValidEndOfComplexOperand(String expected) {
+        if (take(END)) {
+            throw primitiveStartParseError(END);
+        }
+        if (!isValidEndOfComplexOperand(pick())) {
+            throw new UnknownOperandFoundException(source.getPos(), expected + pick());
         }
     }
 
@@ -103,12 +140,12 @@ public class ExpressionParser extends BaseParser implements TripleParser {
         } else {
             throw primitiveStartParseError(pick());
         }
-        validEndOfPrimitive();
+        checkForValidEndOfPrimitive();
         return primitive;
     }
 
-    private void validEndOfPrimitive() {
-        if (!validEndOfPrimitive(pick())) {
+    private void checkForValidEndOfPrimitive() {
+        if (!isValidEndOfPrimitive(pick())) {
             throw primitiveEndParseError(pick());
         }
     }
@@ -138,7 +175,11 @@ public class ExpressionParser extends BaseParser implements TripleParser {
         return false;
     }
 
-    private static boolean validEndOfPrimitive(char ch) {
+    private static boolean isValidEndOfComplexOperand(char ch) {
+        return Character.isWhitespace(ch) || (ch == '(') || (ch == '-');
+    }
+
+    private static boolean isValidEndOfPrimitive(char ch) {
         return Character.isWhitespace(ch) || isOperationSymbol(ch) || (ch == END) || (ch == ')');
     }
 

@@ -12,4 +12,6 @@ public interface CharSource {
     void mark();
 
     void reset();
+
+    String getString();
 }

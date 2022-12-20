@@ -38,4 +38,9 @@ public class StringCharSource implements CharSource {
     public void reset() {
         pos = mark;
     }
+
+    @Override
+    public String getString() {
+        return string;
+    }
 }
