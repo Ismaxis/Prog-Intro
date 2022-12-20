@@ -10,7 +10,6 @@ public class ExpressionParser extends BaseParser implements TripleParser {
     public TripleExpression parse(final String expression) {
         source = new StringCharSource(expression);
         take();
-        // System.err.println(source.getString());
         var res = parseTopLevel();
         expectEnd();
         return res;
@@ -32,10 +31,10 @@ public class ExpressionParser extends BaseParser implements TripleParser {
         while (true) {
             skipWhitespace();
             if (take("set")) {
-                checkForValidEndOfComplexOperand("setx error '" + pick() + "' for string '" + source.getString() + "'");
+                checkForValidEndOfComplexOperand("set");
                 left = new Set(left, parseExpression());
             } else if (take("clear")) {
-                checkForValidEndOfComplexOperand("clearx error" + pick());
+                checkForValidEndOfComplexOperand("clear");
                 left = new Clear(left, parseExpression());
             } else {
                 return left;
