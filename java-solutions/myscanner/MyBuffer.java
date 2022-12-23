@@ -5,7 +5,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 
 public class MyBuffer {
-    private final static int DEFAULT_BUFFER_SIZE = 1024;
+    private final static int DEFAULT_BUFFER_SIZE = 512;
 
     private InputStreamReader reader;
 
