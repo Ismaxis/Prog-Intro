@@ -3,6 +3,8 @@ ITMO CT 2022-y1-fall
 
 Course by [kgeorgiy](https://www.kgeorgiy.info/)
 
+---
+
 [Условия домашних заданий](https://www.kgeorgiy.info/courses/prog-intro/homeworks.html)
 
 ## Домашнее задание 13. Обработка ошибок
