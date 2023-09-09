@@ -1,4 +1,4 @@
-# Solutions of Prog-Intro HW 
+# Solutions of Prog-Intro HW (M3136)
 ITMO CT 2022-y1-fall 
 
 Course by [kgeorgiy](https://www.kgeorgiy.info/)
